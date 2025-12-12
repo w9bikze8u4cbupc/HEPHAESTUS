@@ -69,7 +69,10 @@ class TestManifestItem:
             quantity=2,
             metadata_confidence=0.75,
             dimensions={"width": 100, "height": 150},
-            bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200}
+            bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200},
+            dedup_group_id=None,
+            is_duplicate=False,
+            canonical_image_id="test_img"
         )
         
         assert item.image_id == "test_img"
@@ -95,7 +98,10 @@ class TestManifestItem:
             quantity=None,
             metadata_confidence=0.0,
             dimensions={"width": 50, "height": 50},
-            bbox=None
+            bbox=None,
+            dedup_group_id=None,
+            is_duplicate=False,
+            canonical_image_id="test_img"
         )
         
         assert item.label is None
@@ -122,7 +128,10 @@ class TestManifest:
                 quantity=2,
                 metadata_confidence=0.75,
                 dimensions={"width": 100, "height": 150},
-                bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200}
+                bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200},
+                dedup_group_id=None,
+                is_duplicate=False,
+                canonical_image_id="img1"
             )
         ]
         
@@ -268,7 +277,10 @@ class TestManifestSerialization:
                 quantity=2,
                 metadata_confidence=0.75,
                 dimensions={"width": 100, "height": 150},
-                bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200}
+                bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200},
+                dedup_group_id=None,
+                is_duplicate=False,
+                canonical_image_id="img1"
             )
         ]
         
@@ -323,7 +335,10 @@ class TestManifestSerialization:
                 quantity=2,
                 metadata_confidence=0.75,
                 dimensions={"width": 100, "height": 150},
-                bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200}
+                bbox={"x0": 50, "y0": 50, "x1": 150, "y1": 200},
+                dedup_group_id=None,
+                is_duplicate=False,
+                canonical_image_id="img1"
             )
         ]
         
@@ -374,7 +389,10 @@ class TestManifestSerialization:
                 quantity=None,
                 metadata_confidence=0.0,
                 dimensions={"width": 50, "height": 50},
-                bbox=None
+                bbox=None,
+                dedup_group_id=None,
+                is_duplicate=False,
+                canonical_image_id="img1"
             )
         ]
         

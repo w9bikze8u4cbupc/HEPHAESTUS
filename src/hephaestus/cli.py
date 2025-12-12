@@ -11,6 +11,7 @@ from .classifier.model import HybridClassifier
 from .text.spatial import extract_spatial_text
 from .text.index import SpatialTextIndex
 from .metadata.annotator import annotate_components
+from .dedup.model import deduplicate_images
 from .output.manifest import build_manifest, write_manifest_json
 
 app = typer.Typer(help="HEPHAESTUS – board-game component extractor", no_args_is_help=True)
@@ -24,6 +25,8 @@ def extract(
     min_height: int = typer.Option(50, help="Minimum image height in pixels"),
     text_expand: float = typer.Option(24.0, help="Text proximity expansion distance in points"),
     write_manifest: bool = typer.Option(True, "--write-manifest/--no-write-manifest", help="Write JSON manifest file"),
+    dedup: bool = typer.Option(True, "--dedup/--no-dedup", help="Enable perceptual deduplication"),
+    dedup_threshold: int = typer.Option(8, help="Perceptual hash distance threshold for deduplication"),
 ) -> None:
     """
     Extract embedded images from a PDF and save them as PNG files.
@@ -73,11 +76,43 @@ def extract(
                 paths = save_images_flat(images, out)
                 logger.info(f"Successfully saved {len(paths)} images")
                 
+                # Phase 4: Deduplicate images
+                dedup_groups = {}
+                if dedup:
+                    logger.info("Deduplicating images...")
+                    # Create temporary manifest items for deduplication
+                    temp_manifest_items = []
+                    for i, image in enumerate(images):
+                        if i < len(paths):
+                            from .output.manifest import ManifestItem
+                            temp_item = ManifestItem(
+                                image_id=image.id,
+                                file_name=paths[i].name,
+                                page_index=image.page_index,
+                                classification="temp",
+                                classification_confidence=0.0,
+                                label=None,
+                                quantity=None,
+                                metadata_confidence=0.0,
+                                dimensions={"width": image.width, "height": image.height},
+                                bbox=None,
+                                dedup_group_id=None,
+                                is_duplicate=False,
+                                canonical_image_id=image.id,
+                                file_path=str(paths[i])
+                            )
+                            temp_manifest_items.append(temp_item)
+                    
+                    dedup_groups = deduplicate_images(images, temp_manifest_items, threshold=dedup_threshold)
+                    
+                    duplicate_count = sum(1 for group in dedup_groups.values() if len(group.image_ids) > 1)
+                    logger.info(f"Deduplication complete: found {duplicate_count} duplicate groups")
+                
                 # Phase 3: Generate and write manifest
                 manifest = None
                 if write_manifest:
                     logger.info("Generating component manifest...")
-                    manifest = build_manifest(pdf_path, images, classification_map, metadata_list, paths)
+                    manifest = build_manifest(pdf_path, images, classification_map, metadata_list, paths, dedup_groups)
                     manifest_path = write_manifest_json(manifest, out)
                     logger.info(f"Wrote manifest to {manifest_path}")
                 
@@ -85,6 +120,10 @@ def extract(
                 metadata_with_labels = sum(1 for m in metadata_list if m.has_label())
                 metadata_with_quantities = sum(1 for m in metadata_list if m.has_quantity())
                 metadata_complete = sum(1 for m in metadata_list if m.is_complete())
+                
+                # Deduplication summary
+                duplicate_groups = len(set(group.group_id for group in dedup_groups.values() if len(group.image_ids) > 1))
+                total_duplicates = sum(len(group.image_ids) - 1 for group in dedup_groups.values() if len(group.image_ids) > 1)
                 
                 typer.echo(f"\n✅ Extraction complete!")
                 typer.echo(f"📄 Processed: {pdf_path}")
@@ -94,6 +133,9 @@ def extract(
                 typer.echo(f"🏷️  With labels: {metadata_with_labels}")
                 typer.echo(f"🔢 With quantities: {metadata_with_quantities}")
                 typer.echo(f"✨ Complete metadata: {metadata_complete}")
+                if dedup:
+                    typer.echo(f"🔄 Duplicate groups: {duplicate_groups}")
+                    typer.echo(f"📋 Total duplicates: {total_duplicates}")
                 typer.echo(f"📁 Output directory: {out}")
                 typer.echo(f"🔍 Filter criteria: {min_width}x{min_height} pixels minimum")
                 
