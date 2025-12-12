@@ -53,16 +53,16 @@ def classify_heuristic(image: ExtractedImage) -> Dict[str, Any]:
         area = width * height
         
         # Size-based heuristics
-        if area < 1000:  # Very small images likely icons or noise
+        if area < 2500:  # Very small images likely icons or noise (50x50 threshold)
             signals["likely_icon"] = True
             signals["confidence"] = 0.7
         elif area > 100000:  # Large images likely boards or full pages
             signals["likely_board"] = True
             signals["confidence"] = 0.6
-        elif 0.6 <= aspect_ratio <= 0.8:  # Square-ish, likely tokens
+        elif 0.7 <= aspect_ratio <= 1.4:  # Square-ish, likely tokens (includes 100x120 = 0.83)
             signals["likely_token"] = True
             signals["confidence"] = 0.5
-        elif 0.6 <= aspect_ratio <= 0.7:  # Card-like aspect ratio
+        elif 0.6 <= aspect_ratio <= 0.75:  # Card-like aspect ratio (narrower range)
             signals["likely_card"] = True
             signals["confidence"] = 0.5
             

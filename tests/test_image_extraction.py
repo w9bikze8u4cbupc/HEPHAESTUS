@@ -9,7 +9,7 @@ import fitz  # type: ignore[import]
 
 from hephaestus.pdf.ingestion import PdfDocument
 from hephaestus.pdf.images import extract_embedded_images, save_images_flat, ExtractedImage
-from tests.helpers.pdf_factory import make_pdf_with_images_and_text
+from tests.helpers.pdf_factory import make_pdf_with_images_and_text, make_pdf_with_images
 
 
 def create_pdf_with_images(image_sizes: list[tuple[int, int]]) -> bytes:
@@ -79,36 +79,30 @@ class TestImageExtraction:
 
 
 class TestImageSaving:
-    def test_save_images_creates_files(self):
+    def test_save_images_creates_files(self, tmp_path):
         """Test that save_images_flat creates the expected files."""
-        # Create a simple test image
-        image_sizes = [(100, 100)]
-        pdf_bytes = create_pdf_with_images(image_sizes)
+        # Create a simple test image using centralized helper
+        images_spec = [(100, 100, 'red')]
+        pdf_path = make_pdf_with_images(tmp_path, images_spec)
         
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
-            
-            doc = PdfDocument(Path(tmp.name))
+        with PdfDocument(pdf_path) as doc:
             images = extract_embedded_images(doc, min_width=50, min_height=50)
             
-            with tempfile.TemporaryDirectory() as output_dir:
-                output_path = Path(output_dir)
-                saved_paths = save_images_flat(images, output_path)
+            output_path = tmp_path / "output"
+            output_path.mkdir()
+            saved_paths = save_images_flat(images, output_path)
+            
+            assert len(saved_paths) == len(images)
+            
+            for path in saved_paths:
+                assert path.exists()
+                assert path.suffix == ".png"
+                assert path.name.startswith("component_")
                 
-                assert len(saved_paths) == len(images)
-                
-                for path in saved_paths:
-                    assert path.exists()
-                    assert path.suffix == ".png"
-                    assert path.name.startswith("component_")
-                    
-                    # Verify the image can be opened
-                    with Image.open(path) as img:
-                        assert img.width > 0
-                        assert img.height > 0
-        
-        Path(tmp.name).unlink()
+                # Verify the image can be opened
+                with Image.open(path) as img:
+                    assert img.width > 0
+                    assert img.height > 0
 
 
 class TestSizeThresholdFiltering:
@@ -123,27 +117,21 @@ class TestSizeThresholdFiltering:
     )
     def test_increasing_thresholds_never_increases_retained_images(self, base_threshold, threshold_increase):
         """For any set of images, increasing thresholds should never increase retained count."""
-        # Create PDF with various sized images
-        image_sizes = [(50, 50), (100, 100), (150, 150), (200, 200)]
-        pdf_bytes = create_pdf_with_images(image_sizes)
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create PDF with various sized images using centralized helper
+            images_spec = [(50, 50, 'red'), (100, 100, 'blue'), (150, 150, 'green'), (200, 200, 'yellow')]
+            pdf_path = make_pdf_with_images(Path(temp_dir), images_spec)
             
-            doc = PdfDocument(Path(tmp.name))
-            
-            # Extract with base threshold
-            images_base = extract_embedded_images(doc, min_width=base_threshold, min_height=base_threshold)
-            
-            # Extract with higher threshold
-            higher_threshold = base_threshold + threshold_increase
-            images_higher = extract_embedded_images(doc, min_width=higher_threshold, min_height=higher_threshold)
-            
-            # Higher threshold should never result in more images
-            assert len(images_higher) <= len(images_base)
-        
-        Path(tmp.name).unlink()
+            with PdfDocument(pdf_path) as doc:
+                # Extract with base threshold
+                images_base = extract_embedded_images(doc, min_width=base_threshold, min_height=base_threshold)
+                
+                # Extract with higher threshold
+                higher_threshold = base_threshold + threshold_increase
+                images_higher = extract_embedded_images(doc, min_width=higher_threshold, min_height=higher_threshold)
+                
+                # Higher threshold should never result in more images
+                assert len(images_higher) <= len(images_base)
 
     @given(
         width_threshold=st.integers(min_value=1, max_value=300),
@@ -151,23 +139,18 @@ class TestSizeThresholdFiltering:
     )
     def test_threshold_filtering_is_accurate(self, width_threshold, height_threshold):
         """For any thresholds, all retained images should meet the criteria."""
-        # Create images with known sizes
-        image_sizes = [(50, 50), (100, 200), (300, 100), (400, 400)]
-        pdf_bytes = create_pdf_with_images(image_sizes)
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create images with known sizes using centralized helper
+            images_spec = [(50, 50, 'red'), (100, 200, 'blue'), (300, 100, 'green'), (400, 400, 'yellow')]
+            pdf_path = make_pdf_with_images(Path(temp_dir), images_spec)
             
-            doc = PdfDocument(Path(tmp.name))
-            images = extract_embedded_images(doc, min_width=width_threshold, min_height=height_threshold)
-            
-            # All retained images should meet the threshold criteria
-            for image in images:
-                assert image.width >= width_threshold
-                assert image.height >= height_threshold
-        
-        Path(tmp.name).unlink()
+            with PdfDocument(pdf_path) as doc:
+                images = extract_embedded_images(doc, min_width=width_threshold, min_height=height_threshold)
+                
+                # All retained images should meet the threshold criteria
+                for image in images:
+                    assert image.width >= width_threshold
+                    assert image.height >= height_threshold
 
 
 class TestIDGenerationStability:
@@ -182,69 +165,62 @@ class TestIDGenerationStability:
     )
     def test_id_generation_is_deterministic(self, page_count, images_per_page):
         """For any PDF, repeated extractions should yield identical IDs."""
-        # Create multi-page PDF with images
-        doc = fitz.open()
-        
-        for page_idx in range(page_count):
-            page = doc.new_page(width=595, height=842)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create multi-page PDF with images using centralized helper
+            pdf_path = Path(temp_dir) / "multipage.pdf"
             
-            for img_idx in range(images_per_page):
-                # Create and insert image
-                img = Image.new('RGB', (100, 100), color='blue')
-                img_bytes = io.BytesIO()
-                img.save(img_bytes, format='PNG')
-                img_bytes.seek(0)
+            doc = fitz.open()
+            try:
+                for page_idx in range(page_count):
+                    page = doc.new_page(width=595, height=842)
+                    
+                    for img_idx in range(images_per_page):
+                        # Create and insert image
+                        img = Image.new('RGB', (100, 100), color='blue')
+                        img_bytes = io.BytesIO()
+                        img.save(img_bytes, format='PNG')
+                        img_bytes.seek(0)
+                        
+                        y_pos = 50 + (img_idx * 110)
+                        img_rect = fitz.Rect(50, y_pos, 150, y_pos + 100)
+                        page.insert_image(img_rect, stream=img_bytes.getvalue())
                 
-                y_pos = 50 + (img_idx * 110)
-                img_rect = fitz.Rect(50, y_pos, 150, y_pos + 100)
-                page.insert_image(img_rect, stream=img_bytes.getvalue())
-        
-        pdf_bytes = doc.tobytes()
-        doc.close()
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
+                pdf_bytes = doc.tobytes()
+                pdf_path.write_bytes(pdf_bytes)
+            finally:
+                doc.close()
             
-            pdf_doc = PdfDocument(Path(tmp.name))
-            
-            # Extract images multiple times
-            images1 = extract_embedded_images(pdf_doc, min_width=50, min_height=50)
-            images2 = extract_embedded_images(pdf_doc, min_width=50, min_height=50)
-            
-            # Should get same number of images
-            assert len(images1) == len(images2)
-            
-            # IDs should be identical
-            ids1 = [img.id for img in images1]
-            ids2 = [img.id for img in images2]
-            assert ids1 == ids2
-            
-            # IDs should follow expected format
-            for page_idx in range(page_count):
-                for img_idx in range(images_per_page):
-                    expected_id = f"p{page_idx}_img{img_idx}"
-                    assert expected_id in ids1
-        
-        Path(tmp.name).unlink()
+            with PdfDocument(pdf_path) as pdf_doc:
+                # Extract images multiple times
+                images1 = extract_embedded_images(pdf_doc, min_width=50, min_height=50)
+                images2 = extract_embedded_images(pdf_doc, min_width=50, min_height=50)
+                
+                # Should get same number of images
+                assert len(images1) == len(images2)
+                
+                # IDs should be identical
+                ids1 = [img.id for img in images1]
+                ids2 = [img.id for img in images2]
+                assert ids1 == ids2
+                
+                # IDs should follow expected format
+                for page_idx in range(page_count):
+                    for img_idx in range(images_per_page):
+                        expected_id = f"p{page_idx}_img{img_idx}"
+                        assert expected_id in ids1
 
     @given(st.integers(min_value=0, max_value=10))
     def test_id_format_consistency(self, page_index):
         """For any page index, ID format should be consistent."""
-        # Create simple PDF
-        image_sizes = [(100, 100), (150, 150)]
-        pdf_bytes = create_pdf_with_images(image_sizes)
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create simple PDF using centralized helper
+            images_spec = [(100, 100, 'red'), (150, 150, 'blue')]
+            pdf_path = make_pdf_with_images(Path(temp_dir), images_spec)
             
-            doc = PdfDocument(Path(tmp.name))
-            images = extract_embedded_images(doc, min_width=50, min_height=50)
-            
-            for local_idx, image in enumerate(images):
-                # ID should follow p{page}_img{local_idx} format
-                expected_id = f"p{image.page_index}_img{local_idx}"
-                assert image.id == expected_id
-        
-        Path(tmp.name).unlink()
+            with PdfDocument(pdf_path) as doc:
+                images = extract_embedded_images(doc, min_width=50, min_height=50)
+                
+                for local_idx, image in enumerate(images):
+                    # ID should follow p{page}_img{local_idx} format
+                    expected_id = f"p{image.page_index}_img{local_idx}"
+                    assert image.id == expected_id

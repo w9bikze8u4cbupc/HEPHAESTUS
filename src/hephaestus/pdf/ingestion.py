@@ -66,6 +66,14 @@ class PdfDocument:
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.close()
 
+    def __del__(self) -> None:
+        """Defensive cleanup in case close() wasn't called."""
+        try:
+            self.close()
+        except Exception:
+            # Best effort cleanup - don't raise in __del__
+            pass
+
     def _open_document(self, path: Path) -> fitz.Document:
         if not path.exists():
             raise PdfOpenError(f"PDF file does not exist: {path}")

@@ -1,4 +1,5 @@
 import logging
+import os
 
 
 def get_logger(name: str) -> logging.Logger:
@@ -12,5 +13,18 @@ def get_logger(name: str) -> logging.Logger:
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
+    
+    # Default to WARNING for library usage, INFO for CLI
+    # Can be overridden with HEPHAESTUS_LOG_LEVEL environment variable
+    default_level = logging.WARNING
+    if name.endswith('.cli'):
+        default_level = logging.INFO
+    
+    level_name = os.getenv('HEPHAESTUS_LOG_LEVEL', logging.getLevelName(default_level))
+    try:
+        level = getattr(logging, level_name.upper())
+    except AttributeError:
+        level = default_level
+    
+    logger.setLevel(level)
     return logger

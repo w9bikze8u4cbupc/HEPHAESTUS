@@ -38,6 +38,8 @@ target-version = "py311"
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 addopts = "-q"
+log_level = "WARNING"
+log_cli = false
 
 [tool.mypy]
 python_version = "3.11"

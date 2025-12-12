@@ -12,6 +12,7 @@ from hephaestus.text.spatial import (
     extract_spatial_text, TextSpan, BBox, bbox_distance, 
     bbox_intersects, bbox_expand
 )
+from tests.helpers.pdf_factory import make_pdf_with_text, make_multi_page_pdf, make_empty_pdf
 
 
 def create_pdf_with_text(text_content: str) -> bytes:
@@ -65,16 +66,12 @@ class TestBBox:
 
 
 class TestSpatialTextExtraction:
-    def test_extract_text_from_simple_pdf(self):
+    def test_extract_text_from_simple_pdf(self, tmp_path):
         """Test text extraction from a simple PDF."""
         test_text = "Hello World Test"
-        pdf_bytes = create_pdf_with_text(test_text)
+        pdf_path = make_pdf_with_text(tmp_path, [test_text])
         
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
-            
-            doc = PdfDocument(Path(tmp.name))
+        with PdfDocument(pdf_path) as doc:
             spans = extract_spatial_text(doc)
             
             # Should extract at least one span
@@ -91,27 +88,13 @@ class TestSpatialTextExtraction:
                 assert span.bbox.width() > 0
                 assert span.bbox.height() > 0
                 assert span.source in ["block", "line", "span"]
-        
-        Path(tmp.name).unlink()
 
-    def test_extract_text_from_multi_page_pdf(self):
+    def test_extract_text_from_multi_page_pdf(self, tmp_path):
         """Test text extraction from multi-page PDF."""
-        doc = fitz.open()
-        
-        # Create multiple pages with different text
         page_texts = ["Page 1 content", "Page 2 content", "Page 3 content"]
-        for i, text in enumerate(page_texts):
-            page = doc.new_page()
-            page.insert_text((50, 50), text)
+        pdf_path = make_multi_page_pdf(tmp_path, 3, page_texts)
         
-        pdf_bytes = doc.tobytes()
-        doc.close()
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
-            
-            pdf_doc = PdfDocument(Path(tmp.name))
+        with PdfDocument(pdf_path) as pdf_doc:
             spans = extract_spatial_text(pdf_doc)
             
             # Should have spans from all pages
@@ -124,28 +107,16 @@ class TestSpatialTextExtraction:
                 page_spans = [s for s in spans if s.page_index == i]
                 found = any(expected_text in span.text for span in page_spans)
                 assert found is True
-        
-        Path(tmp.name).unlink()
 
-    def test_empty_pdf_handling(self):
+    def test_empty_pdf_handling(self, tmp_path):
         """Test handling of PDF with no text."""
-        doc = fitz.open()
-        page = doc.new_page()  # Empty page
+        pdf_path = make_empty_pdf(tmp_path)
         
-        pdf_bytes = doc.tobytes()
-        doc.close()
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
-            
-            pdf_doc = PdfDocument(Path(tmp.name))
+        with PdfDocument(pdf_path) as pdf_doc:
             spans = extract_spatial_text(pdf_doc)
             
             # Should handle gracefully (may return empty list or fallback)
             assert isinstance(spans, list)
-        
-        Path(tmp.name).unlink()
 
 
 class TestSpatialTextProperties:
@@ -159,29 +130,23 @@ class TestSpatialTextProperties:
         if not clean_text.strip():
             clean_text = "test"
         
-        pdf_bytes = create_pdf_with_text(clean_text)
-        
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(pdf_bytes)
-            tmp.flush()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            pdf_path = make_pdf_with_text(Path(temp_dir), [clean_text])
             
-            doc = PdfDocument(Path(tmp.name))
-            
-            # Extract twice
-            spans1 = extract_spatial_text(doc)
-            spans2 = extract_spatial_text(doc)
-            
-            # Results should be identical
-            assert len(spans1) == len(spans2)
-            
-            for s1, s2 in zip(spans1, spans2):
-                assert s1.text == s2.text
-                assert s1.page_index == s2.page_index
-                assert s1.bbox.x0 == s2.bbox.x0
-                assert s1.bbox.y0 == s2.bbox.y0
-                assert s1.source == s2.source
-        
-        Path(tmp.name).unlink()
+            with PdfDocument(pdf_path) as doc:
+                # Extract twice
+                spans1 = extract_spatial_text(doc)
+                spans2 = extract_spatial_text(doc)
+                
+                # Results should be identical
+                assert len(spans1) == len(spans2)
+                
+                for s1, s2 in zip(spans1, spans2):
+                    assert s1.text == s2.text
+                    assert s1.page_index == s2.page_index
+                    assert s1.bbox.x0 == s2.bbox.x0
+                    assert s1.bbox.y0 == s2.bbox.y0
+                    assert s1.source == s2.source
 
     @given(
         x0=st.floats(min_value=0, max_value=500),
