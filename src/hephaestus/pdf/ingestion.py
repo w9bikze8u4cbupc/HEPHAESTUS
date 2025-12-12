@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Iterator
 
 import fitz  # type: ignore[import]
 
@@ -30,14 +31,15 @@ class PdfPage:
     def height(self) -> float:
         return float(self._page.rect.height)
 
-    def raw(self) -> fitz.Page:
+    def as_pymupdf_page(self) -> fitz.Page:
+        """Return the underlying PyMuPDF page object."""
         return self._page
 
 
 class PdfDocument:
-    def __init__(self, path: Path) -> None:
-        self._path = path
-        self._doc = self._open_document(path)
+    def __init__(self, source: Path | str) -> None:
+        self._path = Path(source)
+        self._doc = self._open_document(self._path)
 
     @property
     def path(self) -> Path:
@@ -47,17 +49,34 @@ class PdfDocument:
     def page_count(self) -> int:
         return self._doc.page_count
 
-    def pages(self) -> list[PdfPage]:
-        return [PdfPage(self._doc.load_page(i), i) for i in range(self.page_count)]
+    def pages(self) -> Iterator[PdfPage]:
+        """Iterate over all pages in the document."""
+        for i in range(self.page_count):
+            yield PdfPage(self._doc.load_page(i), i)
+
+    def close(self) -> None:
+        """Close the PDF document and release file handles."""
+        if hasattr(self, '_doc') and self._doc is not None:
+            self._doc.close()
+            self._doc = None
+
+    def __enter__(self) -> PdfDocument:
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.close()
 
     def _open_document(self, path: Path) -> fitz.Document:
         if not path.exists():
             raise PdfOpenError(f"PDF file does not exist: {path}")
+        
         try:
             doc = fitz.open(path)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             raise PdfOpenError(f"Failed to open PDF: {path}") from exc
 
         if doc.needs_pass:
+            doc.close()  # Close before raising exception
             raise EncryptedPdfError(f"PDF is encrypted: {path}")
+        
         return doc

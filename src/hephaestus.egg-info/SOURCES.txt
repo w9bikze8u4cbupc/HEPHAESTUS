@@ -14,5 +14,6 @@ src/hephaestus/pdf/__init__.py
 src/hephaestus/pdf/images.py
 src/hephaestus/pdf/ingestion.py
 tests/test_cli.py
+tests/test_config.py
 tests/test_image_extraction.py
 tests/test_pdf_ingestion.py

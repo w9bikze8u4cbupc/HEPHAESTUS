@@ -4,20 +4,20 @@ version = "0.1.0"
 description = "HEPHAESTUS – PDF board-game component extraction system"
 readme = "README.md"
 requires-python = ">=3.11"
-authors = [{ name = "Daniel", email = "you@example.com" }]
+authors = [{ name = "HEPHAESTUS Team", email = "team@hephaestus.dev" }]
 dependencies = [
-  "pymupdf>=1.24.0",
-  "Pillow>=10.0.0",
-  "typer[all]>=0.12.0",
+    "pymupdf>=1.24.0",
+    "Pillow>=10.0.0",
+    "typer[all]>=0.12.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8.0.0",
-  "hypothesis>=6.0.0",
-  "black>=24.0.0",
-  "ruff>=0.5.0",
-  "mypy>=1.10.0",
+    "pytest>=8.0.0",
+    "hypothesis>=6.0.0",
+    "black>=24.0.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
 ]
 
 [project.scripts]

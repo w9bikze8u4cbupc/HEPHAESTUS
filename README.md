@@ -1,75 +1,110 @@
-# HEPHAESTUS
+# HEPHAESTUS – PDF Component Extraction System
 
-HEPHAESTUS is a modular PDF board-game component extraction system that processes rulebook PDFs to extract, filter, and organize component images.
+HEPHAESTUS is a modular system that extracts board-game components from rulebook PDFs. It processes PDF documents to identify, extract, and organize component images with structured metadata output.
 
 ## Features
 
-**Phase 1 (Current):**
-- PDF ingestion and parsing with PyMuPDF
-- Embedded image extraction with dimensional filtering
-- PNG export with structured naming
-- Command-line interface with configurable parameters
-- Comprehensive error handling and logging
+### Phase 1 (Complete)
+- **PDF Ingestion**: Robust PDF parsing with error handling for corrupted and encrypted files
+- **Image Extraction**: Extract embedded raster images from PDF pages
+- **Smart Filtering**: Configurable size-based filtering to exclude decorative elements
+- **Stable Output**: Deterministic naming and PNG export with structured organization
+- **CLI Interface**: Simple command-line tool with comprehensive options
 
-**Future Phases:**
-- AI-powered component classification
-- Spatial text extraction and association
-- Perceptual deduplication
-- JSON manifest generation
-- Web UI for visual review
+### Phase 2 (Current)
+- **Hybrid Classification**: Intelligent component vs non-component classification
+- **Heuristic Analysis**: Deterministic rules based on dimensions, aspect ratio, and color
+- **Vision Integration**: Extensible architecture for AI-powered classification (stubbed)
+- **Classification Reporting**: Detailed breakdown of component types in CLI output
 
 ## Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/w9bikze8u4cbupc/HEPHAESTUS.git
-cd HEPHAESTUS
+### Requirements
 
-# Install with development dependencies
+- Python 3.11 or higher
+- Windows, macOS, or Linux
+
+### Install from source
+
+```bash
+git clone https://github.com/your-org/HEPHAESTUS.git
+cd HEPHAESTUS
 pip install -e ".[dev]"
+```
+
+### Quick test
+
+```bash
+# Test the CLI
+python -m hephaestus.cli --help
+
+# Run tests
+pytest tests/ -v
 ```
 
 ## Usage
 
+### Basic extraction
+
 ```bash
-# Extract components from a PDF
 hephaestus extract rulebook.pdf
-
-# Specify output directory and filtering thresholds
-hephaestus extract rulebook.pdf --out components/ --min-width 100 --min-height 100
-
-# Show help
-hephaestus extract --help
 ```
+
+### Advanced options
+
+```bash
+hephaestus extract rulebook.pdf \
+  --out ./extracted_components \
+  --min-width 100 \
+  --min-height 100
+```
+
+### CLI Options
+
+- `--out, -o`: Output directory (default: `./output`)
+- `--min-width`: Minimum image width in pixels (default: 50)
+- `--min-height`: Minimum image height in pixels (default: 50)
+- `--help`: Show help and usage information
 
 ## Development
 
+### Setup development environment
+
 ```bash
-# Run tests
+pip install -e ".[dev]"
+```
+
+### Run tests
+
+```bash
 pytest
+```
 
-# Format code
-black src/ tests/
+### Code quality
 
-# Lint code
-ruff check src/ tests/
-
-# Type check
-mypy src/
+```bash
+black src tests
+ruff check src tests
+mypy src
 ```
 
 ## Architecture
 
 HEPHAESTUS follows a modular pipeline architecture:
 
-- **PDF Ingestion**: Robust document parsing with error handling
-- **Image Extraction**: Embedded image detection and filtering
-- **File Output**: Standardized PNG export with naming conventions
-- **CLI Interface**: User-friendly command-line tool
+1. **PDF Ingestion** (`pdf/ingestion.py`) - Document parsing and validation
+2. **Image Extraction** (`pdf/images.py`) - Embedded image extraction and filtering
+3. **Classification** (`classifier/`) - Hybrid heuristic + AI component classification
+4. **File Output** - PNG conversion and structured file organization
+5. **CLI Interface** (`cli.py`) - Command-line user interface
 
-## Requirements
+## Future Phases
 
-- Python 3.11+
-- PyMuPDF for PDF processing
-- Pillow for image handling
-- Typer for CLI interface
+- **Phase 3**: Spatial Text Analysis - Associate text labels with nearby images
+- **Phase 4**: Deduplication Engine - Remove visually similar duplicate images  
+- **Phase 5**: Structured Manifest - JSON output with complete component metadata
+- **Phase 6**: Web Interface - Visual review and editing interface
+
+## License
+
+MIT License - see LICENSE file for details
