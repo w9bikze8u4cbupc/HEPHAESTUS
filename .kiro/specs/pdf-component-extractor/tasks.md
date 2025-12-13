@@ -195,12 +195,88 @@
   - Test cross-platform compatibility (Windows, macOS, Linux)
   - _Requirements: FR-7.1, NFR-1, NFR-2_
 
+## Phase 5: Structured Output Packaging
+
+- [x] 10. Create output packaging module
+
+
+
+  - Create `src/hephaestus/output/__init__.py` package
+  - Implement PackageResult and ManifestItem dataclasses in `output/package.py`
+  - Implement category mapping logic for classification labels to folder names
+  - Create directory structure creation utilities
+  - _Requirements: FR-7.1, FR-7.3_
+
+
+
+- [ ] 10.1 Write property test for directory structure consistency
+  - **Property 12: Directory Structure Consistency**
+
+  - **Validates: Requirements FR-7.1**
+
+- [ ] 10.2 Write property test for category mapping determinism
+  - **Property 13: Category Mapping Determinism**
+  - **Validates: Requirements FR-7.1**
+
+- [ ] 11. Implement packaging logic and file operations
+  - Implement package_exports function with copy-based file operations
+  - Add support for export modes (all vs canonicals-only)
+  - Implement include_non_components filtering logic
+  - Add manifest path field updates (path_all, path_primary, path_duplicate)
+  - Ensure idempotent operations with safe file overwriting
+  - _Requirements: FR-7.2, FR-7.3, FR-7.5_
+
+- [ ] 11.1 Write property test for export mode compliance
+  - **Property 14: Export Mode Compliance**
+  - **Validates: Requirements FR-7.2**
+
+- [ ] 11.2 Write property test for manifest path accuracy
+  - **Property 15: Manifest Path Accuracy**
+  - **Validates: Requirements FR-7.3**
+
+- [ ] 11.3 Write property test for packaging idempotence
+  - **Property 16: Packaging Idempotence**
+  - **Validates: Requirements FR-7.5**
+
+- [ ] 12. Add packaging CLI options and integration
+  - Add --package/--no-package, --export-mode, --include-non-components options to CLI
+  - Integrate packaging step into extraction pipeline
+  - Update CLI help text and option descriptions
+  - Add packaging statistics to output logging
+  - _Requirements: FR-7.4_
+
+- [ ] 12.1 Write unit tests for packaging CLI options
+  - Test CLI option parsing and validation
+  - Test integration of packaging with extraction pipeline
+  - Test packaging statistics reporting
+  - _Requirements: FR-7.4, FR-8.1_
+
+- [ ] 13. Create comprehensive packaging tests
+  - Implement unit tests for package_exports function
+  - Test directory creation, file copying, and manifest updates
+  - Test Windows-safe file operations (no WinError 32)
+  - Test all export modes and configuration combinations
+  - _Requirements: FR-8.1_
+
+- [ ] 13.1 Write property test for file copy preservation
+  - **Property 17: File Copy Preservation**
+  - **Validates: Requirements FR-7.5**
+
+- [ ] 14. Phase 5 checkpoint - structured output validation
+  - Ensure all tests pass, ask the user if questions arise
+  - Validate complete directory layout creation
+  - Test canonicals-only mode exports only canonical images
+  - Verify manifest includes correct paths
+  - Test idempotent re-runs produce identical results
+  - _Requirements: FR-7.1, FR-7.2, FR-7.3, FR-7.5_
+
 ## Final Checkpoint and Documentation
 
-- [ ] 10. Final validation and documentation
+- [ ] 15. Final validation and documentation
   - Ensure all tests pass, ask the user if questions arise
   - Validate code quality with black, ruff, and mypy
-  - Update README.md with complete installation, usage, and feature documentation
+  - Update README.md with complete installation, usage, and feature documentation including Phase 5 options
   - Add docstrings and type hints throughout codebase
   - Verify CLI help text and error messages are clear and actionable
-  - _Requirements: FR-4.1, FR-5.1, NFR-3_
+  - Update design.md and requirements.md with Phase 5 structured output documentation
+  - _Requirements: FR-4.1, FR-5.1, FR-7.4, NFR-3_

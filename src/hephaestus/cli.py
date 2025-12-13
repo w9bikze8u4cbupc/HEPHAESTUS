@@ -1,7 +1,19 @@
 from pathlib import Path
 import sys
+import os
 
 import typer
+
+# Ensure UTF-8 encoding for Windows compatibility
+if sys.platform == "win32":
+    # Set console output to UTF-8 on Windows
+    os.environ["PYTHONIOENCODING"] = "utf-8"
+    # Try to set console code page to UTF-8
+    try:
+        import subprocess
+        subprocess.run(["chcp", "65001"], shell=True, capture_output=True)
+    except Exception:
+        pass  # Ignore if chcp fails
 
 from .config import Settings
 from .logging import get_logger
@@ -13,8 +25,41 @@ from .text.index import SpatialTextIndex
 from .metadata.annotator import annotate_components
 from .dedup.model import deduplicate_images
 from .output.manifest import build_manifest, write_manifest_json
+from .output.package import package_exports
 
 app = typer.Typer(help="HEPHAESTUS – board-game component extractor", no_args_is_help=True)
+
+
+def safe_echo(message: str) -> None:
+    """Echo message with Unicode fallback for Windows compatibility."""
+    try:
+        typer.echo(message)
+    except UnicodeEncodeError:
+        # Fallback: replace Unicode characters with ASCII equivalents
+        fallback_message = (
+            message.replace("✅", "[OK]")
+            .replace("📄", "[PDF]")
+            .replace("🖼️", "[IMG]")
+            .replace("🎯", "[COMP]")
+            .replace("🎨", "[ART]")
+            .replace("🏷️", "[LBL]")
+            .replace("🔢", "[QTY]")
+            .replace("✨", "[META]")
+            .replace("🔄", "[DUP]")
+            .replace("📋", "[LIST]")
+            .replace("📦", "[PKG]")
+            .replace("📁", "[DIR]")
+            .replace("🔍", "[FILT]")
+            .replace("📊", "[STATS]")
+        )
+        try:
+            typer.echo(fallback_message)
+        except UnicodeEncodeError:
+            # Ultimate fallback: print to stdout with error handling
+            try:
+                print(fallback_message)
+            except UnicodeEncodeError:
+                print("Output contains unsupported characters")
 
 
 @app.command()
@@ -27,6 +72,9 @@ def extract(
     write_manifest: bool = typer.Option(True, "--write-manifest/--no-write-manifest", help="Write JSON manifest file"),
     dedup: bool = typer.Option(True, "--dedup/--no-dedup", help="Enable perceptual deduplication"),
     dedup_threshold: int = typer.Option(8, help="Perceptual hash distance threshold for deduplication"),
+    package: bool = typer.Option(True, "--package/--no-package", help="Enable structured output packaging"),
+    export_mode: str = typer.Option("all", help="Export mode: 'all' or 'canonicals-only'"),
+    include_non_components: bool = typer.Option(False, help="Include non-components in structured folders"),
 ) -> None:
     """
     Extract embedded images from a PDF and save them as PNG files.
@@ -113,6 +161,25 @@ def extract(
                 if write_manifest:
                     logger.info("Generating component manifest...")
                     manifest = build_manifest(pdf_path, images, classification_map, metadata_list, paths, dedup_groups)
+                    
+                    # Phase 5: Structured output packaging
+                    if package:
+                        logger.info("Packaging structured output...")
+                        # Validate export mode
+                        if export_mode not in ["all", "canonicals-only"]:
+                            logger.error(f"Invalid export mode: {export_mode}. Must be 'all' or 'canonicals-only'")
+                            raise typer.Exit(code=1)
+                        
+                        updated_manifest_items, package_result = package_exports(
+                            out, manifest.items, export_mode, include_non_components
+                        )
+                        
+                        # Update manifest with new items that have path information
+                        from dataclasses import replace
+                        manifest = replace(manifest, items=updated_manifest_items)
+                        
+                        logger.info(f"Structured packaging complete: {package_result.exported_primary} canonicals, {package_result.exported_duplicates} duplicates")
+                    
                     manifest_path = write_manifest_json(manifest, out)
                     logger.info(f"Wrote manifest to {manifest_path}")
                 
@@ -125,28 +192,36 @@ def extract(
                 duplicate_groups = len(set(group.group_id for group in dedup_groups.values() if len(group.image_ids) > 1))
                 total_duplicates = sum(len(group.image_ids) - 1 for group in dedup_groups.values() if len(group.image_ids) > 1)
                 
-                typer.echo(f"\n✅ Extraction complete!")
-                typer.echo(f"📄 Processed: {pdf_path}")
-                typer.echo(f"🖼️  Images extracted: {len(images)}")
-                typer.echo(f"🎯 Components identified: {summary['components']}")
-                typer.echo(f"🎨 Non-components: {summary['non_components']}")
-                typer.echo(f"🏷️  With labels: {metadata_with_labels}")
-                typer.echo(f"🔢 With quantities: {metadata_with_quantities}")
-                typer.echo(f"✨ Complete metadata: {metadata_complete}")
+                safe_echo(f"\n✅ Extraction complete!")
+                safe_echo(f"📄 Processed: {pdf_path}")
+                safe_echo(f"🖼️  Images extracted: {len(images)}")
+                safe_echo(f"🎯 Components identified: {summary['components']}")
+                safe_echo(f"🎨 Non-components: {summary['non_components']}")
+                safe_echo(f"🏷️  With labels: {metadata_with_labels}")
+                safe_echo(f"🔢 With quantities: {metadata_with_quantities}")
+                safe_echo(f"✨ Complete metadata: {metadata_complete}")
                 if dedup:
-                    typer.echo(f"🔄 Duplicate groups: {duplicate_groups}")
-                    typer.echo(f"📋 Total duplicates: {total_duplicates}")
-                typer.echo(f"📁 Output directory: {out}")
-                typer.echo(f"🔍 Filter criteria: {min_width}x{min_height} pixels minimum")
+                    safe_echo(f"🔄 Duplicate groups: {duplicate_groups}")
+                    safe_echo(f"📋 Total duplicates: {total_duplicates}")
+                
+                # Phase 5: Show packaging information
+                if package and write_manifest and manifest:
+                    # Count items with structured paths
+                    canonicals_exported = sum(1 for item in manifest.items if item.path_primary is not None)
+                    duplicates_exported = sum(1 for item in manifest.items if item.path_duplicate is not None)
+                    safe_echo(f"📦 Structured export ({export_mode}): {canonicals_exported} canonicals, {duplicates_exported} duplicates")
+                
+                safe_echo(f"📁 Output directory: {out}")
+                safe_echo(f"🔍 Filter criteria: {min_width}x{min_height} pixels minimum")
                 
                 if write_manifest and manifest:
-                    typer.echo(f"📋 Manifest: manifest.json")
+                    safe_echo(f"📋 Manifest: manifest.json")
                 
                 # Show classification breakdown
                 if summary['labels']:
-                    typer.echo(f"📊 Classification breakdown:")
+                    safe_echo(f"📊 Classification breakdown:")
                     for label, count in summary['labels'].items():
-                        typer.echo(f"   {label}: {count}")
+                        safe_echo(f"   {label}: {count}")
                 
             except Exception as exc:
                 logger.error(f"Failed to save images: {exc}")

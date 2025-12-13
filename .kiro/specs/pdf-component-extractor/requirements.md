@@ -19,6 +19,11 @@ This document specifies the **functional and non-functional requirements** for t
 - **HEPHAESTUS** – The PDF board-game component extraction system
 - **PyMuPDF** – Python library (fitz) for PDF document manipulation and parsing
 - **CLI** – Command-line interface for system interaction
+- **Canonical image** – The primary representative of a group of similar/duplicate images
+- **Duplicate image** – A non-canonical image that is similar to a canonical image
+- **Category** – A classification grouping (cards, tokens, boards, tiles, dice, unknown, non_components)
+- **Export mode** – Configuration option controlling which image types are included in structured output
+- **Packaging** – The process of organizing extracted images into structured directory hierarchy
 
 ## 3. System Context
 
@@ -143,22 +148,71 @@ _When_ implementing the system, _the design shall_ separate concerns into module
 - WHEN running unit tests, THE HEPHAESTUS SHALL allow exercising PDF ingestion without invoking image extraction and vice versa
 - WHEN adding future modules (e.g., classifier), THE HEPHAESTUS SHALL allow integration without changing the public API of existing modules
 
-### 4.7 Testing Strategy
+### 4.7 Structured Output Packaging (Phase 5)
 
-**FR-7.1 – Unit tests**
+**FR-7.1 – Output directory taxonomy**
+
+_When_ extraction completes, _the HEPHAESTUS shall_ organize output into a structured directory hierarchy based on component classification.
+
+**Acceptance criteria**
+- WHEN running extraction with packaging enabled, THE HEPHAESTUS SHALL create directories: images/all/, images/canonicals/, and images/duplicates/
+- WHEN organizing canonicals and duplicates, THE HEPHAESTUS SHALL group images by category subdirectories (cards, tokens, boards, tiles, dice, unknown, non_components)
+- WHEN classification labels are normalized, THE HEPHAESTUS SHALL map classifier labels to category names deterministically
+
+**FR-7.2 – Canonical vs duplicate export control**
+
+_When_ the user specifies export modes, _the HEPHAESTUS shall_ provide options for controlling which images are exported to structured folders.
+
+**Acceptance criteria**
+- WHEN running with --export-mode=all, THE HEPHAESTUS SHALL populate both canonicals/ and duplicates/ folders
+- WHEN running with --export-mode=canonicals-only, THE HEPHAESTUS SHALL populate only canonicals/ folder while maintaining complete manifest
+- WHEN running with --include-non-components=false, THE HEPHAESTUS SHALL exclude non_components from canonicals/duplicates folders but include in manifest
+
+**FR-7.3 – Enhanced manifest with paths**
+
+_When_ packaging is enabled, _the HEPHAESTUS shall_ extend the manifest to include file path information for all export modes.
+
+**Acceptance criteria**
+- WHEN generating manifest entries, THE HEPHAESTUS SHALL include path_all field with relative path to images/all/ location
+- WHEN an image is exported as canonical, THE HEPHAESTUS SHALL include path_primary field with relative path to canonicals/ location
+- WHEN an image is exported as duplicate, THE HEPHAESTUS SHALL include path_duplicate field with relative path to duplicates/ location
+- WHEN export-mode excludes an image type, THE HEPHAESTUS SHALL set corresponding path field to null
+
+**FR-7.4 – Packaging CLI options**
+
+_When_ the user runs the CLI, _the HEPHAESTUS shall_ provide options to control output packaging behavior.
+
+**Acceptance criteria**
+- WHEN running with --package/--no-package, THE HEPHAESTUS SHALL enable or disable structured output packaging (default: enabled)
+- WHEN running with --export-mode option, THE HEPHAESTUS SHALL accept values "all" or "canonicals-only" (default: all)
+- WHEN running with --include-non-components flag, THE HEPHAESTUS SHALL control whether non-component images appear in structured folders
+
+**FR-7.5 – Deterministic and idempotent packaging**
+
+_When_ packaging operations are performed, _the HEPHAESTUS shall_ ensure consistent and repeatable results.
+
+**Acceptance criteria**
+- WHEN running packaging multiple times with identical inputs, THE HEPHAESTUS SHALL produce identical directory structures and file contents
+- WHEN re-running packaging on existing output, THE HEPHAESTUS SHALL safely overwrite files without corruption or partial states
+- WHEN copying files between directories, THE HEPHAESTUS SHALL use copy operations to preserve the images/all/ archive
+
+### 4.8 Testing Strategy
+
+**FR-8.1 – Unit tests**
 
 _When_ the codebase is built, _the HEPHAESTUS shall_ include unit tests for all critical functions.
 
 **Acceptance criteria**
 - WHEN running `pytest`, THE HEPHAESTUS SHALL execute successfully in CI and locally
-- WHEN testing the system, THE HEPHAESTUS SHALL include tests for PDF opening, image extraction, filtering, and CLI behavior
+- WHEN testing the system, THE HEPHAESTUS SHALL include tests for PDF opening, image extraction, filtering, CLI behavior, and output packaging
 
-**FR-7.2 – Property-based tests (core logic)**
+**FR-8.2 – Property-based tests (core logic)**
 
-_When_ feasible, _the HEPHAESTUS shall_ employ property-based testing for pure functions (e.g., ID generation, naming, filtering).
+_When_ feasible, _the HEPHAESTUS shall_ employ property-based testing for pure functions (e.g., ID generation, naming, filtering, packaging).
 
 **Acceptance criteria**
 - WHEN testing key modules, THE HEPHAESTUS SHALL include at least one module (e.g., filtering or naming) covered by Hypothesis tests that explore a wide range of randomized inputs
+- WHEN testing packaging operations, THE HEPHAESTUS SHALL include property tests for directory structure creation, category mapping, and idempotence
 
 ## 5. Non-Functional Requirements
 

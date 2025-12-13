@@ -150,15 +150,17 @@ def save_images_flat(
     output_dir: Path,
     fmt: str = "png",
 ) -> list[Path]:
-    """Save extracted images to a flat directory structure."""
-    output_dir.mkdir(parents=True, exist_ok=True)
+    """Save extracted images to a flat directory structure in images/all/."""
+    # Create the images/all directory structure for Phase 5 compatibility
+    all_dir = output_dir / "images" / "all"
+    all_dir.mkdir(parents=True, exist_ok=True)
     saved_paths: list[Path] = []
     
-    logger.info(f"Saving {len(images)} images to {output_dir}")
+    logger.info(f"Saving {len(images)} images to {all_dir}")
     
     for image in images:
         filename = f"component_{image.id}.{fmt.lower()}"
-        path = output_dir / filename
+        path = all_dir / filename
         
         try:
             image.pixmap.save(path.as_posix())

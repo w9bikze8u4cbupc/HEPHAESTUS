@@ -27,10 +27,16 @@ PDF file(s)
 [Filtering + ID Assignment]
    │
    ▼
-[Image Export]
+[Image Export (flat)]
    │
    ▼
-[Future: Classification → Metadata → Dedup → Manifest]
+[Output Packaging] ← Phase 5
+   │
+   ▼
+[Structured Directory Layout]
+   │
+   ▼
+[Future: Classification → Metadata → Dedup → Enhanced Manifest]
 ```
 
 ### 2.2 Modules
@@ -42,6 +48,9 @@ We organize the code under `src/hephaestus/`:
 - `pdf/ingestion.py` – PDF opening & page abstraction
 - `pdf/images.py` – embedded image extraction & representation
 - `cli.py` – Typer-based CLI front-end
+
+**(Phase 5 - Structured Output)**
+- `output/package.py` – structured directory organization and file packaging
 
 **(Future)**
 - `pdf/text.py` – spatial text extraction
@@ -243,6 +252,9 @@ def extract(
     out: Path = typer.Option(Path("output"), "--out", "-o"),
     min_width: int = typer.Option(50, help="Minimum image width in pixels"),
     min_height: int = typer.Option(50, help="Minimum image height in pixels"),
+    package: bool = typer.Option(True, "--package/--no-package", help="Enable structured output packaging"),
+    export_mode: str = typer.Option("all", help="Export mode: 'all' or 'canonicals-only'"),
+    include_non_components: bool = typer.Option(False, help="Include non-components in structured folders"),
 ):
     logger = get_logger(__name__)
     try:
@@ -277,7 +289,107 @@ if __name__ == "__main__":
 hephaestus = "hephaestus.cli:main"
 ```
 
-## 4. Correctness Properties
+## 4. Phase 5 Components - Structured Output
+
+### 4.1 Output Packaging Module
+
+**File:** `output/package.py`
+
+**Responsibilities**
+- Create structured directory hierarchy based on component categories
+- Copy images from flat output to organized folders
+- Update manifest with file path information
+- Support different export modes (all vs canonicals-only)
+
+**API sketch**
+
+```python
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
+
+@dataclass(frozen=True)
+class PackageResult:
+    all_dir: Path
+    canonicals_dir: Path
+    duplicates_dir: Path
+    exported_primary: int
+    exported_duplicates: int
+
+@dataclass
+class ManifestItem:
+    id: str
+    page_index: int
+    width: int
+    height: int
+    is_canonical: bool
+    category: str
+    path_all: str
+    path_primary: Optional[str] = None
+    path_duplicate: Optional[str] = None
+
+def package_exports(
+    output_dir: Path,
+    manifest: list[ManifestItem],
+    export_mode: str,
+    include_non_components: bool,
+) -> tuple[list[ManifestItem], PackageResult]:
+    """
+    Creates directory structure, copies files, updates manifest paths.
+    Returns updated manifest and packaging statistics.
+    """
+```
+
+### 4.2 Directory Structure
+
+**Target Layout:**
+```
+OUTDIR/
+├── manifest.json
+└── images/
+    ├── all/
+    │   └── component_<id>.png           (all extracted images)
+    ├── canonicals/
+    │   ├── cards/
+    │   │   └── component_<id>.png
+    │   ├── tokens/
+    │   │   └── component_<id>.png
+    │   ├── boards/
+    │   ├── tiles/
+    │   ├── dice/
+    │   ├── unknown/
+    │   └── non_components/              (if include_non_components=true)
+    └── duplicates/
+        ├── cards/
+        ├── tokens/
+        └── ...                          (same category structure)
+```
+
+### 4.3 Category Mapping
+
+**Classification to Category Rules:**
+- `card` → `cards`
+- `token` → `tokens`  
+- `board` → `boards`
+- `tile` → `tiles`
+- `dice` → `dice`
+- `non-component` → `non_components`
+- All others → `unknown`
+
+### 4.4 Export Mode Behavior
+
+**all mode (default):**
+- Populate `images/all/`, `images/canonicals/`, and `images/duplicates/`
+- All manifest items have `path_all` set
+- Canonical items have `path_primary` set
+- Duplicate items have `path_duplicate` set
+
+**canonicals-only mode:**
+- Populate `images/all/` and `images/canonicals/` only
+- Canonical items have `path_primary` set
+- Duplicate items have `path_duplicate = null`
+
+## 5. Correctness Properties
 
 *A property is a characteristic or behavior that should hold true across all valid executions of a system-essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
 
@@ -326,6 +438,30 @@ We derive testable properties from the requirements:
 **Property 11: Config Invariants**
 *For any* negative thresholds or non-existent output directories, they should be rejected with clear errors
 **Validates: Requirements FR-4.2, FR-5.1**
+
+**Property 12: Directory Structure Consistency**
+*For any* packaging operation, the created directory structure should match the expected taxonomy
+**Validates: Requirements FR-7.1**
+
+**Property 13: Category Mapping Determinism**
+*For any* classification label, the category mapping should be consistent and deterministic
+**Validates: Requirements FR-7.1**
+
+**Property 14: Export Mode Compliance**
+*For any* export mode setting, only the specified image types should appear in structured folders
+**Validates: Requirements FR-7.2**
+
+**Property 15: Manifest Path Accuracy**
+*For any* packaged image, the manifest path fields should correctly reference existing files
+**Validates: Requirements FR-7.3**
+
+**Property 16: Packaging Idempotence**
+*For any* packaging operation run multiple times with identical inputs, the results should be identical
+**Validates: Requirements FR-7.5**
+
+**Property 17: File Copy Preservation**
+*For any* image copied during packaging, the content should be identical to the source in images/all/
+**Validates: Requirements FR-7.5**
 
 ## 5. Error Handling
 
