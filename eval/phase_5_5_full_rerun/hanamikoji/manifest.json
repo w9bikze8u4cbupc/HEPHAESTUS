@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "source_pdf": "data\\rulebooks\\Hanamikoji.pdf",
+  "extraction_timestamp": "2025-12-19T07:19:35.890025",
+  "total_items": 4,
+  "summary": {
+    "total_items": 4,
+    "components": 1,
+    "non_components": 3,
+    "component_ratio": 0.25,
+    "metadata_coverage": {
+      "with_labels": 0,
+      "with_quantities": 0,
+      "complete": 0,
+      "label_success_rate": 0.0,
+      "quantity_success_rate": 0.0,
+      "complete_success_rate": 0.0
+    },
+    "confidence_scores": {
+      "average_classification": 0.925,
+      "average_metadata": 0.0
+    },
+    "distributions": {
+      "classifications": {
+        "board": 1,
+        "non-component": 3
+      },
+      "pages": {
+        "0": 4
+      },
+      "top_labels": {}
+    },
+    "deduplication": {
+      "total_duplicates": 0,
+      "unique_groups": 0,
+      "duplicate_ratio": 0.0
+    }
+  },
+  "items": [
+    {
+      "image_id": "p0_img0",
+      "file_name": "component_p0_img0.png",
+      "page_index": 0,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 687,
+        "height": 237
+      },
+      "bbox": {
+        "x0": 557.530029296875,
+        "y0": 34.43158721923828,
+        "x1": 722.3123779296875,
+        "y1": 91.10791015625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img0",
+      "file_path": "eval\\phase_5_5_full_rerun\\hanamikoji\\images\\all\\component_p0_img0.png",
+      "path_all": "images/all/component_p0_img0.png",
+      "path_primary": "images/canonicals/boards/component_p0_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p0_img1",
+      "file_name": "component_p0_img75.png",
+      "page_index": 0,
+      "classification": "non-component",
+      "classification_confidence": 1.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 98,
+        "height": 98
+      },
+      "bbox": {
+        "x0": 685.346923828125,
+        "y0": 280.2693176269531,
+        "x1": 708.8468627929688,
+        "y1": 303.769287109375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img1",
+      "file_path": "eval\\phase_5_5_full_rerun\\hanamikoji\\images\\all\\component_p0_img75.png",
+      "path_all": "images/all/component_p0_img1.png",
+      "path_primary": null,
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p0_img2",
+      "file_name": "component_p0_img76.png",
+      "page_index": 0,
+      "classification": "non-component",
+      "classification_confidence": 1.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 88,
+        "height": 120
+      },
+      "bbox": {
+        "x0": 145.35525512695312,
+        "y0": 396.0435791015625,
+        "x1": 166.38880920410156,
+        "y1": 424.69049072265625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img2",
+      "file_path": "eval\\phase_5_5_full_rerun\\hanamikoji\\images\\all\\component_p0_img76.png",
+      "path_all": "images/all/component_p0_img2.png",
+      "path_primary": null,
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p0_img3",
+      "file_name": "component_p0_img77.png",
+      "page_index": 0,
+      "classification": "non-component",
+      "classification_confidence": 1.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 88,
+        "height": 120
+      },
+      "bbox": {
+        "x0": 186.78189086914062,
+        "y0": 396.0435791015625,
+        "x1": 207.81544494628906,
+        "y1": 424.69049072265625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img3",
+      "file_path": "eval\\phase_5_5_full_rerun\\hanamikoji\\images\\all\\component_p0_img77.png",
+      "path_all": "images/all/component_p0_img3.png",
+      "path_primary": null,
+      "path_duplicate": null
+    }
+  ]
+}
