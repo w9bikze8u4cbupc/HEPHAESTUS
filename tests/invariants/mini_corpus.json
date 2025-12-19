@@ -1,0 +1,76 @@
+{
+  "description": "Phase 5.6+ Golden Input Corpus for Invariant Verification",
+  "version": "1.0.0",
+  "last_updated": "2025-12-19",
+  "purpose": "Pinned test inputs to prevent regression of Phase 5.6 colorspace guarantees",
+  "rulebooks": [
+    {
+      "id": "jaipur",
+      "filename": "Jaipur.pdf",
+      "slug": "jaipur",
+      "baseline": {
+        "images_attempted": 254,
+        "images_saved": 254,
+        "conversion_failures": 0,
+        "component_detection_rate": 1.0,
+        "primary_colorspace": "DeviceCMYK"
+      },
+      "critical_properties": [
+        "100% CMYK conversion success",
+        "Zero silent drops",
+        "Complete component detection"
+      ]
+    },
+    {
+      "id": "seti",
+      "filename": "seti-rules-en.pdf", 
+      "slug": "seti",
+      "baseline": {
+        "images_attempted": 242,
+        "images_saved": 241,
+        "conversion_failures": 1,
+        "component_detection_rate": 0.992,
+        "primary_colorspace": "ICCBased(RGB,sRGB IEC61966-2.1)"
+      },
+      "critical_properties": [
+        "ICCBased conversion success",
+        "Proper failure handling (p23_img27)",
+        "Extraction log context integrity"
+      ],
+      "special_assertions": [
+        "p23_img27 must be logged as failed on page_index=23"
+      ]
+    },
+    {
+      "id": "dune_imperium",
+      "filename": "DUNE_IMPERIUM_Rules_2020_10_26.pdf",
+      "slug": "dune_imperium", 
+      "baseline": {
+        "images_attempted": 209,
+        "images_saved": 209,
+        "conversion_failures": 0,
+        "component_detection_rate": 0.981,
+        "primary_colorspace": "ICCBased(RGB,sRGB IEC61966-2.1)"
+      },
+      "critical_properties": [
+        "ICCBased conversion success",
+        "High component detection rate",
+        "Regression prevention baseline"
+      ]
+    }
+  ],
+  "invariant_requirements": {
+    "manifest_disk_consistency": "manifest_paths == disk_paths",
+    "health_metrics_identity": "attempted == saved + failures",
+    "persistence_boundary": "FAILED => no_file, PERSISTED => file_exists_size_gt_0",
+    "extraction_log_integrity": "no_placeholders_proper_context",
+    "zero_silent_drops": "all_failures_explicitly_logged"
+  },
+  "failure_conditions": [
+    "Any invariant violation",
+    "Placeholder context (image_id=unknown, page_index=-1)",
+    "Silent retries or best-effort continuation",
+    "Manifest/disk drift",
+    "Missing extraction log entries"
+  ]
+}
