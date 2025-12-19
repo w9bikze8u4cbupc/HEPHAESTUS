@@ -121,8 +121,24 @@ def extract(
             
             logger.info(f"Saving {len(images)} images to {out}")
             try:
-                paths = save_images_flat(images, out)
+                # Extract rulebook ID from PDF path for logging
+                rulebook_id = pdf_path.stem if pdf_path else "unknown"
+                path_mapping, health_metrics = save_images_flat(images, out, rulebook_id=rulebook_id)
+                paths = list(path_mapping.values())  # Convert to list for backward compatibility
                 logger.info(f"Successfully saved {len(paths)} images")
+                
+                # Log health metrics for Phase 5.6 visibility
+                logger.info(f"Extraction health: {health_metrics.success_rate:.2%} success rate")
+                if health_metrics.failure_rate > 0:
+                    logger.warning(f"Conversion failures: {health_metrics.conversion_failures}/{health_metrics.images_attempted}")
+                    logger.info(f"Colorspace distribution: {health_metrics.colorspace_distribution}")
+                    logger.info(f"Failure reasons: {health_metrics.failure_reasons}")
+                
+                # Hard fail if extraction health is unacceptable (>20% failure rate)
+                if health_metrics.failure_rate > 0.20:
+                    logger.error(f"CRITICAL: Extraction failure rate {health_metrics.failure_rate:.2%} exceeds 20% threshold")
+                    logger.error("This indicates a systemic colorspace handling issue")
+                    raise typer.Exit(1)
                 
                 # Phase 4: Deduplicate images
                 dedup_groups = {}
@@ -160,7 +176,7 @@ def extract(
                 manifest = None
                 if write_manifest:
                     logger.info("Generating component manifest...")
-                    manifest = build_manifest(pdf_path, images, classification_map, metadata_list, paths, dedup_groups)
+                    manifest = build_manifest(pdf_path, images, classification_map, metadata_list, path_mapping, dedup_groups, health_metrics)
                     
                     # Phase 5: Structured output packaging
                     if package:

@@ -90,9 +90,31 @@ def classify_heuristic(image: ExtractedImage) -> Dict[str, Any]:
 
 
 def _pixmap_to_pil(pixmap) -> Image.Image:
-    """Convert PyMuPDF Pixmap to PIL Image."""
-    img_data = pixmap.tobytes("png")
-    return Image.open(io.BytesIO(img_data))
+    """Convert PyMuPDF Pixmap to PIL Image with colorspace handling."""
+    try:
+        # Try direct PNG conversion first
+        img_data = pixmap.tobytes("png")
+        return Image.open(io.BytesIO(img_data))
+    except Exception:
+        # If PNG conversion fails due to colorspace, try alternative formats
+        try:
+            # Try PPM format which supports more colorspaces
+            img_data = pixmap.tobytes("ppm")
+            return Image.open(io.BytesIO(img_data))
+        except Exception:
+            # Last resort: try raw pixel data conversion
+            try:
+                import fitz
+                # Convert to RGB colorspace first
+                rgb_pixmap = fitz.Pixmap(fitz.csRGB, pixmap)
+                img_data = rgb_pixmap.tobytes("png")
+                rgb_pixmap = None  # Clean up
+                return Image.open(io.BytesIO(img_data))
+            except Exception as final_exc:
+                # If all else fails, create a placeholder image
+                logger.warning(f"Failed to convert pixmap to PIL image: {final_exc}")
+                # Return a small placeholder image to avoid breaking the pipeline
+                return Image.new('RGB', (pixmap.width, pixmap.height), color='gray')
 
 
 def _analyze_color_complexity(pil_image: Image.Image) -> Dict[str, Any]:

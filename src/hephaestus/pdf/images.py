@@ -7,6 +7,7 @@ from typing import Literal, Sequence, Optional
 import fitz  # type: ignore[import]
 
 from .ingestion import PdfDocument
+from .colorspace import normalize_pdf_image, NormalizedImageResult, ExtractionHealthMetrics, calculate_health_metrics, validate_extraction_health, write_extraction_log
 from ..text.spatial import BBox
 from ..logging import get_logger
 
@@ -149,26 +150,61 @@ def save_images_flat(
     images: Sequence[ExtractedImage],
     output_dir: Path,
     fmt: str = "png",
-) -> list[Path]:
-    """Save extracted images to a flat directory structure in images/all/."""
+    rulebook_id: str = "unknown",
+) -> tuple[Dict[str, Path], ExtractionHealthMetrics]:
+    """
+    Save extracted images to a flat directory structure with colorspace normalization.
+    
+    Returns:
+        Tuple of (image_id_to_path_mapping, health_metrics)
+    """
     # Create the images/all directory structure for Phase 5 compatibility
     all_dir = output_dir / "images" / "all"
     all_dir.mkdir(parents=True, exist_ok=True)
-    saved_paths: list[Path] = []
+    saved_path_mapping: Dict[str, Path] = {}
+    normalization_results: list[NormalizedImageResult] = []
     
-    logger.info(f"Saving {len(images)} images to {all_dir}")
+    logger.info(f"Saving {len(images)} images to {all_dir} with colorspace normalization")
     
     for image in images:
         filename = f"component_{image.id}.{fmt.lower()}"
         path = all_dir / filename
         
-        try:
-            image.pixmap.save(path.as_posix())
-            saved_paths.append(path)
-            logger.debug(f"Saved {image.id} as {path}")
-        except Exception as exc:
-            logger.error(f"Failed to save {image.id}: {exc}")
-            continue
+        # Use colorspace normalization instead of direct save
+        result = normalize_pdf_image(
+            pixmap=image.pixmap,
+            image_id=image.id,
+            output_path=path,
+            fmt=fmt
+        )
+        
+        normalization_results.append(result)
+        
+        if result.output_path:
+            saved_path_mapping[image.id] = result.output_path
+            logger.debug(f"Normalized and saved {image.id} as {path}")
+        else:
+            logger.error(f"Failed to normalize {image.id}: {result.errors}")
     
-    logger.info(f"Successfully saved {len(saved_paths)} images")
-    return saved_paths
+    # Calculate health metrics
+    health_metrics = calculate_health_metrics(normalization_results)
+    
+    # Write structured extraction log
+    log_path = output_dir / "extraction_log.jsonl"
+    write_extraction_log(normalization_results, log_path, rulebook_id)
+    
+    # Validate extraction health (fail-fast if >20% failures)
+    if not validate_extraction_health(health_metrics, failure_threshold=0.20):
+        logger.error(
+            f"EXTRACTION HEALTH CHECK FAILED: "
+            f"{health_metrics.failure_rate:.2%} failure rate exceeds 20% threshold"
+        )
+        # Note: We log the error but don't raise an exception to allow partial results
+        # The caller can check health_metrics.failure_rate to decide on hard failure
+    
+    logger.info(
+        f"Extraction complete: {len(saved_path_mapping)}/{len(images)} images saved "
+        f"({health_metrics.success_rate:.2%} success rate)"
+    )
+    
+    return saved_path_mapping, health_metrics

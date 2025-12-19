@@ -90,7 +90,8 @@ class TestImageSaving:
             
             output_path = tmp_path / "output"
             output_path.mkdir()
-            saved_paths = save_images_flat(images, output_path)
+            path_mapping, health_metrics = save_images_flat(images, output_path, rulebook_id="test")
+            saved_paths = list(path_mapping.values())
             
             assert len(saved_paths) == len(images)
             

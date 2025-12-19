@@ -265,7 +265,8 @@ class TestPackageExports:
             
             # Step 1: Save images using save_images_flat (should create images/all/)
             from src.hephaestus.pdf.images import save_images_flat
-            saved_paths = save_images_flat([test_image], output_dir)
+            path_mapping, health_metrics = save_images_flat([test_image], output_dir, rulebook_id="test")
+            saved_paths = list(path_mapping.values())
             
             # Verify images are saved in the correct location
             expected_path = output_dir / "images" / "all" / "component_test_img.png"

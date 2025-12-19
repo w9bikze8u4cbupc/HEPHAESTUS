@@ -185,6 +185,7 @@ class TestManifestBuilding:
             Path("output/component_img1.png"),
             Path("output/component_img2.png"),
         ]
+        path_mapping = {images[i].id: saved_paths[i] for i in range(len(images))}
         
         # Build manifest
         manifest = build_manifest(
@@ -192,7 +193,7 @@ class TestManifestBuilding:
             images,
             classifications,
             metadata,
-            saved_paths
+            path_mapping
         )
         
         assert manifest.version == "1.0.0"
@@ -221,13 +222,14 @@ class TestManifestBuilding:
         classifications = {}
         metadata = []
         saved_paths = [Path("output/component_img1.png")]
+        path_mapping = {images[0].id: saved_paths[0]}
         
         manifest = build_manifest(
             Path("test.pdf"),
             images,
             classifications,
             metadata,
-            saved_paths
+            path_mapping
         )
         
         assert manifest.total_items == 1
@@ -248,13 +250,14 @@ class TestManifestBuilding:
         
         # Only one saved path
         saved_paths = [Path("output/component_img1.png")]
+        path_mapping = {images[0].id: saved_paths[0]}  # Only img1 has a saved path
         
         manifest = build_manifest(
             Path("test.pdf"),
             images,
             {},
             [],
-            saved_paths
+            path_mapping
         )
         
         # Should only include images with saved paths
