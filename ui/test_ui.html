@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hephaestus Inspector - Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .test-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .test-steps {
+            background: #e8f4fd;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        .test-steps ol {
+            margin-left: 1rem;
+        }
+        .test-steps li {
+            margin-bottom: 0.5rem;
+        }
+        .launch-button {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        .launch-button:hover {
+            background: #34495e;
+        }
+        .expected-structure {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        <h1>🔍 Hephaestus Inspector - Phase 6.1 Test</h1>
+        
+        <h2>View 1: Extraction Health Panel - READY FOR TESTING</h2>
+        
+        <p>The Extraction Health Panel is complete and ready for inspection. This view displays system health before component browsing, as required by Phase 6.1.</p>
+        
+        <div class="test-steps">
+            <h3>Testing Instructions:</h3>
+            <ol>
+                <li>Click "Launch Inspector" below to open the UI</li>
+                <li>Click "Select Export Directory" and choose: <code>eval/phase_5_6_test/jaipur</code></li>
+                <li>Verify the Extraction Health Panel displays all required metrics</li>
+                <li>Confirm every displayed value is traceable to manifest/log sources</li>
+            </ol>
+        </div>
+        
+        <h3>Expected Display Fields:</h3>
+        <ul>
+            <li><strong>Core Metrics:</strong> 254 attempted, 254 saved, 0 failures, 100.0% success rate</li>
+            <li><strong>Fail-Fast Threshold:</strong> ✅ WITHIN LIMITS (0.0% < 20%)</li>
+            <li><strong>Health ↔ Log Consistency:</strong> ✅ CONSISTENT</li>
+            <li><strong>Colorspace Distribution:</strong> DeviceCMYK: 254 (100.0%)</li>
+            <li><strong>Conversion Operations:</strong> CMYK_to_RGB: 254 (100.0%)</li>
+            <li><strong>Failure Reasons:</strong> ✅ No conversion failures recorded</li>
+        </ul>
+        
+        <h3>Source Traceability:</h3>
+        <p>Every metric includes source field reference (e.g., "manifest.extraction_health.images_attempted")</p>
+        
+        <div class="expected-structure">
+Expected directory structure for testing:
+eval/phase_5_6_test/jaipur/
+├── manifest.json           ✅ Contains extraction_health
+├── extraction_log.jsonl    ✅ Contains 254 log entries  
+└── images/
+    └── all/               ✅ Contains 254 PNG files
+        </div>
+        
+        <a href="dist/index.html" class="launch-button" target="_blank">
+            🚀 Launch Inspector
+        </a>
+        
+        <h3>Phase 6.1 Compliance:</h3>
+        <ul>
+            <li>✅ Read-only interface - No mutation capabilities</li>
+            <li>✅ Direct artifact reading - No backend services</li>
+            <li>✅ Manifest is truth - All values from manifest.json</li>
+            <li>✅ Failures visible by default - No hiding mechanisms</li>
+            <li>✅ Source traceability - Every field references source</li>
+        </ul>
+    </div>
+</body>
+</html>

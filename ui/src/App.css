@@ -1,0 +1,396 @@
+/**
+ * Phase 6.1 Styles - Function over form
+ * 
+ * Minimal styling focused on clarity and traceability.
+ * Every visual element serves the forensic inspection purpose.
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  background: #2c3e50;
+  color: white;
+  padding: 1rem 2rem;
+  border-bottom: 3px solid #34495e;
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.artifact-info {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.artifact-info span {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+}
+
+.reset-button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.reset-button:hover {
+  background: #c0392b;
+}
+
+/* Main Content */
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Artifact Loader */
+.artifact-loader {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.artifact-loader h2 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.loader-section {
+  margin: 2rem 0;
+  padding: 2rem;
+  border: 2px dashed #bdc3c7;
+  border-radius: 8px;
+  background: white;
+}
+
+.directory-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.directory-input {
+  padding: 0.75rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.loading-state {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #3498db;
+  color: white;
+  border-radius: 4px;
+}
+
+.error-state {
+  margin: 1rem 0;
+  padding: 1.5rem;
+  background: #e74c3c;
+  color: white;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.error-help {
+  margin-top: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.error-help pre {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.loader-info {
+  margin-top: 2rem;
+  text-align: left;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #ecf0f1;
+}
+
+.loader-info ul {
+  list-style-position: inside;
+  margin-top: 0.5rem;
+}
+
+.loader-info li {
+  margin-bottom: 0.5rem;
+}
+
+/* Extraction Health Panel */
+.health-panel {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ecf0f1;
+}
+
+.health-panel.error {
+  border-color: #e74c3c;
+  background: #fdf2f2;
+}
+
+.health-panel h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 0.5rem;
+}
+
+.health-panel h3 {
+  color: #34495e;
+  margin: 1.5rem 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+/* Metrics Grid */
+.metrics-section {
+  margin-bottom: 2rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+}
+
+.metric label {
+  font-weight: bold;
+  color: #495057;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.metric .value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.metric .value.error {
+  color: #e74c3c;
+}
+
+.metric .source {
+  font-size: 0.7rem;
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+}
+
+/* Threshold Status */
+.threshold-section {
+  margin-bottom: 2rem;
+}
+
+.threshold-status {
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.threshold-status.within {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.threshold-status.exceeded {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.threshold-label {
+  font-weight: bold;
+}
+
+.threshold-value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.threshold-note {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Consistency Check */
+.consistency-section {
+  margin-bottom: 2rem;
+}
+
+.consistency-status {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.consistency-status.consistent {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.consistency-status.inconsistent {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.consistency-details {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+}
+
+.consistency-details div {
+  margin-bottom: 0.25rem;
+}
+
+/* Tables */
+.distribution-table,
+.operations-table,
+.failures-table {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  background: #f8f9fa;
+  font-weight: bold;
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.colorspace-name,
+.operation-name,
+.reason-code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+}
+
+.source-note {
+  font-size: 0.7rem;
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+  margin-top: 0.5rem;
+}
+
+.no-failures {
+  padding: 1rem;
+  text-align: center;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
+  color: #155724;
+}
+
+/* Footer */
+.app-footer {
+  background: #34495e;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1rem;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .artifact-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
