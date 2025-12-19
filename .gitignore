@@ -63,3 +63,9 @@ components/
 
 # Logs
 *.log
+
+# Debug and temporary files
+debug_*.py
+
+# Evaluation results (large test outputs)
+eval/
