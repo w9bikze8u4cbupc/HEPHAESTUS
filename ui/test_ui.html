@@ -58,9 +58,9 @@
     <div class="test-info">
         <h1>🔍 Hephaestus Inspector - Phase 6.1 Test</h1>
         
-        <h2>View 1: Extraction Health Panel + View 2: Failure Viewer - READY FOR TESTING</h2>
+        <h2>Views 1-3: Health Panel + Failure Viewer + Component Inventory - READY FOR TESTING</h2>
         
-        <p>Both primary views are complete and ready for inspection. The Extraction Health Panel displays system health, and the Failure Viewer provides raw log analysis.</p>
+        <p>Three primary views are complete: system health display, raw log analysis, and component inventory with canonical/duplicate grouping.</p>
         
         <div class="test-steps">
             <h3>Testing Instructions:</h3>
@@ -71,8 +71,10 @@
                 <li>Scroll down to the Failure Viewer section</li>
                 <li>Verify the raw log table shows all 242 extraction attempts</li>
                 <li>Filter by status="failed" to see the 1 failure (p23_img27)</li>
-                <li>Click on the failed row to see detailed analysis</li>
-                <li>Confirm file existence check and manifest link work correctly</li>
+                <li>Scroll down to the Component Inventory section</li>
+                <li>Verify canonical/duplicate grouping with 241 components displayed</li>
+                <li>Try different grouping modes and sorting options</li>
+                <li>Click on any component card to see drilldown entry point (console log)</li>
             </ol>
         </div>
         
@@ -87,12 +89,14 @@
             <li><strong>Failure Reasons:</strong> save_error: 1 (100.0% of failures)</li>
         </ul>
         
-        <h4>View 2: Failure Viewer</h4>
+        <h4>View 3: Component Inventory</h4>
         <ul>
-            <li><strong>Raw Log Table:</strong> 242 rows (all extraction attempts in file order)</li>
-            <li><strong>Filterable Columns:</strong> rulebook_id, page_index, image_id, reason_code, status</li>
-            <li><strong>Failed Entry (p23_img27):</strong> page_index=23, status=failed, reason_code=save_error</li>
-            <li><strong>Click-Through Details:</strong> Raw JSON, file existence check, manifest link, error details</li>
+            <li><strong>Component Grid:</strong> 241 components with thumbnails and metadata</li>
+            <li><strong>Grouping Modes:</strong> Canonical→Duplicates, All Items, Canonicals Only, Duplicates Only</li>
+            <li><strong>Sorting Options:</strong> Page Order, Classification, Confidence, Group Size</li>
+            <li><strong>Component Cards:</strong> Thumbnail, classification, confidence, page reference, metadata</li>
+            <li><strong>Deduplication Info:</strong> Canonical/duplicate role badges and group information</li>
+            <li><strong>Click-Through:</strong> Entry point to View 4 (Component Drilldown)</li>
         </ul>
         
         <h3>Source Traceability:</h3>
@@ -122,3 +126,11 @@ eval/phase_5_6_test/seti/
     </div>
 </body>
 </html>
+        
+        <h4>View 2: Failure Viewer</h4>
+        <ul>
+            <li><strong>Raw Log Table:</strong> 242 rows (all extraction attempts in file order)</li>
+            <li><strong>Filterable Columns:</strong> rulebook_id, page_index, image_id, reason_code, status</li>
+            <li><strong>Failed Entry (p23_img27):</strong> page_index=23, status=failed, reason_code=save_error</li>
+            <li><strong>Click-Through Details:</strong> Raw JSON, file existence check, manifest link, error details</li>
+        </ul>

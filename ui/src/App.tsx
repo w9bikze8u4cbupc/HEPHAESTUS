@@ -10,6 +10,7 @@ import { ArtifactBundle } from './types';
 import { ArtifactLoader } from './components/ArtifactLoader';
 import { ExtractionHealthPanel } from './components/ExtractionHealthPanel';
 import { FailureViewer } from './components/FailureViewer';
+import { ComponentInventory } from './components/ComponentInventory';
 import './App.css';
 
 export const App: React.FC = () => {
@@ -21,6 +22,11 @@ export const App: React.FC = () => {
 
   const handleReset = () => {
     setArtifacts(null);
+  };
+
+  const handleComponentSelect = (item: any) => {
+    // TODO: Implement View 4 (Component Drilldown) navigation
+    console.log('Component selected for drilldown:', item);
   };
 
   return (
@@ -59,8 +65,13 @@ export const App: React.FC = () => {
               manifestItems={artifacts.manifest.items}
             />
             
+            {/* View 3: Component Inventory - Canonical/duplicate grouping */}
+            <ComponentInventory
+              manifestItems={artifacts.manifest.items}
+              onComponentSelect={handleComponentSelect}
+            />
+            
             {/* Future views will be added here in strict order:
-                View 3: Component Inventory  
                 View 4: Component Drilldown */}
           </div>
         )}

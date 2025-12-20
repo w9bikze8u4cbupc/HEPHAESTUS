@@ -38,10 +38,28 @@ Raw rendering of extraction_log.jsonl with filtering capabilities - failures are
 - No "clean" formatting that obscures raw fields
 - No suppression of repeated failures
 
+### ✅ View 3: Component Inventory (COMPLETE)
+
+Canonical/duplicate grouping with thumbnails, classification, confidence, and source page reference.
+
+**Core Features**:
+- Deterministic canonical grouping rule: `canonical_image_id` defines groups
+- Multiple display modes: Canonical→Duplicates, All Items, Canonicals Only, Duplicates Only
+- Sorting options: Page Order, Classification, Confidence, Group Size
+- Classification filtering with confidence display
+- Thumbnail placeholders with role badges (CANONICAL/DUPLICATE)
+- Complete manifest metadata display: label, quantity, dimensions, file reference
+- Click-through to View 4 (Component Drilldown) entry point
+
+**Data Model**:
+- Groups defined by `manifest.items[].canonical_image_id`
+- Canonical item: `image_id === canonical_image_id`
+- Duplicate items: `is_duplicate === true` in same group
+- All data sourced directly from `manifest.json` items array
+
 ### 🚧 Pending Views (Strict Implementation Order)
 
-1. **View 3: Component Inventory** - Canonical/duplicate grouping with thumbnails
-2. **View 4: Component Drilldown** - PDF preview with overlays and metadata
+1. **View 4: Component Drilldown** - PDF preview with overlays and metadata
 
 ## Development
 
