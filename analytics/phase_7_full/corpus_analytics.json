@@ -1,0 +1,1519 @@
+{
+  "schema_version": "1.0.0",
+  "analysis_timestamp": "2025-12-20T19:06:50.955742",
+  "input_directory": "eval\\phase_5_6_test",
+  "rulebook_analytics": [
+    {
+      "identity": {
+        "rulebook_id": "7wd",
+        "source_pdf_path": "data\\rulebooks\\6b-7-wonders-duel-rules.pdf",
+        "pdf_filename": "6b-7-wonders-duel-rules.pdf",
+        "extraction_timestamp": "2025-12-19T09:19:52.439174",
+        "manifest_version": "1.0.0"
+      },
+      "pdf_characteristics": {
+        "page_count": 20,
+        "total_images_found": 200,
+        "has_text_artifacts": false,
+        "text_pages_count": 0,
+        "image_only_pages_count": 0,
+        "text_coverage_ratio": 0.0,
+        "avg_images_per_page": 10.0
+      },
+      "extraction_outcome": {
+        "images_attempted": 200,
+        "images_saved": 200,
+        "conversion_failures": 0,
+        "success_rate": 1.0,
+        "failure_rate": 0.0,
+        "colorspace_distribution": {
+          "DeviceCMYK": 200
+        },
+        "failure_reasons": {},
+        "failures_by_page": {},
+        "failures_by_colorspace": {},
+        "failures_by_size_range": {}
+      },
+      "classification_outcome": {
+        "total_components": 200,
+        "classification_distribution": {
+          "board": 29,
+          "card": 63,
+          "token": 60,
+          "unknown": 29,
+          "non-component": 19
+        },
+        "confidence_stats": {
+          "min": 0.0,
+          "max": 0.8,
+          "mean": 0.5465,
+          "median": 0.6,
+          "std": 0.23422651494121569
+        },
+        "low_confidence_count": 29,
+        "high_confidence_count": 19,
+        "unknown_classification_count": 29,
+        "confidence_by_type": {
+          "board": {
+            "min": 0.7,
+            "max": 0.7,
+            "mean": 0.7,
+            "count": 29
+          },
+          "card": {
+            "min": 0.6,
+            "max": 0.6,
+            "mean": 0.6,
+            "count": 63
+          },
+          "token": {
+            "min": 0.6,
+            "max": 0.6,
+            "mean": 0.6,
+            "count": 60
+          },
+          "unknown": {
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "count": 29
+          },
+          "non-component": {
+            "min": 0.8,
+            "max": 0.8,
+            "mean": 0.8,
+            "count": 19
+          }
+        }
+      },
+      "deduplication_outcome": {
+        "total_images": 200,
+        "canonical_images": 115,
+        "duplicate_images": 85,
+        "dedup_groups_count": 36,
+        "duplicate_ratio": 0.425,
+        "avg_group_size": 5.555555555555555,
+        "max_group_size": 19,
+        "group_size_distribution": {
+          "2": 17,
+          "4": 6,
+          "3": 8,
+          "5": 4,
+          "19": 1
+        },
+        "dedup_by_type": {
+          "board": {
+            "canonical": 11,
+            "duplicate": 18
+          },
+          "card": {
+            "canonical": 43,
+            "duplicate": 20
+          },
+          "token": {
+            "canonical": 29,
+            "duplicate": 31
+          },
+          "unknown": {
+            "canonical": 16,
+            "duplicate": 13
+          },
+          "non-component": {
+            "canonical": 16,
+            "duplicate": 3
+          }
+        }
+      },
+      "text_extraction_outcome": {
+        "pages_with_text": 0,
+        "pages_with_errors": 0,
+        "total_text_blocks": 0,
+        "avg_blocks_per_page": 0.0,
+        "components_with_text": 0,
+        "components_without_text": 0,
+        "text_intersection_ratio": 0.0,
+        "error_types": {},
+        "pages_by_block_count": {}
+      },
+      "failure_taxonomy": {
+        "extraction_failures": [],
+        "classification_anomalies": [
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img11",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img12",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img13",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 3,
+            "image_id": "p3_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 3,
+            "image_id": "p3_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 3,
+            "image_id": "p3_img18",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img7",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img10",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img11",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img12",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img13",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img0",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img12",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img4",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img5",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img7",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img11",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img12",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 11,
+            "image_id": "p11_img17",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 13,
+            "image_id": "p13_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          }
+        ],
+        "text_extraction_errors": [],
+        "coverage_violations": []
+      },
+      "analysis_timestamp": "2025-12-20T19:06:50.855761"
+    },
+    {
+      "identity": {
+        "rulebook_id": "dune_imperium",
+        "source_pdf_path": "data\\rulebooks\\DUNE_IMPERIUM_Rules_2020_10_26.pdf",
+        "pdf_filename": "DUNE_IMPERIUM_Rules_2020_10_26.pdf",
+        "extraction_timestamp": "2025-12-19T09:20:21.831341",
+        "manifest_version": "1.0.0"
+      },
+      "pdf_characteristics": {
+        "page_count": 20,
+        "total_images_found": 209,
+        "has_text_artifacts": false,
+        "text_pages_count": 0,
+        "image_only_pages_count": 0,
+        "text_coverage_ratio": 0.0,
+        "avg_images_per_page": 10.45
+      },
+      "extraction_outcome": {
+        "images_attempted": 209,
+        "images_saved": 209,
+        "conversion_failures": 0,
+        "success_rate": 1.0,
+        "failure_rate": 0.0,
+        "colorspace_distribution": {
+          "ICCBased(RGB,sRGB IEC61966-2.1)": 209
+        },
+        "failure_reasons": {},
+        "failures_by_page": {},
+        "failures_by_colorspace": {},
+        "failures_by_size_range": {}
+      },
+      "classification_outcome": {
+        "total_components": 209,
+        "classification_distribution": {
+          "board": 23,
+          "non-component": 4,
+          "token": 110,
+          "unknown": 45,
+          "card": 27
+        },
+        "confidence_stats": {
+          "min": 0.0,
+          "max": 0.8,
+          "mean": 0.4746411483253588,
+          "median": 0.6,
+          "std": 0.25149168519406745
+        },
+        "low_confidence_count": 45,
+        "high_confidence_count": 4,
+        "unknown_classification_count": 45,
+        "confidence_by_type": {
+          "board": {
+            "min": 0.6,
+            "max": 0.7,
+            "mean": 0.6173913043478261,
+            "count": 23
+          },
+          "non-component": {
+            "min": 0.8,
+            "max": 0.8,
+            "mean": 0.8,
+            "count": 4
+          },
+          "token": {
+            "min": 0.5,
+            "max": 0.6,
+            "mean": 0.5963636363636363,
+            "count": 110
+          },
+          "unknown": {
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "count": 45
+          },
+          "card": {
+            "min": 0.6,
+            "max": 0.6,
+            "mean": 0.6,
+            "count": 27
+          }
+        }
+      },
+      "deduplication_outcome": {
+        "total_images": 209,
+        "canonical_images": 139,
+        "duplicate_images": 70,
+        "dedup_groups_count": 31,
+        "duplicate_ratio": 0.3349282296650718,
+        "avg_group_size": 6.741935483870968,
+        "max_group_size": 19,
+        "group_size_distribution": {
+          "3": 5,
+          "2": 21,
+          "19": 1,
+          "12": 1,
+          "4": 2,
+          "5": 1
+        },
+        "dedup_by_type": {
+          "board": {
+            "canonical": 5,
+            "duplicate": 18
+          },
+          "non-component": {
+            "canonical": 2,
+            "duplicate": 2
+          },
+          "token": {
+            "canonical": 77,
+            "duplicate": 33
+          },
+          "unknown": {
+            "canonical": 42,
+            "duplicate": 3
+          },
+          "card": {
+            "canonical": 13,
+            "duplicate": 14
+          }
+        }
+      },
+      "text_extraction_outcome": {
+        "pages_with_text": 0,
+        "pages_with_errors": 0,
+        "total_text_blocks": 0,
+        "avg_blocks_per_page": 0.0,
+        "components_with_text": 0,
+        "components_without_text": 0,
+        "text_intersection_ratio": 0.0,
+        "error_types": {},
+        "pages_by_block_count": {}
+      },
+      "failure_taxonomy": {
+        "extraction_failures": [],
+        "classification_anomalies": [
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 2,
+            "image_id": "p2_img24",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 2,
+            "image_id": "p2_img36",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 2,
+            "image_id": "p2_img37",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 2,
+            "image_id": "p2_img38",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 2,
+            "image_id": "p2_img39",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 2,
+            "image_id": "p2_img40",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 4,
+            "image_id": "p4_img0",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 4,
+            "image_id": "p4_img7",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 4,
+            "image_id": "p4_img21",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 6,
+            "image_id": "p6_img4",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 6,
+            "image_id": "p6_img5",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 6,
+            "image_id": "p6_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img10",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 9,
+            "image_id": "p9_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 9,
+            "image_id": "p9_img14",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 9,
+            "image_id": "p9_img15",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 10,
+            "image_id": "p10_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 12,
+            "image_id": "p12_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 13,
+            "image_id": "p13_img0",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 13,
+            "image_id": "p13_img4",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 13,
+            "image_id": "p13_img5",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 13,
+            "image_id": "p13_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 14,
+            "image_id": "p14_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 14,
+            "image_id": "p14_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img4",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img5",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img7",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 16,
+            "image_id": "p16_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img0",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img1",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img4",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img5",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img7",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img8",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img10",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 17,
+            "image_id": "p17_img11",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          }
+        ],
+        "text_extraction_errors": [],
+        "coverage_violations": []
+      },
+      "analysis_timestamp": "2025-12-20T19:06:50.885444"
+    },
+    {
+      "identity": {
+        "rulebook_id": "jaipur",
+        "source_pdf_path": "data\\rulebooks\\Jaipur.pdf",
+        "pdf_filename": "Jaipur.pdf",
+        "extraction_timestamp": "2025-12-19T09:19:36.160708",
+        "manifest_version": "1.0.0"
+      },
+      "pdf_characteristics": {
+        "page_count": 5,
+        "total_images_found": 254,
+        "has_text_artifacts": false,
+        "text_pages_count": 0,
+        "image_only_pages_count": 0,
+        "text_coverage_ratio": 0.0,
+        "avg_images_per_page": 50.8
+      },
+      "extraction_outcome": {
+        "images_attempted": 254,
+        "images_saved": 254,
+        "conversion_failures": 0,
+        "success_rate": 1.0,
+        "failure_rate": 0.0,
+        "colorspace_distribution": {
+          "DeviceCMYK": 254
+        },
+        "failure_reasons": {},
+        "failures_by_page": {},
+        "failures_by_colorspace": {},
+        "failures_by_size_range": {}
+      },
+      "classification_outcome": {
+        "total_components": 254,
+        "classification_distribution": {
+          "board": 9,
+          "token": 244,
+          "unknown": 1
+        },
+        "confidence_stats": {
+          "min": 0.0,
+          "max": 0.7,
+          "mean": 0.6011811023622047,
+          "median": 0.6,
+          "std": 0.042157509530891264
+        },
+        "low_confidence_count": 1,
+        "high_confidence_count": 0,
+        "unknown_classification_count": 1,
+        "confidence_by_type": {
+          "board": {
+            "min": 0.7,
+            "max": 0.7,
+            "mean": 0.7,
+            "count": 9
+          },
+          "token": {
+            "min": 0.6,
+            "max": 0.6,
+            "mean": 0.6,
+            "count": 244
+          },
+          "unknown": {
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "count": 1
+          }
+        }
+      },
+      "deduplication_outcome": {
+        "total_images": 254,
+        "canonical_images": 31,
+        "duplicate_images": 223,
+        "dedup_groups_count": 21,
+        "duplicate_ratio": 0.8779527559055118,
+        "avg_group_size": 12.095238095238095,
+        "max_group_size": 37,
+        "group_size_distribution": {
+          "14": 3,
+          "7": 2,
+          "13": 2,
+          "26": 1,
+          "8": 1,
+          "11": 1,
+          "16": 2,
+          "4": 1,
+          "6": 3,
+          "37": 1,
+          "9": 1,
+          "5": 1,
+          "10": 1,
+          "2": 1
+        },
+        "dedup_by_type": {
+          "board": {
+            "canonical": 8,
+            "duplicate": 1
+          },
+          "token": {
+            "canonical": 22,
+            "duplicate": 222
+          },
+          "unknown": {
+            "canonical": 1,
+            "duplicate": 0
+          }
+        }
+      },
+      "text_extraction_outcome": {
+        "pages_with_text": 0,
+        "pages_with_errors": 0,
+        "total_text_blocks": 0,
+        "avg_blocks_per_page": 0.0,
+        "components_with_text": 0,
+        "components_without_text": 0,
+        "text_intersection_ratio": 0.0,
+        "error_types": {},
+        "pages_by_block_count": {}
+      },
+      "failure_taxonomy": {
+        "extraction_failures": [],
+        "classification_anomalies": [
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 4,
+            "image_id": "p4_img1",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          }
+        ],
+        "text_extraction_errors": [],
+        "coverage_violations": []
+      },
+      "analysis_timestamp": "2025-12-20T19:06:50.911206"
+    },
+    {
+      "identity": {
+        "rulebook_id": "seti",
+        "source_pdf_path": "data\\rulebooks\\seti-rules-en.pdf",
+        "pdf_filename": "seti-rules-en.pdf",
+        "extraction_timestamp": "2025-12-19T09:20:55.200335",
+        "manifest_version": "1.0.0"
+      },
+      "pdf_characteristics": {
+        "page_count": 28,
+        "total_images_found": 241,
+        "has_text_artifacts": false,
+        "text_pages_count": 0,
+        "image_only_pages_count": 0,
+        "text_coverage_ratio": 0.0,
+        "avg_images_per_page": 8.607142857142858
+      },
+      "extraction_outcome": {
+        "images_attempted": 242,
+        "images_saved": 241,
+        "conversion_failures": 1,
+        "success_rate": 0.9958677685950413,
+        "failure_rate": 0.004132231404958678,
+        "colorspace_distribution": {
+          "ICCBased(RGB,sRGB IEC61966-2.1)": 241,
+          "Indexed(252,ICCBased(RGB,sRGB IEC61966-2.1))": 1
+        },
+        "failure_reasons": {
+          "save_error": 1
+        },
+        "failures_by_page": {
+          "23": 1
+        },
+        "failures_by_colorspace": {
+          "Indexed(252,ICCBased(RGB,sRGB IEC61966-2.1))": 1
+        },
+        "failures_by_size_range": {
+          "small": 1
+        }
+      },
+      "classification_outcome": {
+        "total_components": 241,
+        "classification_distribution": {
+          "board": 62,
+          "token": 170,
+          "non-component": 2,
+          "unknown": 7
+        },
+        "confidence_stats": {
+          "min": 0.0,
+          "max": 0.8,
+          "mean": 0.6082987551867219,
+          "median": 0.6,
+          "std": 0.11589151697504574
+        },
+        "low_confidence_count": 7,
+        "high_confidence_count": 2,
+        "unknown_classification_count": 7,
+        "confidence_by_type": {
+          "board": {
+            "min": 0.6,
+            "max": 0.7,
+            "mean": 0.6983870967741935,
+            "count": 62
+          },
+          "token": {
+            "min": 0.5,
+            "max": 0.6,
+            "mean": 0.5982352941176471,
+            "count": 170
+          },
+          "non-component": {
+            "min": 0.8,
+            "max": 0.8,
+            "mean": 0.8,
+            "count": 2
+          },
+          "unknown": {
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "count": 7
+          }
+        }
+      },
+      "deduplication_outcome": {
+        "total_images": 241,
+        "canonical_images": 139,
+        "duplicate_images": 102,
+        "dedup_groups_count": 44,
+        "duplicate_ratio": 0.42323651452282157,
+        "avg_group_size": 5.4772727272727275,
+        "max_group_size": 15,
+        "group_size_distribution": {
+          "2": 27,
+          "3": 4,
+          "4": 6,
+          "5": 4,
+          "15": 1,
+          "14": 1,
+          "7": 1
+        },
+        "dedup_by_type": {
+          "board": {
+            "canonical": 50,
+            "duplicate": 12
+          },
+          "token": {
+            "canonical": 85,
+            "duplicate": 85
+          },
+          "non-component": {
+            "canonical": 1,
+            "duplicate": 1
+          },
+          "unknown": {
+            "canonical": 3,
+            "duplicate": 4
+          }
+        }
+      },
+      "text_extraction_outcome": {
+        "pages_with_text": 0,
+        "pages_with_errors": 0,
+        "total_text_blocks": 0,
+        "avg_blocks_per_page": 0.0,
+        "components_with_text": 0,
+        "components_without_text": 0,
+        "text_intersection_ratio": 0.0,
+        "error_types": {},
+        "pages_by_block_count": {}
+      },
+      "failure_taxonomy": {
+        "extraction_failures": [
+          {
+            "failure_type": "extraction_failure",
+            "page_index": 23,
+            "image_id": "p23_img27",
+            "error_details": "save_error",
+            "artifact_source": "extraction_log.jsonl",
+            "colorspace": "Indexed(252,ICCBased(RGB,sRGB IEC61966-2.1))",
+            "size": "51x51"
+          }
+        ],
+        "classification_anomalies": [
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 12,
+            "image_id": "p12_img6",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 19,
+            "image_id": "p19_img5",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 21,
+            "image_id": "p21_img56",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 22,
+            "image_id": "p22_img91",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 22,
+            "image_id": "p22_img92",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 22,
+            "image_id": "p22_img93",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 22,
+            "image_id": "p22_img94",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          }
+        ],
+        "text_extraction_errors": [],
+        "coverage_violations": []
+      },
+      "analysis_timestamp": "2025-12-20T19:06:50.930205"
+    },
+    {
+      "identity": {
+        "rulebook_id": "viticulture",
+        "source_pdf_path": "data\\rulebooks\\a5-viticulture-essential-edition-rulebook.pdf",
+        "pdf_filename": "a5-viticulture-essential-edition-rulebook.pdf",
+        "extraction_timestamp": "2025-12-19T09:20:12.498730",
+        "manifest_version": "1.0.0"
+      },
+      "pdf_characteristics": {
+        "page_count": 20,
+        "total_images_found": 110,
+        "has_text_artifacts": false,
+        "text_pages_count": 0,
+        "image_only_pages_count": 0,
+        "text_coverage_ratio": 0.0,
+        "avg_images_per_page": 5.5
+      },
+      "extraction_outcome": {
+        "images_attempted": 110,
+        "images_saved": 110,
+        "conversion_failures": 0,
+        "success_rate": 1.0,
+        "failure_rate": 0.0,
+        "colorspace_distribution": {
+          "DeviceCMYK": 104,
+          "DeviceN(1,DeviceCMYK,Black)": 6
+        },
+        "failure_reasons": {},
+        "failures_by_page": {},
+        "failures_by_colorspace": {},
+        "failures_by_size_range": {}
+      },
+      "classification_outcome": {
+        "total_components": 110,
+        "classification_distribution": {
+          "non-component": 3,
+          "board": 32,
+          "unknown": 13,
+          "token": 32,
+          "card": 30
+        },
+        "confidence_stats": {
+          "min": 0.0,
+          "max": 0.8,
+          "mean": 0.5609090909090909,
+          "median": 0.6,
+          "std": 0.21378865262214375
+        },
+        "low_confidence_count": 13,
+        "high_confidence_count": 3,
+        "unknown_classification_count": 13,
+        "confidence_by_type": {
+          "non-component": {
+            "min": 0.8,
+            "max": 0.8,
+            "mean": 0.8,
+            "count": 3
+          },
+          "board": {
+            "min": 0.7,
+            "max": 0.7,
+            "mean": 0.7,
+            "count": 32
+          },
+          "unknown": {
+            "min": 0.0,
+            "max": 0.0,
+            "mean": 0.0,
+            "count": 13
+          },
+          "token": {
+            "min": 0.5,
+            "max": 0.6,
+            "mean": 0.590625,
+            "count": 32
+          },
+          "card": {
+            "min": 0.6,
+            "max": 0.6,
+            "mean": 0.6,
+            "count": 30
+          }
+        }
+      },
+      "deduplication_outcome": {
+        "total_images": 110,
+        "canonical_images": 53,
+        "duplicate_images": 57,
+        "dedup_groups_count": 17,
+        "duplicate_ratio": 0.5181818181818182,
+        "avg_group_size": 6.470588235294118,
+        "max_group_size": 18,
+        "group_size_distribution": {
+          "18": 1,
+          "11": 1,
+          "3": 5,
+          "2": 7,
+          "4": 1,
+          "6": 2
+        },
+        "dedup_by_type": {
+          "non-component": {
+            "canonical": 2,
+            "duplicate": 1
+          },
+          "board": {
+            "canonical": 10,
+            "duplicate": 22
+          },
+          "unknown": {
+            "canonical": 5,
+            "duplicate": 8
+          },
+          "token": {
+            "canonical": 13,
+            "duplicate": 19
+          },
+          "card": {
+            "canonical": 23,
+            "duplicate": 7
+          }
+        }
+      },
+      "text_extraction_outcome": {
+        "pages_with_text": 0,
+        "pages_with_errors": 0,
+        "total_text_blocks": 0,
+        "avg_blocks_per_page": 0.0,
+        "components_with_text": 0,
+        "components_without_text": 0,
+        "text_intersection_ratio": 0.0,
+        "error_types": {},
+        "pages_by_block_count": {}
+      },
+      "failure_taxonomy": {
+        "extraction_failures": [],
+        "classification_anomalies": [
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img0",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img1",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img18",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img19",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 1,
+            "image_id": "p1_img20",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 4,
+            "image_id": "p4_img9",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 5,
+            "image_id": "p5_img0",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 6,
+            "image_id": "p6_img2",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img26",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 8,
+            "image_id": "p8_img27",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          },
+          {
+            "failure_type": "low_confidence_classification",
+            "page_index": 13,
+            "image_id": "p13_img3",
+            "error_details": "Confidence 0.000 below threshold 0.5",
+            "artifact_source": "manifest.json",
+            "classification": "unknown"
+          }
+        ],
+        "text_extraction_errors": [],
+        "coverage_violations": []
+      },
+      "analysis_timestamp": "2025-12-20T19:06:50.955742"
+    }
+  ],
+  "corpus_aggregates": {
+    "total_rulebooks": 5,
+    "total_pages": 93,
+    "total_images_attempted": 1015,
+    "total_images_saved": 1014,
+    "total_conversion_failures": 1,
+    "corpus_success_rate": 0.9990147783251232,
+    "corpus_failure_rate": 0.0009852216748768472,
+    "success_rate_distribution": {
+      "0-20%": 0,
+      "20-50%": 0,
+      "50-80%": 0,
+      "80-95%": 0,
+      "95-100%": 5
+    },
+    "failure_rate_distribution": {
+      "0-5%": 5,
+      "5-20%": 0,
+      "20-50%": 0,
+      "50%+": 0
+    },
+    "common_failure_reasons": {
+      "save_error": 1
+    },
+    "common_colorspaces": {
+      "DeviceCMYK": 558,
+      "ICCBased(RGB,sRGB IEC61966-2.1)": 450,
+      "Indexed(252,ICCBased(RGB,sRGB IEC61966-2.1))": 1,
+      "DeviceN(1,DeviceCMYK,Black)": 6
+    },
+    "classification_type_totals": {
+      "board": 155,
+      "card": 120,
+      "token": 616,
+      "unknown": 95,
+      "non-component": 28
+    },
+    "high_failure_rulebooks": [],
+    "low_text_coverage_rulebooks": [
+      "7wd",
+      "dune_imperium",
+      "jaipur",
+      "seti",
+      "viticulture"
+    ],
+    "anomalous_classification_rulebooks": []
+  }
+}

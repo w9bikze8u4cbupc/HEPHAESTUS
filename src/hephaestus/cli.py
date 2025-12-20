@@ -30,6 +30,14 @@ from .output.package import package_exports
 
 app = typer.Typer(help="HEPHAESTUS – board-game component extractor", no_args_is_help=True)
 
+# Add analytics subcommand
+from .analytics.corpus import app as analytics_app
+app.add_typer(analytics_app, name="analytics", help="Corpus-level analytics commands")
+
+# Phase 7: Add analytics subcommand
+analytics_app = typer.Typer(help="Corpus-level analytics commands")
+app.add_typer(analytics_app, name="analytics")
+
 
 def safe_echo(message: str) -> None:
     """Echo message with Unicode fallback for Windows compatibility."""
@@ -264,3 +272,46 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+@analytics_app.command("corpus")
+def analytics_corpus(
+    input_dir: Path = typer.Argument(..., exists=True, help="Directory containing rulebook exports"),
+    out: Path = typer.Option(Path("analytics"), "--out", "-o", help="Output directory for analytics"),
+) -> None:
+    """
+    Run corpus-level analytics across multiple rulebook exports.
+    
+    Analyzes extraction patterns, classification behavior, and failure modes
+    across an entire corpus of rulebooks.
+    """
+    from .analytics.corpus import CorpusAnalyzer
+    
+    logger = get_logger(__name__)
+    
+    try:
+        logger.info(f"Starting corpus analytics: {input_dir} -> {out}")
+        
+        analyzer = CorpusAnalyzer(input_dir, out)
+        analytics = analyzer.analyze_corpus()
+        output_path = analyzer.save_analytics(analytics)
+        
+        # Display summary
+        safe_echo("✅ Corpus analysis complete!")
+        safe_echo(f"📊 Analyzed {analytics.corpus_aggregates.total_rulebooks} rulebooks")
+        safe_echo(f"📄 Total pages: {analytics.corpus_aggregates.total_pages}")
+        safe_echo(f"🖼️  Total images: {analytics.corpus_aggregates.total_images_attempted}")
+        safe_echo(f"💾 Success rate: {analytics.corpus_aggregates.corpus_success_rate:.2%}")
+        safe_echo(f"📁 Output: {output_path}")
+        
+        # Highlight key findings
+        if analytics.corpus_aggregates.high_failure_rulebooks:
+            safe_echo(f"⚠️  High failure rulebooks: {len(analytics.corpus_aggregates.high_failure_rulebooks)}")
+        
+        if analytics.corpus_aggregates.low_text_coverage_rulebooks:
+            safe_echo(f"📝 Low text coverage: {len(analytics.corpus_aggregates.low_text_coverage_rulebooks)}")
+        
+    except Exception as exc:
+        logger.error(f"Corpus analytics failed: {exc}")
+        safe_echo(f"❌ Corpus analytics failed: {exc}")
+        raise typer.Exit(1)
