@@ -16,6 +16,31 @@ export interface ExtractionHealth {
   failure_reasons: Record<string, number>;
 }
 
+export interface TextArtifacts {
+  page_text_jsonl_path: string | null;
+  page_text_jsonl_sha256: string | null;
+}
+
+export interface PageSize {
+  width: number;
+  height: number;
+}
+
+export interface TextBlock {
+  bbox: [number, number, number, number]; // [x0, y0, x1, y1]
+  text: string;
+  type: string; // "text" | "other"
+}
+
+export interface PageTextRecord {
+  rulebook_id: string;
+  page_index: number;
+  page_size: PageSize;
+  blocks: TextBlock[];
+  errors: string[];
+  timestamp: string;
+}
+
 export interface ManifestItem {
   image_id: string;
   file_name: string;
@@ -49,6 +74,7 @@ export interface Manifest {
   summary: Record<string, any>;
   items: ManifestItem[];
   extraction_health: ExtractionHealth | null;
+  text_artifacts: TextArtifacts | null;
 }
 
 export interface ExtractionLogEntry {
@@ -70,5 +96,6 @@ export interface ExtractionLogEntry {
 export interface ArtifactBundle {
   manifest: Manifest;
   extractionLog: ExtractionLogEntry[];
+  pageTextRecords: Map<number, PageTextRecord>; // Phase 6.2: keyed by page_index
   exportPath: string;
 }

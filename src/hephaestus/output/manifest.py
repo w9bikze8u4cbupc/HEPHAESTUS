@@ -6,6 +6,7 @@ with their classifications, metadata, and file locations.
 """
 
 import json
+import hashlib
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import List, Dict, Any, Optional
@@ -48,6 +49,13 @@ class ManifestItem:
 
 
 @dataclass(frozen=True)
+class TextArtifacts:
+    """References to text extraction artifacts."""
+    page_text_jsonl_path: Optional[str] = None      # Path to page_text.jsonl file
+    page_text_jsonl_sha256: Optional[str] = None    # SHA256 checksum of page_text.jsonl
+
+
+@dataclass(frozen=True)
 class Manifest:
     """Complete manifest describing all extracted components."""
     version: str                            # Manifest format version
@@ -57,6 +65,7 @@ class Manifest:
     summary: Dict[str, Any]                 # Summary statistics
     items: List[ManifestItem]               # Individual component items
     extraction_health: Optional[Dict[str, Any]] = None  # Phase 5.6: Colorspace health metrics
+    text_artifacts: Optional[TextArtifacts] = None      # Phase 6.2: Text artifact references
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -70,6 +79,8 @@ class Manifest:
         }
         if self.extraction_health is not None:
             result["extraction_health"] = self.extraction_health
+        if self.text_artifacts is not None:
+            result["text_artifacts"] = asdict(self.text_artifacts)
         return result
 
 
@@ -80,7 +91,8 @@ def build_manifest(
     metadata: List[ComponentMetadata],
     path_mapping: Dict[str, Path],
     dedup_groups: Optional[Dict[str, Any]] = None,
-    health_metrics: Optional[ExtractionHealthMetrics] = None
+    health_metrics: Optional[ExtractionHealthMetrics] = None,
+    page_text_path: Optional[Path] = None
 ) -> Manifest:
     """
     Build a complete manifest from extraction results.
@@ -93,6 +105,7 @@ def build_manifest(
         path_mapping: Mapping of image ID to saved file path
         dedup_groups: Deduplication group information
         health_metrics: Phase 5.6 extraction health metrics
+        page_text_path: Phase 6.2 path to page_text.jsonl artifact
         
     Returns:
         Complete Manifest object
@@ -143,6 +156,22 @@ def build_manifest(
     # Generate summary statistics
     summary = _generate_summary(items, classifications, metadata, dedup_groups)
     
+    # Phase 6.2: Create text artifacts reference
+    text_artifacts = None
+    if page_text_path and page_text_path.exists():
+        try:
+            # Calculate relative path from output directory
+            relative_path = page_text_path.name  # Just the filename for now
+            sha256_hash = _calculate_file_sha256(page_text_path)
+            
+            text_artifacts = TextArtifacts(
+                page_text_jsonl_path=relative_path,
+                page_text_jsonl_sha256=sha256_hash
+            )
+            logger.info(f"Text artifacts reference: {relative_path} (SHA256: {sha256_hash[:16]}...)")
+        except Exception as exc:
+            logger.warning(f"Failed to create text artifacts reference: {exc}")
+    
     # Create manifest
     manifest = Manifest(
         version="1.0.0",
@@ -151,7 +180,8 @@ def build_manifest(
         total_items=len(items),
         summary=summary,
         items=items,
-        extraction_health=health_metrics.to_dict() if health_metrics else None
+        extraction_health=health_metrics.to_dict() if health_metrics else None,
+        text_artifacts=text_artifacts
     )
     
     logger.info(f"Built manifest with {len(items)} items")
@@ -216,7 +246,8 @@ def load_manifest_json(manifest_path: Path) -> Manifest:
             total_items=data["total_items"],
             summary=data["summary"],
             items=items,
-            extraction_health=data.get("extraction_health")
+            extraction_health=data.get("extraction_health"),
+            text_artifacts=TextArtifacts(**data["text_artifacts"]) if data.get("text_artifacts") else None
         )
         
         logger.info(f"Loaded manifest from {manifest_path} with {len(items)} items")
@@ -235,6 +266,16 @@ def _bbox_to_dict(bbox) -> Dict[str, float]:
         "x1": bbox.x1,
         "y1": bbox.y1
     }
+
+
+def _calculate_file_sha256(file_path: Path) -> str:
+    """Calculate SHA256 checksum of a file."""
+    sha256_hash = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        # Read in chunks to handle large files
+        for byte_block in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
 
 
 def _generate_summary(

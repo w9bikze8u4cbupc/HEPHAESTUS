@@ -11,6 +11,7 @@ Enforced Invariants:
 3. Persistence boundary: FAILED ⇒ no file, PERSISTED ⇒ size > 0
 4. Extraction log integrity with proper context (no placeholders)
 5. Zero silent drops enforcement
+6. Text artifact integrity (Phase 6.2)
 """
 
 import json
@@ -83,7 +84,8 @@ class Phase56Invariants:
             "path_set_consistency": False,
             "persistence_boundary": False,
             "health_metrics_identity": False,
-            "extraction_log_integrity": False
+            "extraction_log_integrity": False,
+            "text_artifact_integrity": False  # Phase 6.2
         }
 
         # Load manifest
@@ -129,6 +131,11 @@ class Phase56Invariants:
         # context)
         invariants["extraction_log_integrity"] = self._verify_extraction_log_integrity(
             log_entries, rulebook_path.name
+        )
+
+        # INVARIANT 5: Text artifact integrity (Phase 6.2)
+        invariants["text_artifact_integrity"] = self._verify_text_artifact_integrity(
+            rulebook_path, manifest
         )
 
         return invariants
@@ -226,6 +233,122 @@ class Phase56Invariants:
             entry = p23_entries[0]
             if entry.get("page_index") != 23 or entry.get(
                     "status") != "failed":
+                return False
+
+        return True
+
+    def _verify_text_artifact_integrity(self, rulebook_path: Path, manifest: Dict) -> bool:
+        """INVARIANT: Text artifact integrity (Phase 6.2)"""
+        text_artifacts = manifest.get("text_artifacts")
+        
+        # If no text artifacts reference, that's acceptable (truthful absence)
+        if not text_artifacts:
+            return True
+        
+        page_text_path = text_artifacts.get("page_text_jsonl_path")
+        expected_sha256 = text_artifacts.get("page_text_jsonl_sha256")
+        
+        # If manifest references text artifacts, they must exist and be valid
+        if not page_text_path:
+            return False
+        
+        # Check file exists
+        artifact_file = rulebook_path / page_text_path
+        if not artifact_file.exists():
+            return False
+        
+        # Verify SHA256 checksum if provided
+        if expected_sha256:
+            import hashlib
+            sha256_hash = hashlib.sha256()
+            with open(artifact_file, "rb") as f:
+                for byte_block in iter(lambda: f.read(4096), b""):
+                    sha256_hash.update(byte_block)
+            actual_sha256 = sha256_hash.hexdigest()
+            
+            if actual_sha256 != expected_sha256:
+                return False
+        
+        # Verify JSONL format and content structure
+        try:
+            with open(artifact_file, 'r', encoding='utf-8') as f:
+                for line_num, line in enumerate(f, 1):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    
+                    try:
+                        record = json.loads(line)
+                    except json.JSONDecodeError:
+                        return False
+                    
+                    # Verify required fields
+                    required_fields = ["rulebook_id", "page_index", "page_size", "blocks", "errors", "timestamp"]
+                    if not all(field in record for field in required_fields):
+                        return False
+                    
+                    # Verify page_size structure
+                    page_size = record.get("page_size", {})
+                    if not isinstance(page_size, dict) or "width" not in page_size or "height" not in page_size:
+                        return False
+                    
+                    # Verify page_size values are positive
+                    if page_size["width"] <= 0 or page_size["height"] <= 0:
+                        return False
+                    
+                    # Verify blocks structure
+                    blocks = record.get("blocks", [])
+                    if not isinstance(blocks, list):
+                        return False
+                    
+                    for block in blocks:
+                        if not isinstance(block, dict):
+                            return False
+                        
+                        # Verify block has required fields
+                        if not all(field in block for field in ["bbox", "text", "type"]):
+                            return False
+                        
+                        # Verify bbox format [x0, y0, x1, y1]
+                        bbox = block.get("bbox")
+                        if not isinstance(bbox, list) or len(bbox) != 4:
+                            return False
+                        
+                        # Verify bbox coordinates are within page bounds (with tolerance)
+                        x0, y0, x1, y1 = bbox
+                        tolerance = 5.0
+                        if not (x0 >= -tolerance and y0 >= -tolerance and 
+                               x1 <= page_size["width"] + tolerance and 
+                               y1 <= page_size["height"] + tolerance and
+                               x0 < x1 and y0 < y1):
+                            return False
+                    
+                    # Verify errors is a list
+                    if not isinstance(record.get("errors", []), list):
+                        return False
+        
+        except Exception:
+            return False
+        
+        # Verify page coverage: each page_index in manifest items should exist in text artifact
+        manifest_pages = set()
+        for item in manifest.get("items", []):
+            manifest_pages.add(item.get("page_index"))
+        
+        artifact_pages = set()
+        try:
+            with open(artifact_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        record = json.loads(line)
+                        artifact_pages.add(record.get("page_index"))
+        except Exception:
+            return False
+        
+        # All manifest pages should have corresponding text records (unless errors are logged)
+        for page_index in manifest_pages:
+            if page_index not in artifact_pages:
                 return False
 
         return True

@@ -1,0 +1,5735 @@
+{
+  "version": "1.0.0",
+  "source_pdf": "data\\rulebooks\\DUNE_IMPERIUM_Rules_2020_10_26.pdf",
+  "extraction_timestamp": "2025-12-20T12:33:16.247166",
+  "total_items": 209,
+  "summary": {
+    "total_items": 209,
+    "components": 205,
+    "non_components": 4,
+    "component_ratio": 0.9808612440191388,
+    "metadata_coverage": {
+      "with_labels": 62,
+      "with_quantities": 118,
+      "complete": 52,
+      "label_success_rate": 0.2966507177033493,
+      "quantity_success_rate": 0.5645933014354066,
+      "complete_success_rate": 0.24880382775119617
+    },
+    "confidence_scores": {
+      "average_classification": 0.47464114832535886,
+      "average_metadata": 0.0
+    },
+    "distributions": {
+      "classifications": {
+        "board": 23,
+        "non-component": 4,
+        "token": 110,
+        "unknown": 45,
+        "card": 27
+      },
+      "pages": {
+        "0": 2,
+        "1": 9,
+        "2": 45,
+        "3": 22,
+        "4": 18,
+        "5": 6,
+        "6": 15,
+        "7": 11,
+        "8": 8,
+        "9": 11,
+        "10": 6,
+        "11": 5,
+        "12": 2,
+        "13": 13,
+        "14": 4,
+        "15": 3,
+        "16": 12,
+        "17": 13,
+        "18": 3,
+        "19": 1
+      },
+      "top_labels": {
+        "10-card starting deck": 7,
+        "G 4": 4,
+        "DUNE: IMPERIUM": 3,
+        "Marker": 2,
+        "16 cubes": 2,
+        "G 2": 2,
+        "D, G": 2,
+        "Bene": 2,
+        "Bought": 2,
+        "Stillsuits": 2
+      }
+    },
+    "deduplication": {
+      "total_duplicates": 70,
+      "unique_groups": 31,
+      "duplicate_ratio": 0.3349282296650718
+    }
+  },
+  "items": [
+    {
+      "image_id": "p0_img0",
+      "file_name": "component_p0_img0.png",
+      "page_index": 0,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 1145,
+        "height": 1145
+      },
+      "bbox": {
+        "x0": -1.06380295753479,
+        "y0": -1.06402587890625,
+        "x1": 823.1111450195312,
+        "y1": 823.1109008789062
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p0_img0.png",
+      "path_all": "images/all/component_p0_img0.png",
+      "path_primary": "images/canonicals/boards/component_p0_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p0_img1",
+      "file_name": "component_p0_img1.png",
+      "page_index": 0,
+      "classification": "non-component",
+      "classification_confidence": 0.8,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 584,
+        "height": 102
+      },
+      "bbox": {
+        "x0": 34.0157470703125,
+        "y0": 44.35411071777344,
+        "x1": 453.835205078125,
+        "y1": 117.6375732421875
+      },
+      "dedup_group_id": "dup_001",
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p0_img1.png",
+      "path_all": "images/all/component_p0_img1.png",
+      "path_primary": null,
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img1",
+      "file_name": "component_p1_img1.png",
+      "page_index": 1,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "bbox": {
+        "x0": 226.7758026123047,
+        "y0": 364.26763916015625,
+        "x1": 595.128662109375,
+        "y1": 732.6204833984375
+      },
+      "dedup_group_id": "dup_009",
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img1.png",
+      "path_all": "images/all/component_p1_img1.png",
+      "path_primary": "images/canonicals/boards/component_p1_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img5",
+      "file_name": "component_p1_img5.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 78,
+        "height": 65
+      },
+      "bbox": {
+        "x0": 28.346466064453125,
+        "y0": 389.58367919921875,
+        "x1": 84.3307113647461,
+        "y1": 435.97064208984375
+      },
+      "dedup_group_id": "dup_011",
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img5.png",
+      "path_all": "images/all/component_p1_img5.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img6",
+      "file_name": "component_p1_img6.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 78,
+        "height": 65
+      },
+      "bbox": {
+        "x0": 28.346435546875,
+        "y0": 260.4891357421875,
+        "x1": 84.33068084716797,
+        "y1": 306.8760986328125
+      },
+      "dedup_group_id": "dup_012",
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img6.png",
+      "path_all": "images/all/component_p1_img6.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img7",
+      "file_name": "component_p1_img7.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 62,
+        "height": 62
+      },
+      "bbox": {
+        "x0": 518.031494140625,
+        "y0": 323.24847412109375,
+        "x1": 561.968505859375,
+        "y1": 367.18548583984375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img7",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img7.png",
+      "path_all": "images/all/component_p1_img7.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img7.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img8",
+      "file_name": "component_p1_img8.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 62,
+        "height": 62
+      },
+      "bbox": {
+        "x0": 625.748046875,
+        "y0": 437.3586730957031,
+        "x1": 669.68505859375,
+        "y1": 481.2956848144531
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img8.png",
+      "path_all": "images/all/component_p1_img8.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img9",
+      "file_name": "component_p1_img9.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Bene Gesserit",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 78,
+        "height": 65
+      },
+      "bbox": {
+        "x0": 28.346466064453125,
+        "y0": 530.7962646484375,
+        "x1": 84.3307113647461,
+        "y1": 577.1832275390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img9.png",
+      "path_all": "images/all/component_p1_img9.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img9.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img10",
+      "file_name": "component_p1_img10.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 78,
+        "height": 65
+      },
+      "bbox": {
+        "x0": 28.346466064453125,
+        "y0": 656.3469848632812,
+        "x1": 84.3307113647461,
+        "y1": 702.7339477539062
+      },
+      "dedup_group_id": "dup_010",
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img10.png",
+      "path_all": "images/all/component_p1_img10.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img10.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img11",
+      "file_name": "component_p1_img11.png",
+      "page_index": 1,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 62,
+        "height": 62
+      },
+      "bbox": {
+        "x0": 243.0706787109375,
+        "y0": 258.500244140625,
+        "x1": 287.0076904296875,
+        "y1": 302.437255859375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img11",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img11.png",
+      "path_all": "images/all/component_p1_img11.png",
+      "path_primary": "images/canonicals/tokens/component_p1_img11.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img13",
+      "file_name": "component_p1_img13.png",
+      "page_index": 1,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Deserts",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p1_img13.png",
+      "path_all": "images/all/component_p1_img13.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p1_img13.png"
+    },
+    {
+      "image_id": "p2_img0",
+      "file_name": "component_p2_img0.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Game board",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "bbox": {
+        "x0": 16.296119689941406,
+        "y0": 56.72779846191406,
+        "x1": 200.26876831054688,
+        "y1": 240.700439453125
+      },
+      "dedup_group_id": "dup_009",
+      "is_duplicate": true,
+      "canonical_image_id": "p1_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img0.png",
+      "path_all": "images/all/component_p2_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p2_img0.png"
+    },
+    {
+      "image_id": "p2_img1",
+      "file_name": "component_p2_img1.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 128,
+        "height": 141
+      },
+      "bbox": {
+        "x0": 556.3827514648438,
+        "y0": 57.43949890136719,
+        "x1": 648.2313842773438,
+        "y1": 158.24334716796875
+      },
+      "dedup_group_id": "dup_013",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img1.png",
+      "path_all": "images/all/component_p2_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img2",
+      "file_name": "component_p2_img2.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 20,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 86,
+        "height": 94
+      },
+      "bbox": {
+        "x0": 571.6829223632812,
+        "y0": 225.06863403320312,
+        "x1": 632.9312744140625,
+        "y1": 292.748046875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img2.png",
+      "path_all": "images/all/component_p2_img2.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img3",
+      "file_name": "component_p2_img3.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 67,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 695.7780151367188,
+        "y0": 225.0706024169922,
+        "x1": 743.8887329101562,
+        "y1": 268.3702392578125
+      },
+      "dedup_group_id": "dup_022",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img3.png",
+      "path_all": "images/all/component_p2_img3.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img4",
+      "file_name": "component_p2_img4.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 67,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 718.73583984375,
+        "y0": 225.0706024169922,
+        "x1": 766.8465576171875,
+        "y1": 268.3702392578125
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img4.png",
+      "path_all": "images/all/component_p2_img4.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p2_img4.png"
+    },
+    {
+      "image_id": "p2_img5",
+      "file_name": "component_p2_img5.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 67,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 695.7780151367188,
+        "y0": 242.70042419433594,
+        "x1": 743.8887329101562,
+        "y1": 286.00006103515625
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img5.png",
+      "path_all": "images/all/component_p2_img5.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p2_img5.png"
+    },
+    {
+      "image_id": "p2_img6",
+      "file_name": "component_p2_img6.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 67,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 718.73583984375,
+        "y0": 242.70042419433594,
+        "x1": 766.8465576171875,
+        "y1": 286.00006103515625
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img6.png",
+      "path_all": "images/all/component_p2_img6.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p2_img6.png"
+    },
+    {
+      "image_id": "p2_img7",
+      "file_name": "component_p2_img7.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Marker",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 83,
+        "height": 110
+      },
+      "bbox": {
+        "x0": 572.7001342773438,
+        "y0": 338.7093811035156,
+        "x1": 632.029296875,
+        "y1": 417.3802490234375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img7",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img7.png",
+      "path_all": "images/all/component_p2_img7.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img7.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img8",
+      "file_name": "component_p2_img8.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Combat marker",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 60,
+        "height": 55
+      },
+      "bbox": {
+        "x0": 464.5847473144531,
+        "y0": 643.8154296875,
+        "x1": 507.23638916015625,
+        "y1": 683.08203125
+      },
+      "dedup_group_id": "dup_028",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img8.png",
+      "path_all": "images/all/component_p2_img8.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img10",
+      "file_name": "component_p2_img10.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "16 cubes",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 64,
+        "height": 59
+      },
+      "bbox": {
+        "x0": 234.47244262695312,
+        "y0": 641.2884521484375,
+        "x1": 279.8689270019531,
+        "y1": 683.08203125
+      },
+      "dedup_group_id": "dup_014",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img10.png",
+      "path_all": "images/all/component_p2_img10.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img10.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img11",
+      "file_name": "component_p2_img11.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 44.533721923828125,
+        "y0": 524.281005859375,
+        "x1": 109.7929458618164,
+        "y1": 610.581298828125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img11",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img11.png",
+      "path_all": "images/all/component_p2_img11.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img11.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img12",
+      "file_name": "component_p2_img12.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 128,
+        "height": 144
+      },
+      "bbox": {
+        "x0": 685.9742431640625,
+        "y0": 57.439483642578125,
+        "x1": 777.8228759765625,
+        "y1": 160.84771728515625
+      },
+      "dedup_group_id": "dup_015",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img12",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img12.png",
+      "path_all": "images/all/component_p2_img12.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img12.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img13",
+      "file_name": "component_p2_img13.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 67.55471801757812,
+        "y0": 523.3912353515625,
+        "x1": 130.1174774169922,
+        "y1": 607.8573608398438
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img13",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img13.png",
+      "path_all": "images/all/component_p2_img13.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img13.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img14",
+      "file_name": "component_p2_img14.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 93.80308532714844,
+        "y0": 522.8592529296875,
+        "x1": 153.59317016601562,
+        "y1": 605.3883056640625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img14",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img14.png",
+      "path_all": "images/all/component_p2_img14.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img14.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img15",
+      "file_name": "component_p2_img15.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 105.18623352050781,
+        "y0": 523.2059326171875,
+        "x1": 164.976318359375,
+        "y1": 605.7349853515625
+      },
+      "dedup_group_id": "dup_016",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img15",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img15.png",
+      "path_all": "images/all/component_p2_img15.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img15.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img16",
+      "file_name": "component_p2_img16.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 129.6968231201172,
+        "y0": 523.919677734375,
+        "x1": 192.25958251953125,
+        "y1": 608.3858032226562
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img16",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img16.png",
+      "path_all": "images/all/component_p2_img16.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img16.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img17",
+      "file_name": "component_p2_img17.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 142.4732666015625,
+        "y0": 521.8155517578125,
+        "x1": 206.3939971923828,
+        "y1": 607.2117309570312
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img17",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img17.png",
+      "path_all": "images/all/component_p2_img17.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img17.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img18",
+      "file_name": "component_p2_img18.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "10-card starting deck",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 156.2694854736328,
+        "y0": 523.0823364257812,
+        "x1": 221.52870178222656,
+        "y1": 609.3826293945312
+      },
+      "dedup_group_id": "dup_017",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img18",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img18.png",
+      "path_all": "images/all/component_p2_img18.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img18.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img20",
+      "file_name": "component_p2_img20.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "16 cubes",
+      "quantity": 16,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 113,
+        "height": 108
+      },
+      "bbox": {
+        "x0": 276.2022705078125,
+        "y0": 528.0464477539062,
+        "x1": 357.2000427246094,
+        "y1": 605.7127075195312
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img20",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img20.png",
+      "path_all": "images/all/component_p2_img20.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img20.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img21",
+      "file_name": "component_p2_img21.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 70,
+        "height": 69
+      },
+      "bbox": {
+        "x0": 675.56494140625,
+        "y0": 350.9579162597656,
+        "x1": 727.0516357421875,
+        "y1": 401.865966796875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img21",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img21.png",
+      "path_all": "images/all/component_p2_img21.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img21.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img22",
+      "file_name": "component_p2_img22.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 15,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 136,
+        "height": 129
+      },
+      "bbox": {
+        "x0": 410.78387451171875,
+        "y0": 57.43817901611328,
+        "x1": 508.3429260253906,
+        "y1": 150.2132568359375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img22",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img22.png",
+      "path_all": "images/all/component_p2_img22.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img22.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img23",
+      "file_name": "component_p2_img23.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 24,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 80.0857925415039,
+        "y0": 302.91217041015625,
+        "x1": 138.46197509765625,
+        "y1": 384.434814453125
+      },
+      "dedup_group_id": "dup_018",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img23",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img23.png",
+      "path_all": "images/all/component_p2_img23.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img23.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img24",
+      "file_name": "component_p2_img24.png",
+      "page_index": 2,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 194,
+        "height": 102
+      },
+      "bbox": {
+        "x0": 246.29307556152344,
+        "y0": 750.1464233398438,
+        "x1": 390.3494873046875,
+        "y1": 833.0655517578125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img24",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img24.png",
+      "path_all": "images/all/component_p2_img24.png",
+      "path_primary": "images/canonicals/unknown/component_p2_img24.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img25",
+      "file_name": "component_p2_img25.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 15,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 438.2732238769531,
+        "y0": 205.20616149902344,
+        "x1": 475.88128662109375,
+        "y1": 261.97552490234375
+      },
+      "dedup_group_id": "dup_019",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img25",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img25.png",
+      "path_all": "images/all/component_p2_img25.png",
+      "path_primary": "images/canonicals/cards/component_p2_img25.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img26",
+      "file_name": "component_p2_img26.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 332.5748596191406,
+        "y0": 199.58584594726562,
+        "x1": 372.22216796875,
+        "y1": 259.95013427734375
+      },
+      "dedup_group_id": "dup_020",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img26",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img26.png",
+      "path_all": "images/all/component_p2_img26.png",
+      "path_primary": "images/canonicals/cards/component_p2_img26.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img27",
+      "file_name": "component_p2_img27.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 81
+      },
+      "bbox": {
+        "x0": 337.1876220703125,
+        "y0": 200.09796142578125,
+        "x1": 374.79571533203125,
+        "y1": 257.9222412109375
+      },
+      "dedup_group_id": "dup_020",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img26",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img27.png",
+      "path_all": "images/all/component_p2_img27.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p2_img27.png"
+    },
+    {
+      "image_id": "p2_img28",
+      "file_name": "component_p2_img28.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 342.3116455078125,
+        "y0": 199.77345275878906,
+        "x1": 383.99652099609375,
+        "y1": 262.00799560546875
+      },
+      "dedup_group_id": "dup_020",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img26",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img28.png",
+      "path_all": "images/all/component_p2_img28.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p2_img28.png"
+    },
+    {
+      "image_id": "p2_img29",
+      "file_name": "component_p2_img29.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 205.8028106689453,
+        "y0": 199.26730346679688,
+        "x1": 245.45010375976562,
+        "y1": 259.631591796875
+      },
+      "dedup_group_id": "dup_021",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img29",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img29.png",
+      "path_all": "images/all/component_p2_img29.png",
+      "path_primary": "images/canonicals/cards/component_p2_img29.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img30",
+      "file_name": "component_p2_img30.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 81
+      },
+      "bbox": {
+        "x0": 210.41555786132812,
+        "y0": 199.77935791015625,
+        "x1": 248.0236358642578,
+        "y1": 257.6036376953125
+      },
+      "dedup_group_id": "dup_021",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img29",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img30.png",
+      "path_all": "images/all/component_p2_img30.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p2_img30.png"
+    },
+    {
+      "image_id": "p2_img31",
+      "file_name": "component_p2_img31.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 215.53961181640625,
+        "y0": 199.4549102783203,
+        "x1": 257.2244873046875,
+        "y1": 261.689453125
+      },
+      "dedup_group_id": "dup_021",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img29",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img31.png",
+      "path_all": "images/all/component_p2_img31.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p2_img31.png"
+    },
+    {
+      "image_id": "p2_img32",
+      "file_name": "component_p2_img32.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 263.9646301269531,
+        "y0": 198.58584594726562,
+        "x1": 303.6119384765625,
+        "y1": 258.95013427734375
+      },
+      "dedup_group_id": "dup_023",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img32",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img32.png",
+      "path_all": "images/all/component_p2_img32.png",
+      "path_primary": "images/canonicals/cards/component_p2_img32.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img33",
+      "file_name": "component_p2_img33.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 81
+      },
+      "bbox": {
+        "x0": 268.577392578125,
+        "y0": 199.09796142578125,
+        "x1": 306.18548583984375,
+        "y1": 256.9222412109375
+      },
+      "dedup_group_id": "dup_023",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img32",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img33.png",
+      "path_all": "images/all/component_p2_img33.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p2_img33.png"
+    },
+    {
+      "image_id": "p2_img34",
+      "file_name": "component_p2_img34.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 24,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 17.00787353515625,
+        "y0": 302.91217041015625,
+        "x1": 75.38406372070312,
+        "y1": 384.434814453125
+      },
+      "dedup_group_id": "dup_024",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img34",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img34.png",
+      "path_all": "images/all/component_p2_img34.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img34.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img35",
+      "file_name": "component_p2_img35.png",
+      "page_index": 2,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 18,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 273.701416015625,
+        "y0": 198.77345275878906,
+        "x1": 315.38629150390625,
+        "y1": 261.00799560546875
+      },
+      "dedup_group_id": "dup_023",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img32",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img35.png",
+      "path_all": "images/all/component_p2_img35.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p2_img35.png"
+    },
+    {
+      "image_id": "p2_img36",
+      "file_name": "component_p2_img36.png",
+      "page_index": 2,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 40,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 113,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 392.7286682128906,
+        "y0": 294.1414489746094,
+        "x1": 476.9203186035156,
+        "y1": 355.1646728515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img36",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img36.png",
+      "path_all": "images/all/component_p2_img36.png",
+      "path_primary": "images/canonicals/unknown/component_p2_img36.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img37",
+      "file_name": "component_p2_img37.png",
+      "page_index": 2,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 162,
+        "height": 113
+      },
+      "bbox": {
+        "x0": 376.90216064453125,
+        "y0": 331.98895263671875,
+        "x1": 497.35479736328125,
+        "y1": 419.29461669921875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img37",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img37.png",
+      "path_all": "images/all/component_p2_img37.png",
+      "path_primary": "images/canonicals/unknown/component_p2_img37.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img38",
+      "file_name": "component_p2_img38.png",
+      "page_index": 2,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 162,
+        "height": 113
+      },
+      "bbox": {
+        "x0": 392.7322998046875,
+        "y0": 333.2049560546875,
+        "x1": 510.48968505859375,
+        "y1": 416.5508117675781
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img38",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img38.png",
+      "path_all": "images/all/component_p2_img38.png",
+      "path_primary": "images/canonicals/unknown/component_p2_img38.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img39",
+      "file_name": "component_p2_img39.png",
+      "page_index": 2,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 162,
+        "height": 113
+      },
+      "bbox": {
+        "x0": 408.0024719238281,
+        "y0": 333.32666015625,
+        "x1": 525.7598876953125,
+        "y1": 416.6724853515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img39",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img39.png",
+      "path_all": "images/all/component_p2_img39.png",
+      "path_primary": "images/canonicals/unknown/component_p2_img39.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img40",
+      "file_name": "component_p2_img40.png",
+      "page_index": 2,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 162,
+        "height": 113
+      },
+      "bbox": {
+        "x0": 422.0608825683594,
+        "y0": 333.38824462890625,
+        "x1": 542.5134887695312,
+        "y1": 420.69390869140625
+      },
+      "dedup_group_id": "dup_025",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img40",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img40.png",
+      "path_all": "images/all/component_p2_img40.png",
+      "path_primary": "images/canonicals/unknown/component_p2_img40.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img41",
+      "file_name": "component_p2_img41.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 24,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 144.0242156982422,
+        "y0": 302.91162109375,
+        "x1": 202.40040588378906,
+        "y1": 384.43426513671875
+      },
+      "dedup_group_id": "dup_026",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img41",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img41.png",
+      "path_all": "images/all/component_p2_img41.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img41.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img42",
+      "file_name": "component_p2_img42.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 262.34197998046875,
+        "y0": 334.84088134765625,
+        "x1": 320.7181701660156,
+        "y1": 416.363525390625
+      },
+      "dedup_group_id": "dup_027",
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img42",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img42.png",
+      "path_all": "images/all/component_p2_img42.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img42.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img43",
+      "file_name": "component_p2_img43.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 144,
+        "height": 144
+      },
+      "bbox": {
+        "x0": 244.70968627929688,
+        "y0": 57.439491271972656,
+        "x1": 348.1175537109375,
+        "y1": 160.84735107421875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img43",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img43.png",
+      "path_all": "images/all/component_p2_img43.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img43.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img44",
+      "file_name": "component_p2_img44.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 31,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 119,
+        "height": 119
+      },
+      "bbox": {
+        "x0": 653.466552734375,
+        "y0": 640.214111328125,
+        "x1": 738.5059204101562,
+        "y1": 725.2534790039062
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img44",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img44.png",
+      "path_all": "images/all/component_p2_img44.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img44.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img45",
+      "file_name": "component_p2_img45.png",
+      "page_index": 2,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 31,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 114,
+        "height": 82
+      },
+      "bbox": {
+        "x0": 654.552734375,
+        "y0": 551.1926879882812,
+        "x1": 736.3017578125,
+        "y1": 609.8541259765625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p2_img45",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img45.png",
+      "path_all": "images/all/component_p2_img45.png",
+      "path_primary": "images/canonicals/tokens/component_p2_img45.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img46",
+      "file_name": "component_p2_img46.png",
+      "page_index": 2,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Marker",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p2_img46.png",
+      "path_all": "images/all/component_p2_img46.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p2_img46.png"
+    },
+    {
+      "image_id": "p3_img0",
+      "file_name": "component_p3_img0.png",
+      "page_index": 3,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "G 4",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 426,
+        "height": 649
+      },
+      "bbox": {
+        "x0": 516.3442993164062,
+        "y0": 347.8655090332031,
+        "x1": 823.0609741210938,
+        "y1": 814.5742797851562
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img0.png",
+      "path_all": "images/all/component_p3_img0.png",
+      "path_primary": "images/canonicals/boards/component_p3_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img1",
+      "file_name": "component_p3_img1.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 740.46630859375,
+        "y0": 246.81646728515625,
+        "x1": 798.8424682617188,
+        "y1": 328.339111328125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img1.png",
+      "path_all": "images/all/component_p3_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img2",
+      "file_name": "component_p3_img2.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "C 2",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 414.09564208984375,
+        "y0": 247.69537353515625,
+        "x1": 472.4718322753906,
+        "y1": 329.218017578125
+      },
+      "dedup_group_id": "dup_027",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img42",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img2.png",
+      "path_all": "images/all/component_p3_img2.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img2.png"
+    },
+    {
+      "image_id": "p3_img11",
+      "file_name": "component_p3_img11.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 60,
+        "height": 70
+      },
+      "bbox": {
+        "x0": 290.6678771972656,
+        "y0": 196.0883331298828,
+        "x1": 333.63287353515625,
+        "y1": 245.8017578125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img11",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img11.png",
+      "path_all": "images/all/component_p3_img11.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img11.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img12",
+      "file_name": "component_p3_img12.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 677.388427734375,
+        "y0": 246.81646728515625,
+        "x1": 735.7645874023438,
+        "y1": 328.339111328125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img12",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img12.png",
+      "path_all": "images/all/component_p3_img12.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img12.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img13",
+      "file_name": "component_p3_img13.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 67,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 262.24639892578125,
+        "y0": 247.8016815185547,
+        "x1": 310.35711669921875,
+        "y1": 291.101318359375
+      },
+      "dedup_group_id": "dup_022",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img13.png",
+      "path_all": "images/all/component_p3_img13.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img13.png"
+    },
+    {
+      "image_id": "p3_img14",
+      "file_name": "component_p3_img14.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 65,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 286.80792236328125,
+        "y0": 247.8016815185547,
+        "x1": 333.31494140625,
+        "y1": 291.101318359375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img14",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img14.png",
+      "path_all": "images/all/component_p3_img14.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img14.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img15",
+      "file_name": "component_p3_img15.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 67,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 262.24639892578125,
+        "y0": 265.4314880371094,
+        "x1": 310.35711669921875,
+        "y1": 308.73114013671875
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img15.png",
+      "path_all": "images/all/component_p3_img15.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img15.png"
+    },
+    {
+      "image_id": "p3_img16",
+      "file_name": "component_p3_img16.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 65,
+        "height": 61
+      },
+      "bbox": {
+        "x0": 286.80792236328125,
+        "y0": 265.4314880371094,
+        "x1": 333.31494140625,
+        "y1": 308.73114013671875
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img16.png",
+      "path_all": "images/all/component_p3_img16.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img16.png"
+    },
+    {
+      "image_id": "p3_img17",
+      "file_name": "component_p3_img17.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "G 4",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 57,
+        "height": 52
+      },
+      "bbox": {
+        "x0": 529.6683959960938,
+        "y0": 470.7162780761719,
+        "x1": 570.6482543945312,
+        "y1": 507.5981750488281
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img17.png",
+      "path_all": "images/all/component_p3_img17.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img17.png"
+    },
+    {
+      "image_id": "p3_img18",
+      "file_name": "component_p3_img18.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "G 4",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 57,
+        "height": 52
+      },
+      "bbox": {
+        "x0": 529.6683959960938,
+        "y0": 584.7945556640625,
+        "x1": 570.6482543945312,
+        "y1": 621.6764526367188
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img18.png",
+      "path_all": "images/all/component_p3_img18.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img18.png"
+    },
+    {
+      "image_id": "p3_img19",
+      "file_name": "component_p3_img19.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "G 4",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 57,
+        "height": 52
+      },
+      "bbox": {
+        "x0": 529.6683959960938,
+        "y0": 700.5745239257812,
+        "x1": 570.6482543945312,
+        "y1": 737.4564208984375
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img19.png",
+      "path_all": "images/all/component_p3_img19.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img19.png"
+    },
+    {
+      "image_id": "p3_img20",
+      "file_name": "component_p3_img20.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 57,
+        "height": 52
+      },
+      "bbox": {
+        "x0": 529.6683959960938,
+        "y0": 355.4800720214844,
+        "x1": 570.6482543945312,
+        "y1": 392.3619689941406
+      },
+      "dedup_group_id": "dup_022",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img20.png",
+      "path_all": "images/all/component_p3_img20.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p3_img20.png"
+    },
+    {
+      "image_id": "p3_img21",
+      "file_name": "component_p3_img21.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 90,
+        "height": 90
+      },
+      "bbox": {
+        "x0": 285.5583801269531,
+        "y0": 68.39281463623047,
+        "x1": 350.0320129394531,
+        "y1": 132.866455078125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img21",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img21.png",
+      "path_all": "images/all/component_p3_img21.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img21.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img22",
+      "file_name": "component_p3_img22.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 614.3104858398438,
+        "y0": 246.8167724609375,
+        "x1": 672.6866455078125,
+        "y1": 328.33941650390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img22",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img22.png",
+      "path_all": "images/all/component_p3_img22.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img22.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img23",
+      "file_name": "component_p3_img23.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 551.2325439453125,
+        "y0": 246.81646728515625,
+        "x1": 609.6087036132812,
+        "y1": 328.339111328125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img23",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img23.png",
+      "path_all": "images/all/component_p3_img23.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img23.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img24",
+      "file_name": "component_p3_img24.png",
+      "page_index": 3,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 488.1546630859375,
+        "y0": 246.81646728515625,
+        "x1": 546.5308227539062,
+        "y1": 328.339111328125
+      },
+      "dedup_group_id": "dup_029",
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img24",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img24.png",
+      "path_all": "images/all/component_p3_img24.png",
+      "path_primary": "images/canonicals/tokens/component_p3_img24.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img25",
+      "file_name": "component_p3_img25.png",
+      "page_index": 3,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": "C 1",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 448.1690979003906,
+        "y0": 381.8895568847656,
+        "x1": 485.77716064453125,
+        "y1": 438.6589050292969
+      },
+      "dedup_group_id": "dup_019",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img25",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img25.png",
+      "path_all": "images/all/component_p3_img25.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p3_img25.png"
+    },
+    {
+      "image_id": "p3_img26",
+      "file_name": "component_p3_img26.png",
+      "page_index": 3,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 660.25390625,
+        "y0": 672.9548950195312,
+        "x1": 697.8619995117188,
+        "y1": 729.7242431640625
+      },
+      "dedup_group_id": "dup_023",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img32",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img26.png",
+      "path_all": "images/all/component_p3_img26.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p3_img26.png"
+    },
+    {
+      "image_id": "p3_img27",
+      "file_name": "component_p3_img27.png",
+      "page_index": 3,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 656.887939453125,
+        "y0": 671.6768798828125,
+        "x1": 696.454345703125,
+        "y1": 729.7241821289062
+      },
+      "dedup_group_id": "dup_030",
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img27",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img27.png",
+      "path_all": "images/all/component_p3_img27.png",
+      "path_primary": "images/canonicals/cards/component_p3_img27.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img28",
+      "file_name": "component_p3_img28.png",
+      "page_index": 3,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 53,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 657.8671264648438,
+        "y0": 674.5850830078125,
+        "x1": 695.4752197265625,
+        "y1": 731.3544311523438
+      },
+      "dedup_group_id": "dup_021",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img29",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img28.png",
+      "path_all": "images/all/component_p3_img28.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p3_img28.png"
+    },
+    {
+      "image_id": "p3_img29",
+      "file_name": "component_p3_img29.png",
+      "page_index": 3,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Five",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p3_img29.png",
+      "path_all": "images/all/component_p3_img29.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p3_img29.png"
+    },
+    {
+      "image_id": "p4_img0",
+      "file_name": "component_p4_img0.png",
+      "page_index": 4,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 5,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 163,
+        "height": 110
+      },
+      "bbox": {
+        "x0": 706.1495971679688,
+        "y0": 700.367919921875,
+        "x1": 823.0692749023438,
+        "y1": 779.0387573242188
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img0.png",
+      "path_all": "images/all/component_p4_img0.png",
+      "path_primary": "images/canonicals/unknown/component_p4_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img1",
+      "file_name": "component_p4_img1.png",
+      "page_index": 4,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "G 5",
+      "quantity": 5,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 226,
+        "height": 649
+      },
+      "bbox": {
+        "x0": -1.015509843826294,
+        "y0": 347.8655090332031,
+        "x1": 161.0058135986328,
+        "y1": 814.5742797851562
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img1.png",
+      "path_all": "images/all/component_p4_img1.png",
+      "path_primary": "images/canonicals/boards/component_p4_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img3",
+      "file_name": "component_p4_img3.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "G 2",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 58,
+        "height": 65
+      },
+      "bbox": {
+        "x0": 110.21241760253906,
+        "y0": 738.8546142578125,
+        "x1": 151.77146911621094,
+        "y1": 785.6139526367188
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img3.png",
+      "path_all": "images/all/component_p4_img3.png",
+      "path_primary": "images/canonicals/tokens/component_p4_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img4",
+      "file_name": "component_p4_img4.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "G 2",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 58,
+        "height": 65
+      },
+      "bbox": {
+        "x0": 128.26597595214844,
+        "y0": 739.8546142578125,
+        "x1": 169.8250274658203,
+        "y1": 786.6139526367188
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img4.png",
+      "path_all": "images/all/component_p4_img4.png",
+      "path_primary": "images/canonicals/tokens/component_p4_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img5",
+      "file_name": "component_p4_img5.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 60,
+        "height": 84
+      },
+      "bbox": {
+        "x0": 499.002197265625,
+        "y0": 524.8455810546875,
+        "x1": 541.9619750976562,
+        "y1": 584.839111328125
+      },
+      "dedup_group_id": "dup_027",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img42",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img5.png",
+      "path_all": "images/all/component_p4_img5.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img5.png"
+    },
+    {
+      "image_id": "p4_img6",
+      "file_name": "component_p4_img6.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 6,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 122,
+        "height": 101
+      },
+      "bbox": {
+        "x0": 368.01385498046875,
+        "y0": 508.7384338378906,
+        "x1": 455.36480712890625,
+        "y1": 581.4429321289062
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img6.png",
+      "path_all": "images/all/component_p4_img6.png",
+      "path_primary": "images/canonicals/tokens/component_p4_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img7",
+      "file_name": "component_p4_img7.png",
+      "page_index": 4,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "D, G",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 162,
+        "height": 113
+      },
+      "bbox": {
+        "x0": 561.865478515625,
+        "y0": 508.2060241699219,
+        "x1": 678.2212524414062,
+        "y1": 589.5335693359375
+      },
+      "dedup_group_id": "dup_025",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img40",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img7.png",
+      "path_all": "images/all/component_p4_img7.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/unknown/component_p4_img7.png"
+    },
+    {
+      "image_id": "p4_img8",
+      "file_name": "component_p4_img8.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "D, G",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 83,
+        "height": 69
+      },
+      "bbox": {
+        "x0": 616.6861572265625,
+        "y0": 516.6296997070312,
+        "x1": 676.2935791015625,
+        "y1": 566.0272827148438
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img8.png",
+      "path_all": "images/all/component_p4_img8.png",
+      "path_primary": "images/canonicals/tokens/component_p4_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img12",
+      "file_name": "component_p4_img12.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 106.24273681640625,
+        "y0": 247.6959228515625,
+        "x1": 164.61892700195312,
+        "y1": 329.21856689453125
+      },
+      "dedup_group_id": "dup_018",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img23",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img12.png",
+      "path_all": "images/all/component_p4_img12.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img12.png"
+    },
+    {
+      "image_id": "p4_img13",
+      "file_name": "component_p4_img13.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 60,
+        "height": 55
+      },
+      "bbox": {
+        "x0": 746.6693115234375,
+        "y0": 286.063232421875,
+        "x1": 789.3209838867188,
+        "y1": 325.329833984375
+      },
+      "dedup_group_id": "dup_028",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img13.png",
+      "path_all": "images/all/component_p4_img13.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img13.png"
+    },
+    {
+      "image_id": "p4_img14",
+      "file_name": "component_p4_img14.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 12,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 64,
+        "height": 59
+      },
+      "bbox": {
+        "x0": 690.1555786132812,
+        "y0": 404.46514892578125,
+        "x1": 735.5520629882812,
+        "y1": 446.25872802734375
+      },
+      "dedup_group_id": "dup_014",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img14.png",
+      "path_all": "images/all/component_p4_img14.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img14.png"
+    },
+    {
+      "image_id": "p4_img16",
+      "file_name": "component_p4_img16.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "C 3",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 43.164817810058594,
+        "y0": 247.6959228515625,
+        "x1": 101.54100036621094,
+        "y1": 329.21856689453125
+      },
+      "dedup_group_id": "dup_024",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img34",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img16.png",
+      "path_all": "images/all/component_p4_img16.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img16.png"
+    },
+    {
+      "image_id": "p4_img17",
+      "file_name": "component_p4_img17.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 82,
+        "height": 114
+      },
+      "bbox": {
+        "x0": 170.18116760253906,
+        "y0": 247.6954345703125,
+        "x1": 228.55735778808594,
+        "y1": 329.21807861328125
+      },
+      "dedup_group_id": "dup_026",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img41",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img17.png",
+      "path_all": "images/all/component_p4_img17.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img17.png"
+    },
+    {
+      "image_id": "p4_img18",
+      "file_name": "component_p4_img18.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "F 2",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 128,
+        "height": 141
+      },
+      "bbox": {
+        "x0": 175.42462158203125,
+        "y0": 547.6703491210938,
+        "x1": 267.27325439453125,
+        "y1": 648.4741821289062
+      },
+      "dedup_group_id": "dup_013",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img18.png",
+      "path_all": "images/all/component_p4_img18.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img18.png"
+    },
+    {
+      "image_id": "p4_img19",
+      "file_name": "component_p4_img19.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 128,
+        "height": 144
+      },
+      "bbox": {
+        "x0": 175.18115234375,
+        "y0": 647.8204345703125,
+        "x1": 267.02978515625,
+        "y1": 751.2286376953125
+      },
+      "dedup_group_id": "dup_015",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img12",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img19.png",
+      "path_all": "images/all/component_p4_img19.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p4_img19.png"
+    },
+    {
+      "image_id": "p4_img20",
+      "file_name": "component_p4_img20.png",
+      "page_index": 4,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 89,
+        "height": 123
+      },
+      "bbox": {
+        "x0": 264.9835510253906,
+        "y0": 615.2078247070312,
+        "x1": 328.810546875,
+        "y1": 703.2942504882812
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img20",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img20.png",
+      "path_all": "images/all/component_p4_img20.png",
+      "path_primary": "images/canonicals/tokens/component_p4_img20.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img21",
+      "file_name": "component_p4_img21.png",
+      "page_index": 4,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "G 1",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 101,
+        "height": 55
+      },
+      "bbox": {
+        "x0": 169.18115234375,
+        "y0": 448.98748779296875,
+        "x1": 241.20855712890625,
+        "y1": 488.49188232421875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p4_img21",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img21.png",
+      "path_all": "images/all/component_p4_img21.png",
+      "path_primary": "images/canonicals/unknown/component_p4_img21.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img23",
+      "file_name": "component_p4_img23.png",
+      "page_index": 4,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "DUNE: IMPERIUM",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p4_img23.png",
+      "path_all": "images/all/component_p4_img23.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p4_img23.png"
+    },
+    {
+      "image_id": "p5_img0",
+      "file_name": "component_p5_img0.png",
+      "page_index": 5,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 88,
+        "height": 98
+      },
+      "bbox": {
+        "x0": 710.0787353515625,
+        "y0": 649.2406616210938,
+        "x1": 773.3907470703125,
+        "y1": 719.200439453125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p5_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p5_img0.png",
+      "path_all": "images/all/component_p5_img0.png",
+      "path_primary": "images/canonicals/tokens/component_p5_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p5_img1",
+      "file_name": "component_p5_img1.png",
+      "page_index": 5,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "DUNE: IMPERIUM",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 70,
+        "height": 96
+      },
+      "bbox": {
+        "x0": 22.677175521850586,
+        "y0": 616.3263549804688,
+        "x1": 72.50189208984375,
+        "y1": 685.3428344726562
+      },
+      "dedup_group_id": "dup_031",
+      "is_duplicate": false,
+      "canonical_image_id": "p5_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p5_img1.png",
+      "path_all": "images/all/component_p5_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p5_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p5_img2",
+      "file_name": "component_p5_img2.png",
+      "page_index": 5,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 288,
+        "height": 202
+      },
+      "bbox": {
+        "x0": 482.82763671875,
+        "y0": 231.0062255859375,
+        "x1": 697.430419921875,
+        "y1": 386.5531311035156
+      },
+      "dedup_group_id": "dup_025",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img40",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p5_img2.png",
+      "path_all": "images/all/component_p5_img2.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/unknown/component_p5_img2.png"
+    },
+    {
+      "image_id": "p5_img3",
+      "file_name": "component_p5_img3.png",
+      "page_index": 5,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 112,
+        "height": 156
+      },
+      "bbox": {
+        "x0": 692.4888305664062,
+        "y0": 251.5572052001953,
+        "x1": 776.3394775390625,
+        "y1": 366.0021057128906
+      },
+      "dedup_group_id": "dup_017",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img18",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p5_img3.png",
+      "path_all": "images/all/component_p5_img3.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p5_img3.png"
+    },
+    {
+      "image_id": "p5_img4",
+      "file_name": "component_p5_img4.png",
+      "page_index": 5,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 59,
+        "height": 59
+      },
+      "bbox": {
+        "x0": 22.094497680664062,
+        "y0": 126.22809600830078,
+        "x1": 64.22583770751953,
+        "y1": 168.35943603515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p5_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p5_img4.png",
+      "path_all": "images/all/component_p5_img4.png",
+      "path_primary": "images/canonicals/tokens/component_p5_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p5_img5",
+      "file_name": "component_p5_img5.png",
+      "page_index": 5,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Gents",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p5_img5.png",
+      "path_all": "images/all/component_p5_img5.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p5_img5.png"
+    },
+    {
+      "image_id": "p6_img0",
+      "file_name": "component_p6_img0.png",
+      "page_index": 6,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 117,
+        "height": 177
+      },
+      "bbox": {
+        "x0": 540.1329345703125,
+        "y0": 618.7333374023438,
+        "x1": 630.4066162109375,
+        "y1": 750.2962646484375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p6_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img0.png",
+      "path_all": "images/all/component_p6_img0.png",
+      "path_primary": "images/canonicals/cards/component_p6_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img1",
+      "file_name": "component_p6_img1.png",
+      "page_index": 6,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 117,
+        "height": 177
+      },
+      "bbox": {
+        "x0": 624.0565185546875,
+        "y0": 618.7333984375,
+        "x1": 707.7796630859375,
+        "y1": 746.089111328125
+      },
+      "dedup_group_id": "dup_004",
+      "is_duplicate": true,
+      "canonical_image_id": "p11_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img1.png",
+      "path_all": "images/all/component_p6_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p6_img1.png"
+    },
+    {
+      "image_id": "p6_img2",
+      "file_name": "component_p6_img2.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 84,
+        "height": 70
+      },
+      "bbox": {
+        "x0": 478.4803771972656,
+        "y0": 135.40875244140625,
+        "x1": 538.8839111328125,
+        "y1": 185.11224365234375
+      },
+      "dedup_group_id": "dup_010",
+      "is_duplicate": true,
+      "canonical_image_id": "p1_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img2.png",
+      "path_all": "images/all/component_p6_img2.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p6_img2.png"
+    },
+    {
+      "image_id": "p6_img3",
+      "file_name": "component_p6_img3.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 127,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 600.6446533203125,
+        "y0": 474.2330322265625,
+        "x1": 691.6836547851562,
+        "y1": 541.9332885742188
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p6_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img3.png",
+      "path_all": "images/all/component_p6_img3.png",
+      "path_primary": "images/canonicals/tokens/component_p6_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img4",
+      "file_name": "component_p6_img4.png",
+      "page_index": 6,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 144,
+        "height": 94
+      },
+      "bbox": {
+        "x0": 687.7709350585938,
+        "y0": 474.1836242675781,
+        "x1": 791.21044921875,
+        "y1": 541.520263671875
+      },
+      "dedup_group_id": "dup_006",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img4.png",
+      "path_all": "images/all/component_p6_img4.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/unknown/component_p6_img4.png"
+    },
+    {
+      "image_id": "p6_img5",
+      "file_name": "component_p6_img5.png",
+      "page_index": 6,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 144,
+        "height": 94
+      },
+      "bbox": {
+        "x0": 645.11572265625,
+        "y0": 512.026123046875,
+        "x1": 748.5552368164062,
+        "y1": 579.2440185546875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p6_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img5.png",
+      "path_all": "images/all/component_p6_img5.png",
+      "path_primary": "images/canonicals/unknown/component_p6_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img6",
+      "file_name": "component_p6_img6.png",
+      "page_index": 6,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 117,
+        "height": 177
+      },
+      "bbox": {
+        "x0": 703.7781372070312,
+        "y0": 618.7333374023438,
+        "x1": 794.0518188476562,
+        "y1": 750.2962646484375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p6_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img6.png",
+      "path_all": "images/all/component_p6_img6.png",
+      "path_primary": "images/canonicals/cards/component_p6_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img7",
+      "file_name": "component_p6_img7.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 104,
+        "height": 94
+      },
+      "bbox": {
+        "x0": 697.9581298828125,
+        "y0": 198.91751098632812,
+        "x1": 772.81103515625,
+        "y1": 266.28515625
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img7.png",
+      "path_all": "images/all/component_p6_img7.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p6_img7.png"
+    },
+    {
+      "image_id": "p6_img8",
+      "file_name": "component_p6_img8.png",
+      "page_index": 6,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 140,
+        "height": 299
+      },
+      "bbox": {
+        "x0": 678.9279174804688,
+        "y0": 195.52357482910156,
+        "x1": 779.5077514648438,
+        "y1": 410.202880859375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p6_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img8.png",
+      "path_all": "images/all/component_p6_img8.png",
+      "path_primary": "images/canonicals/unknown/component_p6_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img9",
+      "file_name": "component_p6_img9.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 108,
+        "height": 98
+      },
+      "bbox": {
+        "x0": 697.0472412109375,
+        "y0": 197.6690673828125,
+        "x1": 774.8057861328125,
+        "y1": 267.6517333984375
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img9.png",
+      "path_all": "images/all/component_p6_img9.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p6_img9.png"
+    },
+    {
+      "image_id": "p6_img10",
+      "file_name": "component_p6_img10.png",
+      "page_index": 6,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 97,
+        "height": 146
+      },
+      "bbox": {
+        "x0": 22.677165985107422,
+        "y0": 473.4944152832031,
+        "x1": 100.85342407226562,
+        "y1": 583.776611328125
+      },
+      "dedup_group_id": "dup_019",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img25",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img10.png",
+      "path_all": "images/all/component_p6_img10.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p6_img10.png"
+    },
+    {
+      "image_id": "p6_img11",
+      "file_name": "component_p6_img11.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 84,
+        "height": 70
+      },
+      "bbox": {
+        "x0": 277.47052001953125,
+        "y0": 135.40875244140625,
+        "x1": 337.8740539550781,
+        "y1": 185.11224365234375
+      },
+      "dedup_group_id": "dup_012",
+      "is_duplicate": true,
+      "canonical_image_id": "p1_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img11.png",
+      "path_all": "images/all/component_p6_img11.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p6_img11.png"
+    },
+    {
+      "image_id": "p6_img12",
+      "file_name": "component_p6_img12.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 84,
+        "height": 70
+      },
+      "bbox": {
+        "x0": 344.47381591796875,
+        "y0": 135.40875244140625,
+        "x1": 404.8773498535156,
+        "y1": 185.11224365234375
+      },
+      "dedup_group_id": "dup_011",
+      "is_duplicate": true,
+      "canonical_image_id": "p1_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img12.png",
+      "path_all": "images/all/component_p6_img12.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p6_img12.png"
+    },
+    {
+      "image_id": "p6_img13",
+      "file_name": "component_p6_img13.png",
+      "page_index": 6,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 84,
+        "height": 70
+      },
+      "bbox": {
+        "x0": 411.4770812988281,
+        "y0": 135.40875244140625,
+        "x1": 471.880615234375,
+        "y1": 185.11224365234375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p6_img13",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img13.png",
+      "path_all": "images/all/component_p6_img13.png",
+      "path_primary": "images/canonicals/tokens/component_p6_img13.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img14",
+      "file_name": "component_p6_img14.png",
+      "page_index": 6,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "First",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p6_img14.png",
+      "path_all": "images/all/component_p6_img14.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p6_img14.png"
+    },
+    {
+      "image_id": "p7_img0",
+      "file_name": "component_p7_img0.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 75,
+        "height": 104
+      },
+      "bbox": {
+        "x0": 27.1732177734375,
+        "y0": 291.4890441894531,
+        "x1": 92.78910827636719,
+        "y1": 374.3002624511719
+      },
+      "dedup_group_id": "dup_027",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img42",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img0.png",
+      "path_all": "images/all/component_p7_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p7_img0.png"
+    },
+    {
+      "image_id": "p7_img1",
+      "file_name": "component_p7_img1.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 251,
+        "height": 195
+      },
+      "bbox": {
+        "x0": 597.4048461914062,
+        "y0": 250.4333953857422,
+        "x1": 777.7325439453125,
+        "y1": 390.4368591308594
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img1.png",
+      "path_all": "images/all/component_p7_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p7_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img2",
+      "file_name": "component_p7_img2.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.5,
+      "label": null,
+      "quantity": 5,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 78,
+        "height": 63
+      },
+      "bbox": {
+        "x0": 715.1761474609375,
+        "y0": 99.21231842041016,
+        "x1": 770.9619750976562,
+        "y1": 144.566650390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img2.png",
+      "path_all": "images/all/component_p7_img2.png",
+      "path_primary": "images/canonicals/tokens/component_p7_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img3",
+      "file_name": "component_p7_img3.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.5,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 72,
+        "height": 63
+      },
+      "bbox": {
+        "x0": 212.59840393066406,
+        "y0": 99.21330261230469,
+        "x1": 264.251953125,
+        "y1": 144.41015625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img3.png",
+      "path_all": "images/all/component_p7_img3.png",
+      "path_primary": "images/canonicals/tokens/component_p7_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img4",
+      "file_name": "component_p7_img4.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 179,
+        "height": 250
+      },
+      "bbox": {
+        "x0": 617.695068359375,
+        "y0": 570.761474609375,
+        "x1": 746.287353515625,
+        "y1": 750.3412475585938
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img4.png",
+      "path_all": "images/all/component_p7_img4.png",
+      "path_primary": "images/canonicals/tokens/component_p7_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img6",
+      "file_name": "component_p7_img6.png",
+      "page_index": 7,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 93,
+        "height": 140
+      },
+      "bbox": {
+        "x0": 617.2434692382812,
+        "y0": 268.953125,
+        "x1": 683.7088012695312,
+        "y1": 369.2825012207031
+      },
+      "dedup_group_id": "dup_023",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img32",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img6.png",
+      "path_all": "images/all/component_p7_img6.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p7_img6.png"
+    },
+    {
+      "image_id": "p7_img7",
+      "file_name": "component_p7_img7.png",
+      "page_index": 7,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 93,
+        "height": 140
+      },
+      "bbox": {
+        "x0": 611.2948608398438,
+        "y0": 266.6946716308594,
+        "x1": 681.22119140625,
+        "y1": 369.28253173828125
+      },
+      "dedup_group_id": "dup_030",
+      "is_duplicate": true,
+      "canonical_image_id": "p3_img27",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img7.png",
+      "path_all": "images/all/component_p7_img7.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p7_img7.png"
+    },
+    {
+      "image_id": "p7_img8",
+      "file_name": "component_p7_img8.png",
+      "page_index": 7,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 88,
+        "height": 134
+      },
+      "bbox": {
+        "x0": 700.9248657226562,
+        "y0": 270.7750244140625,
+        "x1": 763.9017333984375,
+        "y1": 366.57257080078125
+      },
+      "dedup_group_id": "dup_003",
+      "is_duplicate": true,
+      "canonical_image_id": "p11_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img8.png",
+      "path_all": "images/all/component_p7_img8.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/cards/component_p7_img8.png"
+    },
+    {
+      "image_id": "p7_img11",
+      "file_name": "component_p7_img11.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.5,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 63,
+        "height": 63
+      },
+      "bbox": {
+        "x0": 48.188968658447266,
+        "y0": 99.21232604980469,
+        "x1": 93.54328918457031,
+        "y1": 144.566650390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img11",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img11.png",
+      "path_all": "images/all/component_p7_img11.png",
+      "path_primary": "images/canonicals/tokens/component_p7_img11.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img13",
+      "file_name": "component_p7_img13.png",
+      "page_index": 7,
+      "classification": "token",
+      "classification_confidence": 0.5,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 61,
+        "height": 63
+      },
+      "bbox": {
+        "x0": 541.4172973632812,
+        "y0": 99.21231842041016,
+        "x1": 584.7824096679688,
+        "y1": 144.566650390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img13",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img13.png",
+      "path_all": "images/all/component_p7_img13.png",
+      "path_primary": "images/canonicals/tokens/component_p7_img13.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img14",
+      "file_name": "component_p7_img14.png",
+      "page_index": 7,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Urns",
+      "quantity": 5,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p7_img14.png",
+      "path_all": "images/all/component_p7_img14.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p7_img14.png"
+    },
+    {
+      "image_id": "p8_img1",
+      "file_name": "component_p8_img1.png",
+      "page_index": 8,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 107,
+        "height": 149
+      },
+      "bbox": {
+        "x0": 707.5372314453125,
+        "y0": 633.4879760742188,
+        "x1": 793.1732177734375,
+        "y1": 746.7349243164062
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p8_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img1.png",
+      "path_all": "images/all/component_p8_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p8_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p8_img6",
+      "file_name": "component_p8_img6.png",
+      "page_index": 8,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 96,
+        "height": 134
+      },
+      "bbox": {
+        "x0": 353.92071533203125,
+        "y0": 288.510986328125,
+        "x1": 431.0491638183594,
+        "y1": 390.50738525390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p8_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img6.png",
+      "path_all": "images/all/component_p8_img6.png",
+      "path_primary": "images/canonicals/tokens/component_p8_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p8_img7",
+      "file_name": "component_p8_img7.png",
+      "page_index": 8,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 70,
+        "height": 96
+      },
+      "bbox": {
+        "x0": 22.67716407775879,
+        "y0": 62.362022399902344,
+        "x1": 72.50188446044922,
+        "y1": 131.37847900390625
+      },
+      "dedup_group_id": "dup_031",
+      "is_duplicate": true,
+      "canonical_image_id": "p5_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img7.png",
+      "path_all": "images/all/component_p8_img7.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p8_img7.png"
+    },
+    {
+      "image_id": "p8_img8",
+      "file_name": "component_p8_img8.png",
+      "page_index": 8,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 124,
+        "height": 64
+      },
+      "bbox": {
+        "x0": 320.76104736328125,
+        "y0": 672.2340087890625,
+        "x1": 409.8585205078125,
+        "y1": 718.2427978515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p8_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img8.png",
+      "path_all": "images/all/component_p8_img8.png",
+      "path_primary": "images/canonicals/unknown/component_p8_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p8_img10",
+      "file_name": "component_p8_img10.png",
+      "page_index": 8,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 138,
+        "height": 85
+      },
+      "bbox": {
+        "x0": 325.8209228515625,
+        "y0": 90.68502044677734,
+        "x1": 424.5423278808594,
+        "y1": 151.53289794921875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p8_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img10.png",
+      "path_all": "images/all/component_p8_img10.png",
+      "path_primary": "images/canonicals/unknown/component_p8_img10.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p8_img11",
+      "file_name": "component_p8_img11.png",
+      "page_index": 8,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 86,
+        "height": 116
+      },
+      "bbox": {
+        "x0": 339.9590148925781,
+        "y0": 490.0199279785156,
+        "x1": 401.5651550292969,
+        "y1": 573.1348266601562
+      },
+      "dedup_group_id": "dup_005",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img11.png",
+      "path_all": "images/all/component_p8_img11.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p8_img11.png"
+    },
+    {
+      "image_id": "p8_img12",
+      "file_name": "component_p8_img12.png",
+      "page_index": 8,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 168,
+        "height": 235
+      },
+      "bbox": {
+        "x0": 649.477783203125,
+        "y0": 104.88165283203125,
+        "x1": 770.4052124023438,
+        "y1": 273.75750732421875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p8_img12",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img12.png",
+      "path_all": "images/all/component_p8_img12.png",
+      "path_primary": "images/canonicals/tokens/component_p8_img12.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p8_img16",
+      "file_name": "component_p8_img16.png",
+      "page_index": 8,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Urn",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p8_img16.png",
+      "path_all": "images/all/component_p8_img16.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p8_img16.png"
+    },
+    {
+      "image_id": "p9_img0",
+      "file_name": "component_p9_img0.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Control marker",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 105,
+        "height": 80
+      },
+      "bbox": {
+        "x0": 321.14483642578125,
+        "y0": 602.4602661132812,
+        "x1": 396.0871276855469,
+        "y1": 659.7422485351562
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img0.png",
+      "path_all": "images/all/component_p9_img0.png",
+      "path_primary": "images/canonicals/tokens/component_p9_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img3",
+      "file_name": "component_p9_img3.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 102,
+        "height": 80
+      },
+      "bbox": {
+        "x0": 524.2409057617188,
+        "y0": 437.07672119140625,
+        "x1": 597.659423828125,
+        "y1": 494.0406188964844
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img3.png",
+      "path_all": "images/all/component_p9_img3.png",
+      "path_primary": "images/canonicals/tokens/component_p9_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img6",
+      "file_name": "component_p9_img6.png",
+      "page_index": 9,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Bene",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 96,
+        "height": 58
+      },
+      "bbox": {
+        "x0": 654.3313598632812,
+        "y0": 656.45947265625,
+        "x1": 722.8060913085938,
+        "y1": 697.854248046875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img6.png",
+      "path_all": "images/all/component_p9_img6.png",
+      "path_primary": "images/canonicals/unknown/component_p9_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img8",
+      "file_name": "component_p9_img8.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 98,
+        "height": 79
+      },
+      "bbox": {
+        "x0": 324.4469909667969,
+        "y0": 206.51632690429688,
+        "x1": 394.6155090332031,
+        "y1": 263.36517333984375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img8.png",
+      "path_all": "images/all/component_p9_img8.png",
+      "path_primary": "images/canonicals/tokens/component_p9_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img9",
+      "file_name": "component_p9_img9.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Troops recruited",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 174,
+        "height": 125
+      },
+      "bbox": {
+        "x0": 272.2226257324219,
+        "y0": 331.3474426269531,
+        "x1": 397.1086120605469,
+        "y1": 421.2853088378906
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img9.png",
+      "path_all": "images/all/component_p9_img9.png",
+      "path_primary": "images/canonicals/tokens/component_p9_img9.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img11",
+      "file_name": "component_p9_img11.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 85,
+        "height": 119
+      },
+      "bbox": {
+        "x0": 731.7701416015625,
+        "y0": 280.99664306640625,
+        "x1": 800.0177612304688,
+        "y1": 371.248779296875
+      },
+      "dedup_group_id": "dup_016",
+      "is_duplicate": true,
+      "canonical_image_id": "p2_img15",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img11.png",
+      "path_all": "images/all/component_p9_img11.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p9_img11.png"
+    },
+    {
+      "image_id": "p9_img12",
+      "file_name": "component_p9_img12.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 85,
+        "height": 119
+      },
+      "bbox": {
+        "x0": 723.046875,
+        "y0": 652.5214233398438,
+        "x1": 791.2944946289062,
+        "y1": 742.7735595703125
+      },
+      "dedup_group_id": "dup_029",
+      "is_duplicate": true,
+      "canonical_image_id": "p3_img24",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img12.png",
+      "path_all": "images/all/component_p9_img12.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p9_img12.png"
+    },
+    {
+      "image_id": "p9_img13",
+      "file_name": "component_p9_img13.png",
+      "page_index": 9,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 85,
+        "height": 119
+      },
+      "bbox": {
+        "x0": 450.968994140625,
+        "y0": 435.9268798828125,
+        "x1": 525.8953857421875,
+        "y1": 530.488525390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img13",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img13.png",
+      "path_all": "images/all/component_p9_img13.png",
+      "path_primary": "images/canonicals/tokens/component_p9_img13.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img14",
+      "file_name": "component_p9_img14.png",
+      "page_index": 9,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 164,
+        "height": 88
+      },
+      "bbox": {
+        "x0": 667.6932373046875,
+        "y0": 184.2510986328125,
+        "x1": 785.67236328125,
+        "y1": 246.91778564453125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img14",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img14.png",
+      "path_all": "images/all/component_p9_img14.png",
+      "path_primary": "images/canonicals/unknown/component_p9_img14.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img15",
+      "file_name": "component_p9_img15.png",
+      "page_index": 9,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 116,
+        "height": 77
+      },
+      "bbox": {
+        "x0": 650.4571533203125,
+        "y0": 292.74432373046875,
+        "x1": 733.6893920898438,
+        "y1": 347.7159423828125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p9_img15",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img15.png",
+      "path_all": "images/all/component_p9_img15.png",
+      "path_primary": "images/canonicals/unknown/component_p9_img15.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p9_img16",
+      "file_name": "component_p9_img16.png",
+      "page_index": 9,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Bene",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p9_img16.png",
+      "path_all": "images/all/component_p9_img16.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p9_img16.png"
+    },
+    {
+      "image_id": "p10_img1",
+      "file_name": "component_p10_img1.png",
+      "page_index": 10,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "Trength",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 107,
+        "height": 149
+      },
+      "bbox": {
+        "x0": 245.4607391357422,
+        "y0": 265.92852783203125,
+        "x1": 330.87335205078125,
+        "y1": 378.880126953125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p10_img1.png",
+      "path_all": "images/all/component_p10_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p10_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p10_img2",
+      "file_name": "component_p10_img2.png",
+      "page_index": 10,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 20,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 198,
+        "height": 71
+      },
+      "bbox": {
+        "x0": 190.74436950683594,
+        "y0": 582.1089477539062,
+        "x1": 332.90399169921875,
+        "y1": 633.1157836914062
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p10_img2.png",
+      "path_all": "images/all/component_p10_img2.png",
+      "path_primary": "images/canonicals/unknown/component_p10_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p10_img4",
+      "file_name": "component_p10_img4.png",
+      "page_index": 10,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 109,
+        "height": 152
+      },
+      "bbox": {
+        "x0": 665.7264404296875,
+        "y0": 524.6231079101562,
+        "x1": 752.8976440429688,
+        "y1": 639.9003295898438
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p10_img4.png",
+      "path_all": "images/all/component_p10_img4.png",
+      "path_primary": "images/canonicals/tokens/component_p10_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p10_img5",
+      "file_name": "component_p10_img5.png",
+      "page_index": 10,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 109,
+        "height": 152
+      },
+      "bbox": {
+        "x0": 688.5919189453125,
+        "y0": 508.8333740234375,
+        "x1": 775.7631225585938,
+        "y1": 624.110595703125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p10_img5.png",
+      "path_all": "images/all/component_p10_img5.png",
+      "path_primary": "images/canonicals/tokens/component_p10_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p10_img6",
+      "file_name": "component_p10_img6.png",
+      "page_index": 10,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 109,
+        "height": 152
+      },
+      "bbox": {
+        "x0": 713.1910400390625,
+        "y0": 492.9068603515625,
+        "x1": 800.3622436523438,
+        "y1": 608.18408203125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p10_img6.png",
+      "path_all": "images/all/component_p10_img6.png",
+      "path_primary": "images/canonicals/tokens/component_p10_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p10_img8",
+      "file_name": "component_p10_img8.png",
+      "page_index": 10,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Effects",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p10_img8.png",
+      "path_all": "images/all/component_p10_img8.png",
+      "path_primary": "images/canonicals/boards/component_p10_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img0",
+      "file_name": "component_p11_img0.png",
+      "page_index": 11,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 12,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 118,
+        "height": 180
+      },
+      "bbox": {
+        "x0": 25.511821746826172,
+        "y0": 642.7372436523438,
+        "x1": 110.39910888671875,
+        "y1": 771.8638916015625
+      },
+      "dedup_group_id": "dup_003",
+      "is_duplicate": false,
+      "canonical_image_id": "p11_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p11_img0.png",
+      "path_all": "images/all/component_p11_img0.png",
+      "path_primary": "images/canonicals/cards/component_p11_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img2",
+      "file_name": "component_p11_img2.png",
+      "page_index": 11,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 117,
+        "height": 178
+      },
+      "bbox": {
+        "x0": 707.5759887695312,
+        "y0": 143.32212829589844,
+        "x1": 791.7008056640625,
+        "y1": 271.28887939453125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p11_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p11_img2.png",
+      "path_all": "images/all/component_p11_img2.png",
+      "path_primary": "images/canonicals/cards/component_p11_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img3",
+      "file_name": "component_p11_img3.png",
+      "page_index": 11,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 134,
+        "height": 204
+      },
+      "bbox": {
+        "x0": 681.33056640625,
+        "y0": 490.93353271484375,
+        "x1": 801.4776000976562,
+        "y1": 651.747314453125
+      },
+      "dedup_group_id": "dup_004",
+      "is_duplicate": false,
+      "canonical_image_id": "p11_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p11_img3.png",
+      "path_all": "images/all/component_p11_img3.png",
+      "path_primary": "images/canonicals/cards/component_p11_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img4",
+      "file_name": "component_p11_img4.png",
+      "page_index": 11,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 134,
+        "height": 204
+      },
+      "bbox": {
+        "x0": 255.9188690185547,
+        "y0": 119.05867004394531,
+        "x1": 357.1653747558594,
+        "y1": 268.6590270996094
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p11_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p11_img4.png",
+      "path_all": "images/all/component_p11_img4.png",
+      "path_primary": "images/canonicals/cards/component_p11_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img5",
+      "file_name": "component_p11_img5.png",
+      "page_index": 11,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Ties",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p11_img5.png",
+      "path_all": "images/all/component_p11_img5.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p11_img5.png"
+    },
+    {
+      "image_id": "p12_img2",
+      "file_name": "component_p12_img2.png",
+      "page_index": 12,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 192,
+        "height": 102
+      },
+      "bbox": {
+        "x0": 652.469970703125,
+        "y0": 109.01759338378906,
+        "x1": 790.011962890625,
+        "y1": 181.9051513671875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p12_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p12_img2.png",
+      "path_all": "images/all/component_p12_img2.png",
+      "path_primary": "images/canonicals/unknown/component_p12_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p12_img4",
+      "file_name": "component_p12_img4.png",
+      "page_index": 12,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Bonus spice",
+      "quantity": 10,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p12_img4.png",
+      "path_all": "images/all/component_p12_img4.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p12_img4.png"
+    },
+    {
+      "image_id": "p13_img0",
+      "file_name": "component_p13_img0.png",
+      "page_index": 13,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Need",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 149,
+        "height": 96
+      },
+      "bbox": {
+        "x0": 24.44253921508789,
+        "y0": 61.3016357421875,
+        "x1": 131.4905242919922,
+        "y1": 130.1529541015625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img0.png",
+      "path_all": "images/all/component_p13_img0.png",
+      "path_primary": "images/canonicals/unknown/component_p13_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img1",
+      "file_name": "component_p13_img1.png",
+      "page_index": 13,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 145,
+        "height": 107
+      },
+      "bbox": {
+        "x0": 192.4847412109375,
+        "y0": 154.08961486816406,
+        "x1": 303.009765625,
+        "y1": 239.61859130859375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img1.png",
+      "path_all": "images/all/component_p13_img1.png",
+      "path_primary": "images/canonicals/tokens/component_p13_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img2",
+      "file_name": "component_p13_img2.png",
+      "page_index": 13,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 127,
+        "height": 167
+      },
+      "bbox": {
+        "x0": 25.516948699951172,
+        "y0": 633.215576171875,
+        "x1": 116.43464660644531,
+        "y1": 752.9583129882812
+      },
+      "dedup_group_id": "dup_005",
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img2.png",
+      "path_all": "images/all/component_p13_img2.png",
+      "path_primary": "images/canonicals/tokens/component_p13_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img3",
+      "file_name": "component_p13_img3.png",
+      "page_index": 13,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 149,
+        "height": 208
+      },
+      "bbox": {
+        "x0": 687.7360229492188,
+        "y0": 486.662353515625,
+        "x1": 794.73486328125,
+        "y1": 636.0662231445312
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img3.png",
+      "path_all": "images/all/component_p13_img3.png",
+      "path_primary": "images/canonicals/tokens/component_p13_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img4",
+      "file_name": "component_p13_img4.png",
+      "page_index": 13,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 129,
+        "height": 85
+      },
+      "bbox": {
+        "x0": 227.66897583007812,
+        "y0": 168.45738220214844,
+        "x1": 320.49871826171875,
+        "y1": 229.1004638671875
+      },
+      "dedup_group_id": "dup_006",
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img4.png",
+      "path_all": "images/all/component_p13_img4.png",
+      "path_primary": "images/canonicals/unknown/component_p13_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img5",
+      "file_name": "component_p13_img5.png",
+      "page_index": 13,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 195,
+        "height": 113
+      },
+      "bbox": {
+        "x0": 246.2366485595703,
+        "y0": 158.08807373046875,
+        "x1": 392.55889892578125,
+        "y1": 250.86187744140625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img5.png",
+      "path_all": "images/all/component_p13_img5.png",
+      "path_primary": "images/canonicals/unknown/component_p13_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img6",
+      "file_name": "component_p13_img6.png",
+      "page_index": 13,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 135,
+        "height": 96
+      },
+      "bbox": {
+        "x0": 22.629817962646484,
+        "y0": 357.80621337890625,
+        "x1": 121.5318603515625,
+        "y1": 429.7503662109375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img6.png",
+      "path_all": "images/all/component_p13_img6.png",
+      "path_primary": "images/canonicals/unknown/component_p13_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img7",
+      "file_name": "component_p13_img7.png",
+      "page_index": 13,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 144,
+        "height": 105
+      },
+      "bbox": {
+        "x0": 44.79416275024414,
+        "y0": 358.0907897949219,
+        "x1": 151.55487060546875,
+        "y1": 438.2938537597656
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img7",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img7.png",
+      "path_all": "images/all/component_p13_img7.png",
+      "path_primary": "images/canonicals/tokens/component_p13_img7.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img8",
+      "file_name": "component_p13_img8.png",
+      "page_index": 13,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": "Bought",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 118,
+        "height": 180
+      },
+      "bbox": {
+        "x0": 435.3143310546875,
+        "y0": 59.955352783203125,
+        "x1": 526.84326171875,
+        "y1": 193.34765625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img8.png",
+      "path_all": "images/all/component_p13_img8.png",
+      "path_primary": "images/canonicals/cards/component_p13_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img9",
+      "file_name": "component_p13_img9.png",
+      "page_index": 13,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 145,
+        "height": 132
+      },
+      "bbox": {
+        "x0": 434.0086669921875,
+        "y0": 364.0186462402344,
+        "x1": 538.243896484375,
+        "y1": 458.5304260253906
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img9.png",
+      "path_all": "images/all/component_p13_img9.png",
+      "path_primary": "images/canonicals/tokens/component_p13_img9.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img10",
+      "file_name": "component_p13_img10.png",
+      "page_index": 13,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 139,
+        "height": 193
+      },
+      "bbox": {
+        "x0": 273.2574462890625,
+        "y0": 494.73870849609375,
+        "x1": 379.7933044433594,
+        "y1": 638.572998046875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img10.png",
+      "path_all": "images/all/component_p13_img10.png",
+      "path_primary": "images/canonicals/tokens/component_p13_img10.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img11",
+      "file_name": "component_p13_img11.png",
+      "page_index": 13,
+      "classification": "card",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 92,
+        "height": 140
+      },
+      "bbox": {
+        "x0": 711.8074951171875,
+        "y0": 241.47625732421875,
+        "x1": 786.2626342773438,
+        "y1": 347.1805114746094
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img11",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img11.png",
+      "path_all": "images/all/component_p13_img11.png",
+      "path_primary": "images/canonicals/cards/component_p13_img11.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img12",
+      "file_name": "component_p13_img12.png",
+      "page_index": 13,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Bought",
+      "quantity": 14,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p13_img12.png",
+      "path_all": "images/all/component_p13_img12.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p13_img12.png"
+    },
+    {
+      "image_id": "p14_img2",
+      "file_name": "component_p14_img2.png",
+      "page_index": 14,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 185,
+        "height": 84
+      },
+      "bbox": {
+        "x0": 133.68756103515625,
+        "y0": 663.31787109375,
+        "x1": 266.3571472167969,
+        "y1": 723.5066528320312
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p14_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p14_img2.png",
+      "path_all": "images/all/component_p14_img2.png",
+      "path_primary": "images/canonicals/unknown/component_p14_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p14_img3",
+      "file_name": "component_p14_img3.png",
+      "page_index": 14,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 166,
+        "height": 106
+      },
+      "bbox": {
+        "x0": 351.3956298828125,
+        "y0": 654.8029174804688,
+        "x1": 470.651611328125,
+        "y1": 730.8756713867188
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p14_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p14_img3.png",
+      "path_all": "images/all/component_p14_img3.png",
+      "path_primary": "images/canonicals/unknown/component_p14_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p14_img4",
+      "file_name": "component_p14_img4.png",
+      "page_index": 14,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": "DUNE: IMPERIUM",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 106,
+        "height": 147
+      },
+      "bbox": {
+        "x0": 373.1683044433594,
+        "y0": 496.0627136230469,
+        "x1": 448.8789367675781,
+        "y1": 601.756103515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p14_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p14_img4.png",
+      "path_all": "images/all/component_p14_img4.png",
+      "path_primary": "images/canonicals/tokens/component_p14_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p14_img5",
+      "file_name": "component_p14_img5.png",
+      "page_index": 14,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Redits",
+      "quantity": 9,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p14_img5.png",
+      "path_all": "images/all/component_p14_img5.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p14_img5.png"
+    },
+    {
+      "image_id": "p15_img5",
+      "file_name": "component_p15_img5.png",
+      "page_index": 15,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 55,
+        "height": 50
+      },
+      "bbox": {
+        "x0": 436.5354919433594,
+        "y0": 64.48789978027344,
+        "x1": 475.54119873046875,
+        "y1": 99.9766845703125
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p15_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p15_img5.png",
+      "path_all": "images/all/component_p15_img5.png",
+      "path_primary": "images/canonicals/tokens/component_p15_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p15_img21",
+      "file_name": "component_p15_img21.png",
+      "page_index": 15,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 64,
+        "height": 57
+      },
+      "bbox": {
+        "x0": 252.220458984375,
+        "y0": 231.07061767578125,
+        "x1": 297.644775390625,
+        "y1": 271.9525146484375
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p15_img21.png",
+      "path_all": "images/all/component_p15_img21.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p15_img21.png"
+    },
+    {
+      "image_id": "p15_img30",
+      "file_name": "component_p15_img30.png",
+      "page_index": 15,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Round",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p15_img30.png",
+      "path_all": "images/all/component_p15_img30.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p15_img30.png"
+    },
+    {
+      "image_id": "p16_img0",
+      "file_name": "component_p16_img0.png",
+      "page_index": 16,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 115
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 269.2911376953125,
+        "x1": 138.89764404296875,
+        "y1": 351.46038818359375
+      },
+      "dedup_group_id": "dup_008",
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img0.png",
+      "path_all": "images/all/component_p16_img0.png",
+      "path_primary": "images/canonicals/tokens/component_p16_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img1",
+      "file_name": "component_p16_img1.png",
+      "page_index": 16,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 115
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 376.1069030761719,
+        "x1": 138.8976593017578,
+        "y1": 458.84088134765625
+      },
+      "dedup_group_id": "dup_008",
+      "is_duplicate": true,
+      "canonical_image_id": "p16_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img1.png",
+      "path_all": "images/all/component_p16_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/tokens/component_p16_img1.png"
+    },
+    {
+      "image_id": "p16_img2",
+      "file_name": "component_p16_img2.png",
+      "page_index": 16,
+      "classification": "non-component",
+      "classification_confidence": 0.8,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 584,
+        "height": 102
+      },
+      "bbox": {
+        "x0": 230.24197387695312,
+        "y0": 22.818649291992188,
+        "x1": 650.0614013671875,
+        "y1": 96.10211181640625
+      },
+      "dedup_group_id": "dup_001",
+      "is_duplicate": true,
+      "canonical_image_id": "p0_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img2.png",
+      "path_all": "images/all/component_p16_img2.png",
+      "path_primary": null,
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img3",
+      "file_name": "component_p16_img3.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Cost: 4 spice",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 482.92254638671875,
+        "x1": 138.89767456054688,
+        "y1": 551.2069702148438
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img3.png",
+      "path_all": "images/all/component_p16_img3.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img4",
+      "file_name": "component_p16_img4.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Intrigue card",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 586.6508178710938,
+        "x1": 138.89767456054688,
+        "y1": 654.7947387695312
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img4.png",
+      "path_all": "images/all/component_p16_img4.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img5",
+      "file_name": "component_p16_img5.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 71
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 679.876953125,
+        "x1": 138.8976593017578,
+        "y1": 730.701171875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img5.png",
+      "path_all": "images/all/component_p16_img5.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img6",
+      "file_name": "component_p16_img6.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 70
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 269.291015625,
+        "x1": 538.5827026367188,
+        "y1": 319.65960693359375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img6.png",
+      "path_all": "images/all/component_p16_img6.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img7",
+      "file_name": "component_p16_img7.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 370.6029052734375,
+        "x1": 538.5827026367188,
+        "y1": 438.3827819824219
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img7",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img7.png",
+      "path_all": "images/all/component_p16_img7.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img7.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img8",
+      "file_name": "component_p16_img8.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Recruit two troops",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 462.90679931640625,
+        "x1": 538.582763671875,
+        "y1": 530.631103515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img8.png",
+      "path_all": "images/all/component_p16_img8.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img9",
+      "file_name": "component_p16_img9.png",
+      "page_index": 16,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Cost: 6 spice",
+      "quantity": 6,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 564.2107543945312,
+        "x1": 538.5827026367188,
+        "y1": 632.3546752929688
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img9.png",
+      "path_all": "images/all/component_p16_img9.png",
+      "path_primary": "images/canonicals/unknown/component_p16_img9.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img10",
+      "file_name": "component_p16_img10.png",
+      "page_index": 16,
+      "classification": "non-component",
+      "classification_confidence": 0.8,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 312,
+        "height": 81
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 674.2291870117188,
+        "x1": 649.1339111328125,
+        "y1": 732.4069213867188
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p16_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img10.png",
+      "path_all": "images/all/component_p16_img10.png",
+      "path_primary": null,
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p16_img11",
+      "file_name": "component_p16_img11.png",
+      "page_index": 16,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Uide",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p16_img11.png",
+      "path_all": "images/all/component_p16_img11.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p16_img11.png"
+    },
+    {
+      "image_id": "p17_img0",
+      "file_name": "component_p17_img0.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 100
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 62.362030029296875,
+        "x1": 138.89767456054688,
+        "y1": 133.7825927734375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img0",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img0.png",
+      "path_all": "images/all/component_p17_img0.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img1",
+      "file_name": "component_p17_img1.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 72
+      },
+      "bbox": {
+        "x0": 25.511810302734375,
+        "y0": 188.5084686279297,
+        "x1": 138.89764404296875,
+        "y1": 240.058349609375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img1.png",
+      "path_all": "images/all/component_p17_img1.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img2",
+      "file_name": "component_p17_img2.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 525.3504028320312,
+        "x1": 538.5827026367188,
+        "y1": 593.1302490234375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img2",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img2.png",
+      "path_all": "images/all/component_p17_img2.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img2.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img3",
+      "file_name": "component_p17_img3.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.1968994140625,
+        "y0": 671.7636108398438,
+        "x1": 538.5827026367188,
+        "y1": 740.0480346679688
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img3",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img3.png",
+      "path_all": "images/all/component_p17_img3.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img3.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img4",
+      "file_name": "component_p17_img4.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Recruit four troops",
+      "quantity": 4,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 83
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 335.8350830078125,
+        "x1": 138.8976593017578,
+        "y1": 395.1424865722656
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img4",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img4.png",
+      "path_all": "images/all/component_p17_img4.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img4.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img5",
+      "file_name": "component_p17_img5.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 77
+      },
+      "bbox": {
+        "x0": 25.5118408203125,
+        "y0": 442.9036865234375,
+        "x1": 138.89767456054688,
+        "y1": 497.7519226074219
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img5",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img5.png",
+      "path_all": "images/all/component_p17_img5.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img5.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img6",
+      "file_name": "component_p17_img6.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Secrets",
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 25.51177978515625,
+        "y0": 552.5540771484375,
+        "x1": 138.89761352539062,
+        "y1": 620.697998046875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img6",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img6.png",
+      "path_all": "images/all/component_p17_img6.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img6.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img7",
+      "file_name": "component_p17_img7.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 87
+      },
+      "bbox": {
+        "x0": 25.511871337890625,
+        "y0": 678.95947265625,
+        "x1": 138.897705078125,
+        "y1": 741.292724609375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img7",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img7.png",
+      "path_all": "images/all/component_p17_img7.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img7.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img8",
+      "file_name": "component_p17_img8.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Cost: 2 spice",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.19683837890625,
+        "y0": 62.50257873535156,
+        "x1": 538.5826416015625,
+        "y1": 130.646484375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img8.png",
+      "path_all": "images/all/component_p17_img8.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img8.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img9",
+      "file_name": "component_p17_img9.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 256,
+        "height": 105
+      },
+      "bbox": {
+        "x0": 425.19696044921875,
+        "y0": 176.92666625976562,
+        "x1": 609.4489135742188,
+        "y1": 252.19927978515625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img9",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img9.png",
+      "path_all": "images/all/component_p17_img9.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img9.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img10",
+      "file_name": "component_p17_img10.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": null,
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 90
+      },
+      "bbox": {
+        "x0": 425.19677734375,
+        "y0": 301.23858642578125,
+        "x1": 538.5825805664062,
+        "y1": 365.4822998046875
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img10",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img10.png",
+      "path_all": "images/all/component_p17_img10.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img10.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img11",
+      "file_name": "component_p17_img11.png",
+      "page_index": 17,
+      "classification": "unknown",
+      "classification_confidence": 0.0,
+      "label": "Stillsuits",
+      "quantity": 1,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 158,
+        "height": 95
+      },
+      "bbox": {
+        "x0": 425.19677734375,
+        "y0": 416.30596923828125,
+        "x1": 538.5826416015625,
+        "y1": 484.0302734375
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p17_img11",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img11.png",
+      "path_all": "images/all/component_p17_img11.png",
+      "path_primary": "images/canonicals/unknown/component_p17_img11.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p17_img12",
+      "file_name": "component_p17_img12.png",
+      "page_index": 17,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Stillsuits",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p17_img12.png",
+      "path_all": "images/all/component_p17_img12.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p17_img12.png"
+    },
+    {
+      "image_id": "p18_img0",
+      "file_name": "component_p18_img0.png",
+      "page_index": 18,
+      "classification": "non-component",
+      "classification_confidence": 0.8,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 584,
+        "height": 102
+      },
+      "bbox": {
+        "x0": 230.24197387695312,
+        "y0": 22.818649291992188,
+        "x1": 650.0614013671875,
+        "y1": 96.10211181640625
+      },
+      "dedup_group_id": "dup_001",
+      "is_duplicate": true,
+      "canonical_image_id": "p0_img1",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p18_img0.png",
+      "path_all": "images/all/component_p18_img0.png",
+      "path_primary": null,
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p18_img7",
+      "file_name": "component_p18_img7.png",
+      "page_index": 18,
+      "classification": "token",
+      "classification_confidence": 0.6,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 149,
+        "height": 107
+      },
+      "bbox": {
+        "x0": 664.3438110351562,
+        "y0": 366.83837890625,
+        "x1": 773.811767578125,
+        "y1": 447.04254150390625
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p18_img7",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p18_img7.png",
+      "path_all": "images/all/component_p18_img7.png",
+      "path_primary": "images/canonicals/tokens/component_p18_img7.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p18_img8",
+      "file_name": "component_p18_img8.png",
+      "page_index": 18,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Ouse",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -830.5512084960938,
+        "y0": -8.504150390625,
+        "x1": 830.5510864257812,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p18_img8.png",
+      "path_all": "images/all/component_p18_img8.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p18_img8.png"
+    },
+    {
+      "image_id": "p19_img6",
+      "file_name": "component_p19_img6.png",
+      "page_index": 19,
+      "classification": "board",
+      "classification_confidence": 0.6,
+      "label": "Card",
+      "quantity": 5,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 2308,
+        "height": 1166
+      },
+      "bbox": {
+        "x0": -8.50396728515625,
+        "y0": -8.504150390625,
+        "x1": 1652.598388671875,
+        "y1": 830.5673828125
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img8",
+      "file_path": "test_phase_6_2_dune\\images\\all\\component_p19_img6.png",
+      "path_all": "images/all/component_p19_img6.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p19_img6.png"
+    }
+  ],
+  "extraction_health": {
+    "images_attempted": 209,
+    "images_saved": 209,
+    "conversion_failures": 0,
+    "success_rate": 1.0,
+    "failure_rate": 0.0,
+    "colorspace_distribution": {
+      "ICCBased(RGB,sRGB IEC61966-2.1)": 209
+    },
+    "conversion_operations": {
+      "ICCBased_to_RGB": 209
+    },
+    "failure_reasons": {}
+  },
+  "text_artifacts": {
+    "page_text_jsonl_path": "page_text.jsonl",
+    "page_text_jsonl_sha256": "5a5f738f006a210d472608af380fb232f949b93b14e6e9822c8768cf63071eb5"
+  }
+}

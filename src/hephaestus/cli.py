@@ -22,6 +22,7 @@ from .pdf.images import extract_embedded_images, save_images_flat
 from .classifier.model import HybridClassifier
 from .text.spatial import extract_spatial_text
 from .text.index import SpatialTextIndex
+from .text.page_text import extract_page_text_artifacts
 from .metadata.annotator import annotate_components
 from .dedup.model import deduplicate_images
 from .output.manifest import build_manifest, write_manifest_json
@@ -119,6 +120,12 @@ def extract(
             logger.info("Annotating components with metadata...")
             metadata_list = annotate_components(images, classification_map, text_index, expand=text_expand)
             
+            # Phase 6.2: Extract page text artifacts for Inspector UI
+            logger.info("Extracting page text artifacts...")
+            rulebook_id = pdf_path.stem if pdf_path else "unknown"
+            page_text_path = extract_page_text_artifacts(doc, rulebook_id, out)
+            logger.info(f"Page text artifacts written to: {page_text_path}")
+            
             logger.info(f"Saving {len(images)} images to {out}")
             try:
                 # Extract rulebook ID from PDF path for logging
@@ -176,7 +183,7 @@ def extract(
                 manifest = None
                 if write_manifest:
                     logger.info("Generating component manifest...")
-                    manifest = build_manifest(pdf_path, images, classification_map, metadata_list, path_mapping, dedup_groups, health_metrics)
+                    manifest = build_manifest(pdf_path, images, classification_map, metadata_list, path_mapping, dedup_groups, health_metrics, page_text_path)
                     
                     # Phase 5: Structured output packaging
                     if package:
