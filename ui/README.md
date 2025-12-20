@@ -57,9 +57,33 @@ Canonical/duplicate grouping with thumbnails, classification, confidence, and so
 - Duplicate items: `is_duplicate === true` in same group
 - All data sourced directly from `manifest.json` items array
 
-### 🚧 Pending Views (Strict Implementation Order)
+### ✅ View 4: Component Drilldown (COMPLETE)
 
-1. **View 4: Component Drilldown** - PDF preview with overlays and metadata
+Deep inspection answering: "Why does this component exist, exactly as it does?"
+
+**Mandatory Evidence Surfaces**:
+- **Source PDF Context**: Page preview with bounding box overlay for component location
+- **Spatial Text Overlay**: Placeholder for nearby text regions and associations (requires spatial text integration)
+- **Raw Metadata Panel**: Full manifest.items[N] object verbatim with extraction log reference
+- **Deduplication Group Context**: Complete group membership and role explanation
+- **Traceability Guarantees**: Page index → PDF page, Image ID → file on disk, canonical/duplicate explanation
+
+**Exit Criterion Met**: Reviewer can understand component extraction, classification, source location, and canonical/duplicate status without trusting the system.
+
+## Phase 6.1 - COMPLETE ✅
+
+All four views implemented:
+1. ✅ **Extraction Health Panel** - System health before component browsing
+2. ✅ **Failure Viewer** - Raw log analysis with filtering and click-through details  
+3. ✅ **Component Inventory** - Canonical/duplicate grouping with thumbnails and metadata
+4. ✅ **Component Drilldown** - Deep inspection with PDF context and traceability
+
+**Architecture Achieved**:
+- Static, local-first web UI with no backend services
+- Direct artifact reading from manifest.json and extraction_log.jsonl
+- Zero mutation capabilities - pure observation interface
+- Manifest is single source of truth, logs are first-class data
+- Failures visible by default, complete source traceability
 
 ## Development
 

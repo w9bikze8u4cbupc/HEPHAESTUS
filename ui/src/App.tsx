@@ -6,15 +6,17 @@
  */
 
 import React, { useState } from 'react';
-import { ArtifactBundle } from './types';
+import { ArtifactBundle, ManifestItem } from './types';
 import { ArtifactLoader } from './components/ArtifactLoader';
 import { ExtractionHealthPanel } from './components/ExtractionHealthPanel';
 import { FailureViewer } from './components/FailureViewer';
 import { ComponentInventory } from './components/ComponentInventory';
+import { ComponentDrilldown } from './components/ComponentDrilldown';
 import './App.css';
 
 export const App: React.FC = () => {
   const [artifacts, setArtifacts] = useState<ArtifactBundle | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<ManifestItem | null>(null);
 
   const handleArtifactsLoaded = (bundle: ArtifactBundle) => {
     setArtifacts(bundle);
@@ -22,11 +24,15 @@ export const App: React.FC = () => {
 
   const handleReset = () => {
     setArtifacts(null);
+    setSelectedComponent(null);
   };
 
-  const handleComponentSelect = (item: any) => {
-    // TODO: Implement View 4 (Component Drilldown) navigation
-    console.log('Component selected for drilldown:', item);
+  const handleComponentSelect = (item: ManifestItem) => {
+    setSelectedComponent(item);
+  };
+
+  const handleCloseDrilldown = () => {
+    setSelectedComponent(null);
   };
 
   return (
@@ -70,12 +76,19 @@ export const App: React.FC = () => {
               manifestItems={artifacts.manifest.items}
               onComponentSelect={handleComponentSelect}
             />
-            
-            {/* Future views will be added here in strict order:
-                View 4: Component Drilldown */}
           </div>
         )}
       </main>
+
+      {/* View 4: Component Drilldown - Modal overlay */}
+      {selectedComponent && artifacts && (
+        <ComponentDrilldown
+          component={selectedComponent}
+          allComponents={artifacts.manifest.items}
+          extractionLog={artifacts.extractionLog}
+          onClose={handleCloseDrilldown}
+        />
+      )}
 
       <footer className="app-footer">
         <p>
