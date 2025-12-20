@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { ArtifactBundle } from './types';
 import { ArtifactLoader } from './components/ArtifactLoader';
 import { ExtractionHealthPanel } from './components/ExtractionHealthPanel';
+import { FailureViewer } from './components/FailureViewer';
 import './App.css';
 
 export const App: React.FC = () => {
@@ -52,8 +53,13 @@ export const App: React.FC = () => {
               extractionLog={artifacts.extractionLog}
             />
             
+            {/* View 2: Failure Viewer - Raw extraction_log.jsonl rendering */}
+            <FailureViewer
+              extractionLog={artifacts.extractionLog}
+              manifestItems={artifacts.manifest.items}
+            />
+            
             {/* Future views will be added here in strict order:
-                View 2: Failure Viewer
                 View 3: Component Inventory  
                 View 4: Component Drilldown */}
           </div>

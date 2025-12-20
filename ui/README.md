@@ -16,38 +16,32 @@ Read-only forensic inspection interface for Hephaestus extraction artifacts.
 
 ### ✅ View 1: Extraction Health Panel (COMPLETE)
 
-The primary view that displays system health before component browsing:
+The primary view that displays system health before component browsing.
 
-**Core Metrics** (from `manifest.extraction_health`):
-- Images attempted/saved/failed counts
-- Success/failure rates
-- Fail-fast threshold status (20% threshold explicitly labeled)
+### ✅ View 2: Failure Viewer (COMPLETE)
 
-**Health ↔ Log Consistency**:
-- Invariant verification between manifest metrics and extraction log
-- Displays both sources for comparison
+Raw rendering of extraction_log.jsonl with filtering capabilities - failures are primary evidence.
 
-**Colorspace Distribution**:
-- Direct display of `colorspace_distribution` from manifest
-- Shows count and percentage for each colorspace type
+**Core Features**:
+- Raw log table with all extraction attempts (stable file order)
+- Filtering by: rulebook_id, page_index, image_id, reason_code, status
+- Click-through to detailed entry view with:
+  - Full raw JSON log entry
+  - File existence check (invariant verification)
+  - Manifest entry link (or absence explanation)
+  - Error and warning details
 
-**Conversion Operations**:
-- Direct display of `conversion_operations` from manifest  
-- Shows successful conversion counts by operation type
-
-**Failure Reasons**:
-- Enumerated display of `failure_reasons` from manifest
-- Shows count and percentage of each failure type
-
-**Source Traceability**:
-- Every displayed value includes source field reference
-- No derived metrics - all values traceable to manifest/log
+**Compliance**:
+- No aggregation-only views - raw rows always accessible
+- Failures appear even with no filters applied
+- No grouping that hides individual failures
+- No "clean" formatting that obscures raw fields
+- No suppression of repeated failures
 
 ### 🚧 Pending Views (Strict Implementation Order)
 
-1. **View 2: Failure Viewer** - Direct extraction_log.jsonl rendering with filtering
-2. **View 3: Component Inventory** - Canonical/duplicate grouping with thumbnails
-3. **View 4: Component Drilldown** - PDF preview with overlays and metadata
+1. **View 3: Component Inventory** - Canonical/duplicate grouping with thumbnails
+2. **View 4: Component Drilldown** - PDF preview with overlays and metadata
 
 ## Development
 

@@ -58,28 +58,41 @@
     <div class="test-info">
         <h1>🔍 Hephaestus Inspector - Phase 6.1 Test</h1>
         
-        <h2>View 1: Extraction Health Panel - READY FOR TESTING</h2>
+        <h2>View 1: Extraction Health Panel + View 2: Failure Viewer - READY FOR TESTING</h2>
         
-        <p>The Extraction Health Panel is complete and ready for inspection. This view displays system health before component browsing, as required by Phase 6.1.</p>
+        <p>Both primary views are complete and ready for inspection. The Extraction Health Panel displays system health, and the Failure Viewer provides raw log analysis.</p>
         
         <div class="test-steps">
             <h3>Testing Instructions:</h3>
             <ol>
                 <li>Click "Launch Inspector" below to open the UI</li>
-                <li>Click "Select Export Directory" and choose: <code>eval/phase_5_6_test/jaipur</code></li>
+                <li>Click "Select Export Directory" and choose: <code>eval/phase_5_6_test/seti</code></li>
                 <li>Verify the Extraction Health Panel displays all required metrics</li>
-                <li>Confirm every displayed value is traceable to manifest/log sources</li>
+                <li>Scroll down to the Failure Viewer section</li>
+                <li>Verify the raw log table shows all 242 extraction attempts</li>
+                <li>Filter by status="failed" to see the 1 failure (p23_img27)</li>
+                <li>Click on the failed row to see detailed analysis</li>
+                <li>Confirm file existence check and manifest link work correctly</li>
             </ol>
         </div>
         
         <h3>Expected Display Fields:</h3>
+        
+        <h4>View 1: Extraction Health Panel</h4>
         <ul>
-            <li><strong>Core Metrics:</strong> 254 attempted, 254 saved, 0 failures, 100.0% success rate</li>
-            <li><strong>Fail-Fast Threshold:</strong> ✅ WITHIN LIMITS (0.0% < 20%)</li>
+            <li><strong>Core Metrics:</strong> 242 attempted, 241 saved, 1 failure, 99.6% success rate</li>
+            <li><strong>Fail-Fast Threshold:</strong> ✅ WITHIN LIMITS (0.4% < 20%)</li>
             <li><strong>Health ↔ Log Consistency:</strong> ✅ CONSISTENT</li>
-            <li><strong>Colorspace Distribution:</strong> DeviceCMYK: 254 (100.0%)</li>
-            <li><strong>Conversion Operations:</strong> CMYK_to_RGB: 254 (100.0%)</li>
-            <li><strong>Failure Reasons:</strong> ✅ No conversion failures recorded</li>
+            <li><strong>Colorspace Distribution:</strong> ICCBased: 241, Indexed: 1</li>
+            <li><strong>Failure Reasons:</strong> save_error: 1 (100.0% of failures)</li>
+        </ul>
+        
+        <h4>View 2: Failure Viewer</h4>
+        <ul>
+            <li><strong>Raw Log Table:</strong> 242 rows (all extraction attempts in file order)</li>
+            <li><strong>Filterable Columns:</strong> rulebook_id, page_index, image_id, reason_code, status</li>
+            <li><strong>Failed Entry (p23_img27):</strong> page_index=23, status=failed, reason_code=save_error</li>
+            <li><strong>Click-Through Details:</strong> Raw JSON, file existence check, manifest link, error details</li>
         </ul>
         
         <h3>Source Traceability:</h3>
@@ -87,11 +100,11 @@
         
         <div class="expected-structure">
 Expected directory structure for testing:
-eval/phase_5_6_test/jaipur/
+eval/phase_5_6_test/seti/
 ├── manifest.json           ✅ Contains extraction_health
-├── extraction_log.jsonl    ✅ Contains 254 log entries  
+├── extraction_log.jsonl    ✅ Contains 242 log entries (241 success, 1 failure)
 └── images/
-    └── all/               ✅ Contains 254 PNG files
+    └── all/               ✅ Contains 241 PNG files (p23_img27 missing - expected)
         </div>
         
         <a href="dist/index.html" class="launch-button" target="_blank">
