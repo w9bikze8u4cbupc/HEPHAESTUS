@@ -86,6 +86,9 @@ export const App: React.FC = () => {
           component={selectedComponent}
           allComponents={artifacts.manifest.items}
           extractionLog={artifacts.extractionLog}
+          pageTextRecords={artifacts.pageTextRecords}
+          pageTextLineIndexByPage={artifacts.pageTextLineIndexByPage}
+          pageTextSourcePath={artifacts.pageTextSourcePath}
           onClose={handleCloseDrilldown}
         />
       )}

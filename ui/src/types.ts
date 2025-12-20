@@ -97,5 +97,7 @@ export interface ArtifactBundle {
   manifest: Manifest;
   extractionLog: ExtractionLogEntry[];
   pageTextRecords: Map<number, PageTextRecord>; // Phase 6.2: keyed by page_index
+  pageTextLineIndexByPage: Map<number, number>; // Phase 6.2: line number in JSONL (1-based)
+  pageTextSourcePath: string | null; // Phase 6.2: manifest reference path for traceability
   exportPath: string;
 }
