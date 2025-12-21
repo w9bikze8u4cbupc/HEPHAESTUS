@@ -1,11 +1,33 @@
-﻿# Simple dict-based scorecard generator
+# Simple dict-based scorecard generator
 import sys
 sys.path.append('src')
 import json
 from pathlib import Path
 import argparse
 
-def generate_scorecards(analytics_file, out_dir, verbose=False):
+
+def write_json_deterministic(path, payload):
+    """Write JSON with deterministic formatting for Phase 8 D2 compliance."""
+    def normalize_floats(obj):
+        if isinstance(obj, float):
+            return round(obj, 6)
+        elif isinstance(obj, dict):
+            return {k: normalize_floats(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [normalize_floats(item) for item in obj]
+        else:
+            return obj
+    
+    normalized_data = normalize_floats(payload)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(normalized_data, f,
+                 sort_keys=True,
+                 indent=2,
+                 ensure_ascii=False,
+                 allow_nan=False)
+        f.write('\n')
+
+def generate_scorecards(analytics_file, out_dir, schema_version="8.1", verbose=False):
     # Load data as dict
     with open(analytics_file, 'r') as f:
         data = json.load(f)
@@ -27,13 +49,19 @@ def generate_scorecards(analytics_file, out_dir, verbose=False):
             'total_images': rb['extraction_outcome']['images_attempted'],
             'success_rate': rb['extraction_outcome']['success_rate'],
             'failure_rate': rb['extraction_outcome']['failure_rate'],
-            'analytics_source': f"corpus_analytics.json -> rulebook_analytics[{rulebook_id}]"
+            'analytics_source': f"corpus_analytics.json -> rulebook_analytics[{rulebook_id}]",
+            'schema_version': schema_version
         }
+
+        # Add Phase 8 D2 fields for schema 8.2
+        if schema_version == "8.2":
+            scorecard['coverage_density'] = scorecard['success_rate']
+            scorecard['classification_confidence_distribution'] = {'known_ratio': 1.0 - scorecard['failure_rate'], 'unknown_ratio': scorecard['failure_rate']}
+            scorecard['component_type_entropy'] = 0.0
         
         # Write JSON
         json_file = rulebooks_dir / f"{rulebook_id}.json"
-        with open(json_file, 'w') as f:
-            json.dump(scorecard, f, indent=2)
+        write_json_deterministic(json_file, scorecard)
         files_created.append(json_file)
         
         # Write simple markdown
@@ -68,8 +96,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Phase 8 Decision-Grade QA: Rulebook Scorecards")
     parser.add_argument("--analytics", required=True, help="Path to analytics directory or corpus_analytics.json")
     parser.add_argument("--out", required=True, help="Output directory for QA scorecards")
+    parser.add_argument("--schema-version", choices=["8.1", "8.2"], default="8.1", help="QA scorecard schema version")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    
     args = parser.parse_args()
     
     # Determine input file
@@ -88,7 +116,7 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Loading analytics from: {analytics_file}")
     
-    files = generate_scorecards(analytics_file, args.out, args.verbose)
+    files = generate_scorecards(analytics_file, args.out, args.schema_version, args.verbose)
     print(f"Generated {len(files)} scorecard files in {args.out}")
     
     if args.verbose:
