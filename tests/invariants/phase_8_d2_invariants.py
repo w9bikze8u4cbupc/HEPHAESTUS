@@ -16,6 +16,29 @@ from typing import Dict, Any, List, Tuple
 import hashlib
 
 
+# Tier 2 Exploratory Fields Manifest
+TIER_2_EXPLORATORY_MANIFEST = {
+    'experimental_risk_score': {
+        'expected_type': 'float',
+        'expected_range': '[0.0, 1.0]',
+        'planned_source': 'weighted composite of extraction_risk + classification_risk + deduplication_risk',
+        'promotion_criteria': 'stable formula validated across 10+ rulebooks, correlation with manual QA assessment'
+    },
+    'ml_confidence_prediction': {
+        'expected_type': 'dict',
+        'expected_range': '{"predicted_accuracy": [0.0, 1.0], "confidence_interval": [0.0, 1.0]}',
+        'planned_source': 'classification_outcome.confidence_stats + historical accuracy data',
+        'promotion_criteria': 'ML model trained and validated, prediction accuracy >80% on test set'
+    },
+    'cross_rulebook_similarity': {
+        'expected_type': 'dict', 
+        'expected_range': '{"most_similar": "rulebook_id", "similarity_score": [0.0, 1.0], "similarity_basis": "string"}',
+        'planned_source': 'component_type_entropy + classification_distribution + pdf_characteristics',
+        'promotion_criteria': 'similarity algorithm validated, useful for QA triage and anomaly detection'
+    }
+}
+
+
 def validate_phase_8_d2_scorecards(analytics_dir: Path, qa_dir: Path) -> Dict[str, Any]:
     """Validate Phase 8 D2 QA scorecard schema versioning and analytical expansion."""
     
@@ -330,34 +353,60 @@ def _validate_tier_1_determinism(results: Dict[str, Any], qa_dir: Path, rulebook
 def _validate_tier_2_exploratory(results: Dict[str, Any], qa_dir: Path, rulebook_ids: List[str]):
     """TIER 2: Validate exploratory metrics (warnings only)."""
     
-    # Future exploratory fields that might be added later
-    exploratory_fields = ['experimental_risk_score', 'ml_confidence_prediction', 'cross_rulebook_similarity']
+    # Check implementation status for each exploratory field
+    field_implementation_status = {}
     
-    missing_exploratory = []
-    
-    for rulebook_id in rulebook_ids:
-        json_file = qa_dir / f"{rulebook_id}.json"
+    for field_name, field_spec in TIER_2_EXPLORATORY_MANIFEST.items():
+        implemented_count = 0
+        total_count = len(rulebook_ids)
         
-        if json_file.exists():
-            try:
-                with open(json_file, 'r') as f:
-                    scorecard_data = json.load(f)
-                
-                for field in exploratory_fields:
-                    if field not in scorecard_data:
-                        missing_exploratory.append(f"{rulebook_id}.{field}")
-                
-            except json.JSONDecodeError:
-                # Already caught in Tier 0
-                pass
+        for rulebook_id in rulebook_ids:
+            json_file = qa_dir / f"{rulebook_id}.json"
+            
+            if json_file.exists():
+                try:
+                    with open(json_file, 'r') as f:
+                        scorecard_data = json.load(f)
+                    
+                    if field_name in scorecard_data:
+                        implemented_count += 1
+                        
+                except json.JSONDecodeError:
+                    # Already caught in Tier 0
+                    pass
+        
+        field_implementation_status[field_name] = {
+            'implemented': implemented_count,
+            'total': total_count,
+            'spec': field_spec
+        }
+    
+    # Generate concise roadmap summary
+    unimplemented_fields = []
+    roadmap_summary = []
+    
+    for field_name, status in field_implementation_status.items():
+        impl_count = status['implemented']
+        total_count = status['total']
+        spec = status['spec']
+        
+        if impl_count == 0:
+            unimplemented_fields.append(field_name)
+        
+        roadmap_summary.append(
+            f"  {field_name}: {impl_count}/{total_count} implemented "
+            f"(type: {spec['expected_type']}, range: {spec['expected_range']})"
+        )
     
     # TIER 2 failures are warnings only - do not block CI
-    if missing_exploratory:
-        _add_tier_2_failure(results, "exploratory_fields_missing", 
-                           f"TIER 2 EXPLORATORY (WARNING): Future exploratory fields not yet implemented: {missing_exploratory}. "
-                           f"This is expected and does not block CI.")
+    if unimplemented_fields:
+        roadmap_details = "\n".join(roadmap_summary)
+        _add_tier_2_failure(results, "exploratory_fields_roadmap", 
+                           f"TIER 2 EXPLORATORY (ROADMAP): Exploratory fields implementation status:\n{roadmap_details}\n\n"
+                           f"Unimplemented: {unimplemented_fields}\n"
+                           f"This is expected and does not block CI. Fields will be promoted to Tier 1 when promotion criteria are met.")
     else:
-        _add_success(results, "exploratory_fields_present", "Exploratory fields implemented", 2)
+        _add_success(results, "exploratory_fields_implemented", "All exploratory fields implemented", 2)
 
 
 if __name__ == "__main__":
