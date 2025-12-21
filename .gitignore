@@ -69,4 +69,4 @@ analytics/
 debug_*.py
 
 # Evaluation results (large test outputs)
-eval/
+eval/qa/

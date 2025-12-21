@@ -155,6 +155,45 @@ print('✅ Analytics JSON structure is valid')
           echo "Skipping artifact validation - no analytics generated"
         fi
 
+  phase-8-qa-scorecards:
+    name: Phase 8 QA Scorecards Invariants
+    runs-on: ubuntu-latest
+    needs: phase-7-corpus-analytics
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+    
+    - name: Generate QA scorecards (if analytics available)
+      run: |
+        if [ -d "analytics/ci_test" ]; then
+          echo "Generating Phase 8 QA scorecards..."
+          python -m hephaestus.analytics.qa_scorecards --analytics analytics/ci_test --out qa_test --verbose
+          echo "✅ QA scorecards generated successfully"
+        else
+          echo "Skipping QA scorecards - no analytics available"
+        fi
+    
+    - name: Verify Phase 8 invariants
+      run: |
+        if [ -d "qa_test" ]; then
+          echo "Verifying Phase 8 QA scorecard invariants..."
+          python tests/invariants/phase_8_invariants.py analytics/ci_test qa_test
+          echo "✅ Phase 8 invariants verified"
+        else
+          echo "Skipping Phase 8 invariants - no scorecards generated"
+        fi
+
   lint-invariants:
     name: Lint Invariant Code
     runs-on: ubuntu-latest
