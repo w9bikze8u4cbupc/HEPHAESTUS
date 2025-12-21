@@ -184,14 +184,24 @@ print('✅ Analytics JSON structure is valid')
           echo "Skipping QA scorecards - no analytics available"
         fi
     
-    - name: Verify Phase 8 invariants
+    - name: Verify Phase 8 D1 invariants
       run: |
         if [ -d "qa_test" ]; then
-          echo "Verifying Phase 8 QA scorecard invariants..."
+          echo "Verifying Phase 8 D1 QA scorecard invariants..."
           python tests/invariants/phase_8_invariants.py analytics/ci_test qa_test
-          echo "✅ Phase 8 invariants verified"
+          echo "✅ Phase 8 D1 invariants verified"
         else
-          echo "Skipping Phase 8 invariants - no scorecards generated"
+          echo "Skipping Phase 8 D1 invariants - no scorecards generated"
+        fi
+    
+    - name: Verify Phase 8 D2 invariants (RED BY DESIGN)
+      run: |
+        if [ -d "qa_test" ]; then
+          echo "Verifying Phase 8 D2 schema versioning and expansion invariants..."
+          echo "NOTE: These invariants are RED BY DESIGN and MUST fail until D2 implementation is complete"
+          python tests/invariants/phase_8_d2_invariants.py analytics/ci_test qa_test || echo "Expected failure: Phase 8 D2 not yet implemented"
+        else
+          echo "Skipping Phase 8 D2 invariants - no scorecards generated"
         fi
 
   lint-invariants:
