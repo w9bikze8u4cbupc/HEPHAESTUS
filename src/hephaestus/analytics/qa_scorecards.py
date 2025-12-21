@@ -110,6 +110,27 @@ def generate_scorecards(analytics_file, out_dir, schema_version="8.1", verbose=F
                 experimental_risk = min(1.0, experimental_risk + 0.1)
             
             scorecard['experimental_risk_score'] = round(experimental_risk, 6)
+            
+            # Tier 2: ml_confidence_prediction - ML-ready proxy metrics
+            # Deterministic computation using Phase 7 classification confidence stats
+            confidence_stats = classification.get('confidence_stats', {})
+            mean_confidence = confidence_stats.get('mean', 0.5)  # Default to neutral
+            std_confidence = confidence_stats.get('std', 0.1)    # Default to low uncertainty
+            
+            # predicted_accuracy = clamp(mean_confidence - 0.5*unknown_ratio - 0.25*low_conf_ratio, 0, 1)
+            predicted_accuracy = max(0.0, min(1.0, 
+                mean_confidence - 0.5 * unknown_ratio - 0.25 * low_conf_ratio
+            ))
+            
+            # confidence_interval = clamp(0.10 + std_confidence + 0.50*unknown_ratio, 0, 1)
+            confidence_interval = max(0.0, min(1.0,
+                0.10 + std_confidence + 0.50 * unknown_ratio
+            ))
+            
+            scorecard['ml_confidence_prediction'] = {
+                'predicted_accuracy': round(predicted_accuracy, 6),
+                'confidence_interval': round(confidence_interval, 6)
+            }
         
         # Write JSON
         json_file = rulebooks_dir / f"{rulebook_id}.json"
