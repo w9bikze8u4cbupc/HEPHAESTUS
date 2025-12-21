@@ -92,6 +92,24 @@ def generate_scorecards(analytics_file, out_dir, schema_version="8.1", verbose=F
                 scorecard['component_type_entropy'] = round(entropy / max_entropy, 6)
             else:
                 scorecard['component_type_entropy'] = 0.0
+            
+            # Tier 2: experimental_risk_score - deterministic composite risk metric
+            # Weights: 0.4 unknown + 0.3 low_conf + 0.3 failure (documented, constant)
+            low_conf_count = classification.get('low_confidence_count', 0)
+            low_conf_ratio = low_conf_count / total_components if total_components > 0 else 0.0
+            is_anomalous = classification.get('is_anomalous', False)
+            
+            experimental_risk = (
+                0.4 * unknown_ratio +           # Unknown classification risk
+                0.3 * low_conf_ratio +          # Low confidence risk  
+                0.3 * scorecard['failure_rate']  # Extraction failure risk
+            )
+            
+            # Anomaly flag adds fixed 0.1 bump with clamping to [0,1]
+            if is_anomalous:
+                experimental_risk = min(1.0, experimental_risk + 0.1)
+            
+            scorecard['experimental_risk_score'] = round(experimental_risk, 6)
         
         # Write JSON
         json_file = rulebooks_dir / f"{rulebook_id}.json"

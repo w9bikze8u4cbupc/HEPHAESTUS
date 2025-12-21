@@ -355,6 +355,7 @@ def _validate_tier_2_exploratory(results: Dict[str, Any], qa_dir: Path, rulebook
     
     # Check implementation status for each exploratory field
     field_implementation_status = {}
+    field_validation_errors = []
     
     for field_name, field_spec in TIER_2_EXPLORATORY_MANIFEST.items():
         implemented_count = 0
@@ -370,6 +371,46 @@ def _validate_tier_2_exploratory(results: Dict[str, Any], qa_dir: Path, rulebook
                     
                     if field_name in scorecard_data:
                         implemented_count += 1
+                        
+                        # Validate field value against spec
+                        field_value = scorecard_data[field_name]
+                        
+                        if field_name == 'experimental_risk_score':
+                            # Validate type and range for experimental_risk_score
+                            if not isinstance(field_value, (int, float)):
+                                field_validation_errors.append(f"{rulebook_id}.{field_name}: expected float, got {type(field_value).__name__}")
+                            elif not (0.0 <= field_value <= 1.0):
+                                field_validation_errors.append(f"{rulebook_id}.{field_name}: value {field_value} outside range [0.0, 1.0]")
+                        
+                        elif field_name == 'ml_confidence_prediction':
+                            # Validate dict structure for ml_confidence_prediction
+                            if not isinstance(field_value, dict):
+                                field_validation_errors.append(f"{rulebook_id}.{field_name}: expected dict, got {type(field_value).__name__}")
+                            else:
+                                required_keys = ['predicted_accuracy', 'confidence_interval']
+                                for key in required_keys:
+                                    if key not in field_value:
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}: missing required key '{key}'")
+                                    elif not isinstance(field_value[key], (int, float)):
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.{key}: expected float, got {type(field_value[key]).__name__}")
+                                    elif not (0.0 <= field_value[key] <= 1.0):
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.{key}: value {field_value[key]} outside range [0.0, 1.0]")
+                        
+                        elif field_name == 'cross_rulebook_similarity':
+                            # Validate dict structure for cross_rulebook_similarity
+                            if not isinstance(field_value, dict):
+                                field_validation_errors.append(f"{rulebook_id}.{field_name}: expected dict, got {type(field_value).__name__}")
+                            else:
+                                required_keys = ['most_similar', 'similarity_score', 'similarity_basis']
+                                for key in required_keys:
+                                    if key not in field_value:
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}: missing required key '{key}'")
+                                if 'similarity_score' in field_value:
+                                    score = field_value['similarity_score']
+                                    if not isinstance(score, (int, float)):
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.similarity_score: expected float, got {type(score).__name__}")
+                                    elif not (0.0 <= score <= 1.0):
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.similarity_score: value {score} outside range [0.0, 1.0]")
                         
                 except json.JSONDecodeError:
                     # Already caught in Tier 0
@@ -397,6 +438,13 @@ def _validate_tier_2_exploratory(results: Dict[str, Any], qa_dir: Path, rulebook
             f"  {field_name}: {impl_count}/{total_count} implemented "
             f"(type: {spec['expected_type']}, range: {spec['expected_range']})"
         )
+    
+    # Report field validation errors as Tier 2 warnings
+    if field_validation_errors:
+        error_details = "\n".join([f"    {error}" for error in field_validation_errors])
+        _add_tier_2_failure(results, "exploratory_field_validation_errors", 
+                           f"TIER 2 EXPLORATORY (VALIDATION): Field validation errors found:\n{error_details}\n"
+                           f"These are warnings for exploratory fields and do not block CI.")
     
     # TIER 2 failures are warnings only - do not block CI
     if unimplemented_fields:
