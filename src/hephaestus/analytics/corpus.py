@@ -11,7 +11,7 @@ Usage:
 import json
 import argparse
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
 import statistics
 
@@ -20,7 +20,7 @@ from .schema import (
     RulebookIdentity, PdfCharacteristics, ExtractionOutcome,
     ClassificationOutcome, DeduplicationOutcome, TextExtractionOutcome,
     FailureTaxonomy, validate_corpus_analytics, SCHEMA_VERSION,
-    CONFIDENCE_THRESHOLDS, SIZE_RANGES
+    CONFIDENCE_THRESHOLDS, SIZE_RANGES, CONFIDENCE_BINS, ANOMALY_SIGMA_THRESHOLD
 )
 from ..logging import get_logger
 
@@ -65,7 +65,7 @@ class CorpusAnalyzer:
         # Create complete corpus analytics
         corpus_analytics = CorpusAnalytics(
             schema_version=SCHEMA_VERSION,
-            analysis_timestamp=datetime.utcnow().isoformat(),
+            analysis_timestamp=datetime.now(timezone.utc).isoformat(),
             input_directory=str(self.input_dir),
             rulebook_analytics=rulebook_analytics,
             corpus_aggregates=corpus_aggregates
@@ -137,7 +137,7 @@ class CorpusAnalyzer:
             deduplication_outcome=dedup_outcome,
             text_extraction_outcome=text_outcome,
             failure_taxonomy=failure_taxonomy,
-            analysis_timestamp=datetime.utcnow().isoformat()
+            analysis_timestamp=datetime.now(timezone.utc).isoformat()
         )
     
     def _load_manifest(self, rulebook_dir: Path) -> Dict[str, Any]:
@@ -227,7 +227,7 @@ class CorpusAnalyzer:
     def _analyze_extraction(
         self, manifest: Dict, extraction_log: List[Dict]
     ) -> ExtractionOutcome:
-        """Analyze extraction outcomes."""
+        """Analyze extraction outcomes with enhanced analytics."""
         health = manifest.get("extraction_health", {})
         
         # Basic metrics from health
@@ -243,12 +243,31 @@ class CorpusAnalyzer:
         failures_by_page = {}
         failures_by_colorspace = {}
         failures_by_size_range = {}
+        failures_by_page_bucket = {"early": 0, "middle": 0, "late": 0}
+        failed_image_ids = []
+        
+        # Get total pages for page bucket calculation
+        page_distribution = manifest.get("summary", {}).get("distributions", {}).get("pages", {})
+        total_pages = len(page_distribution) if page_distribution else 1
         
         for entry in extraction_log:
             if entry.get("status") == "failed":
+                # Collect failed image IDs
+                failed_image_ids.append(entry.get("image_id", "unknown"))
+                
                 # By page
                 page_idx = entry.get("page_index", -1)
                 failures_by_page[page_idx] = failures_by_page.get(page_idx, 0) + 1
+                
+                # By page bucket (early/middle/late)
+                if page_idx >= 0:
+                    page_ratio = page_idx / total_pages
+                    if page_ratio < 0.33:
+                        failures_by_page_bucket["early"] += 1
+                    elif page_ratio < 0.67:
+                        failures_by_page_bucket["middle"] += 1
+                    else:
+                        failures_by_page_bucket["late"] += 1
                 
                 # By colorspace
                 colorspace = entry.get("colorspace_str", "unknown")
@@ -261,6 +280,54 @@ class CorpusAnalyzer:
                 size_range = self._get_size_range(size)
                 failures_by_size_range[size_range] = failures_by_size_range.get(size_range, 0) + 1
         
+        # Zero silent drops proof
+        silent_drops_proof = {
+            "total_log_entries": len(extraction_log),
+            "persisted_entries": sum(1 for e in extraction_log if e.get("status") == "persisted"),
+            "failed_entries": sum(1 for e in extraction_log if e.get("status") == "failed"),
+            "manifest_items": len(manifest.get("items", [])),
+            "health_images_saved": images_saved,
+            "health_conversion_failures": conversion_failures,
+            "identity_verified": len(extraction_log) == images_attempted
+        }
+        
+        # Enhanced failure analysis - pattern detection
+        failure_patterns = {}
+        if failed_image_ids:
+            # Colorspace failure concentration
+            total_failures = len(failed_image_ids)
+            colorspace_concentration = {}
+            for colorspace, count in failures_by_colorspace.items():
+                concentration = count / total_failures if total_failures > 0 else 0
+                if concentration > 0.5:  # More than 50% of failures
+                    colorspace_concentration[colorspace] = concentration
+            
+            failure_patterns["colorspace_concentration"] = colorspace_concentration
+            
+            # Page clustering - detect if failures cluster in specific page ranges
+            if failures_by_page:
+                page_indices = list(failures_by_page.keys())
+                if len(page_indices) > 1:
+                    page_range = max(page_indices) - min(page_indices)
+                    page_span_ratio = page_range / total_pages if total_pages > 0 else 0
+                    failure_patterns["page_clustering"] = {
+                        "span_ratio": page_span_ratio,
+                        "is_clustered": page_span_ratio < 0.3 and len(page_indices) > 2
+                    }
+        
+        # Failure severity distribution
+        failure_severity_distribution = {"critical": 0, "moderate": 0, "minor": 0}
+        for entry in extraction_log:
+            if entry.get("status") == "failed":
+                reason = entry.get("reason_code", "unknown")
+                # Classify severity based on reason
+                if reason in ["save_error", "conversion_error"]:
+                    failure_severity_distribution["critical"] += 1
+                elif reason in ["colorspace_error", "format_error"]:
+                    failure_severity_distribution["moderate"] += 1
+                else:
+                    failure_severity_distribution["minor"] += 1
+        
         return ExtractionOutcome(
             images_attempted=images_attempted,
             images_saved=images_saved,
@@ -271,11 +338,16 @@ class CorpusAnalyzer:
             failure_reasons=failure_reasons,
             failures_by_page=failures_by_page,
             failures_by_colorspace=failures_by_colorspace,
-            failures_by_size_range=failures_by_size_range
+            failures_by_size_range=failures_by_size_range,
+            failures_by_page_bucket=failures_by_page_bucket,
+            silent_drops_proof=silent_drops_proof,
+            failed_image_ids=failed_image_ids,
+            failure_patterns=failure_patterns,
+            failure_severity_distribution=failure_severity_distribution
         )
     
-    def _analyze_classification(self, manifest: Dict) -> ClassificationOutcome:
-        """Analyze classification outcomes."""
+    def _analyze_classification(self, manifest: Dict, corpus_mean_confidence: float = None) -> ClassificationOutcome:
+        """Analyze classification outcomes with enhanced analytics."""
         items = manifest.get("items", [])
         total_components = len(items)
         
@@ -323,6 +395,56 @@ class CorpusAnalyzer:
                     "count": len(type_confidences)
                 }
         
+        # Fixed-bin confidence histogram
+        confidence_histogram = {}
+        for bin_range in CONFIDENCE_BINS:
+            confidence_histogram[bin_range] = 0
+        
+        for confidence in confidences:
+            if confidence < 0.2:
+                confidence_histogram["0.0-0.2"] += 1
+            elif confidence < 0.4:
+                confidence_histogram["0.2-0.4"] += 1
+            elif confidence < 0.6:
+                confidence_histogram["0.4-0.6"] += 1
+            elif confidence < 0.8:
+                confidence_histogram["0.6-0.8"] += 1
+            else:
+                confidence_histogram["0.8-1.0"] += 1
+        
+        # Low-confidence components with exact IDs
+        low_confidence_components = []
+        for item in items:
+            confidence = item.get("classification_confidence", 0.0)
+            if confidence < CONFIDENCE_THRESHOLDS["low"]:
+                low_confidence_components.append({
+                    "image_id": item.get("image_id", "unknown"),
+                    "page_index": item.get("page_index", -1),
+                    "classification": item.get("classification", "unknown"),
+                    "confidence": confidence,
+                    "bbox": item.get("bbox"),
+                    "file_path": item.get("file_path", "unknown")
+                })
+        
+        # Anomaly detection (if corpus mean is provided)
+        is_anomalous = False
+        anomaly_details = {}
+        
+        if corpus_mean_confidence is not None and len(confidences) > 0:
+            mean_confidence = confidence_stats["mean"]
+            deviation = abs(mean_confidence - corpus_mean_confidence)
+            
+            # Use 2σ threshold for anomaly detection
+            if deviation > ANOMALY_SIGMA_THRESHOLD * confidence_stats["std"]:
+                is_anomalous = True
+                anomaly_details = {
+                    "deviation_from_corpus_mean": deviation,
+                    "corpus_mean_confidence": corpus_mean_confidence,
+                    "rulebook_mean_confidence": mean_confidence,
+                    "sigma_threshold": ANOMALY_SIGMA_THRESHOLD,
+                    "anomaly_type": "confidence_deviation"
+                }
+        
         return ClassificationOutcome(
             total_components=total_components,
             classification_distribution=classification_dist,
@@ -330,11 +452,15 @@ class CorpusAnalyzer:
             low_confidence_count=low_confidence_count,
             high_confidence_count=high_confidence_count,
             unknown_classification_count=unknown_count,
-            confidence_by_type=confidence_by_type
+            confidence_by_type=confidence_by_type,
+            confidence_histogram=confidence_histogram,
+            low_confidence_components=low_confidence_components,
+            is_anomalous=is_anomalous,
+            anomaly_details=anomaly_details
         )
     
     def _analyze_deduplication(self, manifest: Dict) -> DeduplicationOutcome:
-        """Analyze deduplication outcomes."""
+        """Analyze deduplication outcomes with enhanced analytics."""
         items = manifest.get("items", [])
         total_images = len(items)
         
@@ -374,6 +500,41 @@ class CorpusAnalyzer:
             else:
                 dedup_by_type[classification]["canonical"] += 1
         
+        # Cross-rulebook potential analysis (placeholder - would need corpus context)
+        potential_cross_duplicates = []
+        
+        # Over/under-merging indicators
+        over_splitting_indicators = []
+        under_merging_indicators = []
+        
+        # Detect over-splitting: many singleton groups of same classification
+        classification_singletons = {}
+        for group in groups.values():
+            if len(group) == 1:
+                classification = group[0].get("classification", "unknown")
+                classification_singletons[classification] = classification_singletons.get(classification, 0) + 1
+        
+        for classification, singleton_count in classification_singletons.items():
+            if singleton_count > 5:  # Threshold for potential over-splitting
+                over_splitting_indicators.append({
+                    "classification": classification,
+                    "singleton_count": singleton_count,
+                    "potential_issue": "many_singletons_same_type"
+                })
+        
+        # Detect under-merging: very large groups with mixed classifications
+        for group_id, group in groups.items():
+            if len(group) > 10:  # Threshold for large groups
+                classifications = set(item.get("classification", "unknown") for item in group)
+                if len(classifications) > 2:  # Mixed classifications in large group
+                    under_merging_indicators.append({
+                        "group_id": group_id,
+                        "group_size": len(group),
+                        "classification_count": len(classifications),
+                        "classifications": list(classifications),
+                        "potential_issue": "mixed_classifications_large_group"
+                    })
+        
         return DeduplicationOutcome(
             total_images=total_images,
             canonical_images=canonical_images,
@@ -383,13 +544,16 @@ class CorpusAnalyzer:
             avg_group_size=avg_group_size,
             max_group_size=max_group_size,
             group_size_distribution=group_size_dist,
-            dedup_by_type=dedup_by_type
+            dedup_by_type=dedup_by_type,
+            potential_cross_duplicates=potential_cross_duplicates,
+            over_splitting_indicators=over_splitting_indicators,
+            under_merging_indicators=under_merging_indicators
         )
     
     def _analyze_text_extraction(
         self, manifest: Dict, page_text_records: Optional[List[Dict]]
     ) -> TextExtractionOutcome:
-        """Analyze text extraction outcomes."""
+        """Analyze text extraction outcomes with enhanced analytics."""
         if not page_text_records:
             return TextExtractionOutcome(
                 pages_with_text=0,
@@ -400,7 +564,11 @@ class CorpusAnalyzer:
                 components_without_text=0,
                 text_intersection_ratio=0.0,
                 error_types={},
-                pages_by_block_count={}
+                pages_by_block_count={},
+                text_confidence_correlation={},
+                error_page_details=[],
+                text_density_distribution={},
+                intersection_quality_metrics={}
             )
         
         # Analyze page text records
@@ -409,10 +577,13 @@ class CorpusAnalyzer:
         total_text_blocks = 0
         error_types = {}
         pages_by_block_count = {"0": 0, "1-5": 0, "6-20": 0, "21+": 0}
+        error_page_details = []
+        text_density_distribution = {"low": 0, "medium": 0, "high": 0, "very_high": 0}
         
         for record in page_text_records:
             blocks = record.get("blocks", [])
             errors = record.get("errors", [])
+            page_index = record.get("page_index", -1)
             
             if blocks:
                 pages_with_text += 1
@@ -424,15 +595,29 @@ class CorpusAnalyzer:
                     pages_by_block_count["0"] += 1
                 elif block_count <= 5:
                     pages_by_block_count["1-5"] += 1
+                    text_density_distribution["low"] += 1
                 elif block_count <= 20:
                     pages_by_block_count["6-20"] += 1
+                    text_density_distribution["medium"] += 1
+                elif block_count <= 50:
+                    pages_by_block_count["21+"] += 1
+                    text_density_distribution["high"] += 1
                 else:
                     pages_by_block_count["21+"] += 1
+                    text_density_distribution["very_high"] += 1
             else:
                 pages_by_block_count["0"] += 1
+                text_density_distribution["low"] += 1
             
             if errors:
                 pages_with_errors += 1
+                error_page_details.append({
+                    "page_index": page_index,
+                    "error_count": len(errors),
+                    "errors": errors,
+                    "block_count": len(blocks)
+                })
+                
                 for error in errors:
                     # Extract error type from error message
                     error_type = self._extract_error_type(error)
@@ -440,24 +625,71 @@ class CorpusAnalyzer:
         
         avg_blocks_per_page = total_text_blocks / pages_with_text if pages_with_text > 0 else 0.0
         
-        # Analyze component-text intersections (simplified - would need full intersection logic)
+        # Analyze component-text intersections with strict AABB intersection
         items = manifest.get("items", [])
         components_with_text = 0
         components_without_text = 0
+        intersection_count = 0
+        total_intersection_area = 0.0
         
-        # For now, estimate based on page coverage
-        # Real implementation would do bbox intersection
+        # Text-confidence correlation analysis
+        text_confidence_correlation = {
+            "with_text": {"0.0-0.2": 0, "0.2-0.4": 0, "0.4-0.6": 0, "0.6-0.8": 0, "0.8-1.0": 0},
+            "without_text": {"0.0-0.2": 0, "0.2-0.4": 0, "0.4-0.6": 0, "0.6-0.8": 0, "0.8-1.0": 0}
+        }
+        
         for item in items:
             page_idx = item.get("page_index", -1)
             page_record = next((r for r in page_text_records if r.get("page_index") == page_idx), None)
+            confidence = item.get("classification_confidence", 0.0)
             
-            if page_record and page_record.get("blocks"):
+            # Determine confidence bin
+            if confidence < 0.2:
+                conf_bin = "0.0-0.2"
+            elif confidence < 0.4:
+                conf_bin = "0.2-0.4"
+            elif confidence < 0.6:
+                conf_bin = "0.4-0.6"
+            elif confidence < 0.8:
+                conf_bin = "0.6-0.8"
+            else:
+                conf_bin = "0.8-1.0"
+            
+            # Check for text intersection using strict AABB
+            has_text_intersection = False
+            if page_record and page_record.get("blocks") and item.get("bbox"):
+                component_bbox = item["bbox"]
+                cx0, cy0, cx1, cy1 = component_bbox["x0"], component_bbox["y0"], component_bbox["x1"], component_bbox["y1"]
+                
+                for block in page_record["blocks"]:
+                    tx0, ty0, tx1, ty1 = block["bbox"]
+                    # Strict AABB intersection
+                    if cx0 < tx1 and cx1 > tx0 and cy0 < ty1 and cy1 > ty0:
+                        has_text_intersection = True
+                        intersection_count += 1
+                        # Calculate intersection area for quality metrics
+                        ix0, iy0 = max(cx0, tx0), max(cy0, ty0)
+                        ix1, iy1 = min(cx1, tx1), min(cy1, ty1)
+                        intersection_area = (ix1 - ix0) * (iy1 - iy0)
+                        total_intersection_area += intersection_area
+                        break
+            
+            if has_text_intersection:
                 components_with_text += 1
+                text_confidence_correlation["with_text"][conf_bin] += 1
             else:
                 components_without_text += 1
+                text_confidence_correlation["without_text"][conf_bin] += 1
         
         total_components = len(items)
         text_intersection_ratio = components_with_text / total_components if total_components > 0 else 0.0
+        
+        # Intersection quality metrics
+        intersection_quality_metrics = {
+            "avg_intersection_area": total_intersection_area / intersection_count if intersection_count > 0 else 0.0,
+            "intersection_coverage": intersection_count / total_components if total_components > 0 else 0.0,
+            "text_density_score": total_text_blocks / len(page_text_records) if page_text_records else 0.0
+        }
         
         return TextExtractionOutcome(
             pages_with_text=pages_with_text,
@@ -468,7 +700,11 @@ class CorpusAnalyzer:
             components_without_text=components_without_text,
             text_intersection_ratio=text_intersection_ratio,
             error_types=error_types,
-            pages_by_block_count=pages_by_block_count
+            pages_by_block_count=pages_by_block_count,
+            text_confidence_correlation=text_confidence_correlation,
+            error_page_details=error_page_details,
+            text_density_distribution=text_density_distribution,
+            intersection_quality_metrics=intersection_quality_metrics
         )
     
     def _build_failure_taxonomy(
@@ -680,6 +916,11 @@ class CorpusAnalyzer:
         
         logger.info(f"Corpus analytics saved to {output_path}")
         return output_path
+    
+    def generate_reports(self, analytics: CorpusAnalytics) -> List[Path]:
+        """Generate all analytics reports."""
+        from .reports import generate_corpus_reports
+        return generate_corpus_reports(analytics, self.output_dir)
 
 
 def main():
@@ -689,6 +930,8 @@ def main():
                        help="Directory containing rulebook exports")
     parser.add_argument("--out", type=Path, required=True,
                        help="Output directory for analytics")
+    parser.add_argument("--reports", action="store_true",
+                       help="Generate markdown reports")
     
     args = parser.parse_args()
     
@@ -697,12 +940,20 @@ def main():
     analytics = analyzer.analyze_corpus()
     output_path = analyzer.save_analytics(analytics)
     
+    # Generate reports if requested
+    report_files = []
+    if args.reports:
+        report_files = analyzer.generate_reports(analytics)
+        print(f"📋 Generated {len(report_files)} reports")
+    
     print(f"✅ Corpus analysis complete!")
     print(f"📊 Analyzed {analytics.corpus_aggregates.total_rulebooks} rulebooks")
     print(f"📄 Total pages: {analytics.corpus_aggregates.total_pages}")
     print(f"🖼️  Total images: {analytics.corpus_aggregates.total_images_attempted}")
     print(f"💾 Success rate: {analytics.corpus_aggregates.corpus_success_rate:.2%}")
     print(f"📁 Output: {output_path}")
+    if report_files:
+        print(f"📋 Reports: {', '.join(f.name for f in report_files)}")
 
 
 if __name__ == "__main__":
@@ -720,7 +971,7 @@ Usage:
 import json
 import statistics
 from collections import defaultdict, Counter
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
@@ -730,7 +981,8 @@ from .schema import (
     CorpusAnalytics, RulebookAnalytics, RulebookIdentity, PdfCharacteristics,
     ExtractionOutcome, ClassificationOutcome, DeduplicationOutcome,
     TextExtractionOutcome, FailureTaxonomy, CorpusAggregates,
-    SCHEMA_VERSION, CONFIDENCE_THRESHOLDS, SIZE_RANGES,
+    SCHEMA_VERSION, CONFIDENCE_THRESHOLDS, SIZE_RANGES, PAGE_BUCKETS,
+    CONFIDENCE_BINS, ANOMALY_SIGMA_THRESHOLD,
     validate_corpus_analytics
 )
 from ..logging import get_logger
@@ -740,10 +992,11 @@ logger = get_logger(__name__)
 app = typer.Typer(help="HEPHAESTUS Corpus Analytics", no_args_is_help=True)
 
 
-@app.command("corpus")
-def analyze(
+@app.command()
+def main(
     input_dir: Path = typer.Option(..., "--input-dir", help="Directory containing rulebook exports"),
     out: Path = typer.Option(..., "--out", help="Output directory for analytics"),
+    reports: bool = typer.Option(False, "--reports", help="Generate markdown reports"),
     min_rulebooks: int = typer.Option(1, help="Minimum number of rulebooks required"),
 ) -> None:
     """
@@ -795,7 +1048,7 @@ def analyze(
     # Create corpus analytics
     corpus_analytics = CorpusAnalytics(
         schema_version=SCHEMA_VERSION,
-        analysis_timestamp=datetime.utcnow().isoformat(),
+        analysis_timestamp=datetime.now(timezone.utc).isoformat(),
         input_directory=str(input_dir),
         rulebook_analytics=rulebook_analytics,
         corpus_aggregates=corpus_aggregates
@@ -813,6 +1066,15 @@ def analyze(
     # Write analytics artifacts
     logger.info(f"Writing analytics to {out}")
     write_analytics_artifacts(corpus_analytics, out)
+    
+    # Generate reports if requested and analysis was successful
+    if reports and len(rulebook_analytics) > 0:
+        logger.info("Generating markdown reports")
+        from .reports import generate_corpus_reports
+        report_files = generate_corpus_reports(corpus_analytics, out)
+        logger.info(f"Generated {len(report_files)} reports: {', '.join(f.name for f in report_files)}")
+    elif reports:
+        logger.warning("Reports requested but no rulebooks successfully analyzed - skipping report generation")
     
     logger.info("Corpus analysis complete")
     logger.info(f"Analyzed {len(rulebook_analytics)} rulebooks")
@@ -885,7 +1147,7 @@ def analyze_single_rulebook(rulebook_dir: Path) -> RulebookAnalytics:
         deduplication_outcome=deduplication_outcome,
         text_extraction_outcome=text_extraction_outcome,
         failure_taxonomy=failure_taxonomy,
-        analysis_timestamp=datetime.utcnow().isoformat()
+        analysis_timestamp=datetime.now(timezone.utc).isoformat()
     )
 
 
@@ -946,8 +1208,8 @@ def extract_rulebook_identity(manifest: Dict[str, Any], rulebook_dir: Path) -> R
     source_pdf = manifest.get("source_pdf", "unknown")
     pdf_filename = Path(source_pdf).name if source_pdf != "unknown" else rulebook_dir.name
     
-    # Use directory name as rulebook_id if not derivable from PDF
-    rulebook_id = Path(source_pdf).stem if source_pdf != "unknown" else rulebook_dir.name
+    # Use directory name as rulebook_id for traceability
+    rulebook_id = rulebook_dir.name
     
     return RulebookIdentity(
         rulebook_id=rulebook_id,
@@ -1009,7 +1271,7 @@ def analyze_pdf_characteristics(manifest: Dict[str, Any], page_text_records: Dic
 
 
 def analyze_extraction_outcome(manifest: Dict[str, Any], extraction_log: List[Dict[str, Any]]) -> ExtractionOutcome:
-    """Analyze image extraction outcomes."""
+    """Analyze image extraction outcomes with enhanced failure analysis."""
     health = manifest.get("extraction_health", {})
     
     images_attempted = health.get("images_attempted", 0)
@@ -1026,6 +1288,11 @@ def analyze_extraction_outcome(manifest: Dict[str, Any], extraction_log: List[Di
     failures_by_page = defaultdict(int)
     failures_by_colorspace = defaultdict(int)
     failures_by_size_range = defaultdict(int)
+    failures_by_page_bucket = defaultdict(int)
+    failed_image_ids = []
+    
+    # Calculate page buckets for this rulebook
+    total_pages = len(set(entry.get("page_index", 0) for entry in extraction_log))
     
     for entry in extraction_log:
         if entry.get("status") == "failed":
@@ -1033,9 +1300,11 @@ def analyze_extraction_outcome(manifest: Dict[str, Any], extraction_log: List[Di
             colorspace = entry.get("colorspace_str", "unknown")
             width = entry.get("width", 0)
             height = entry.get("height", 0)
+            image_id = entry.get("image_id", "unknown")
             
             failures_by_page[page_index] += 1
             failures_by_colorspace[colorspace] += 1
+            failed_image_ids.append(image_id)
             
             # Categorize by size
             max_dimension = max(width, height)
@@ -1045,6 +1314,25 @@ def analyze_extraction_outcome(manifest: Dict[str, Any], extraction_log: List[Di
                     size_range = range_name
                     break
             failures_by_size_range[size_range] += 1
+            
+            # Categorize by page bucket (early/middle/late)
+            if total_pages > 0:
+                page_ratio = page_index / total_pages
+                for bucket_name, (min_ratio, max_ratio) in PAGE_BUCKETS.items():
+                    if min_ratio <= page_ratio < max_ratio:
+                        failures_by_page_bucket[bucket_name] += 1
+                        break
+    
+    # Zero silent drops proof
+    silent_drops_proof = {
+        "attempted": images_attempted,
+        "saved": images_saved,
+        "failed": conversion_failures,
+        "identity_holds": images_attempted == images_saved + conversion_failures,
+        "log_entries_count": len(extraction_log),
+        "log_failed_count": len([e for e in extraction_log if e.get("status") == "failed"]),
+        "log_saved_count": len([e for e in extraction_log if e.get("status") == "persisted"])
+    }
     
     return ExtractionOutcome(
         images_attempted=images_attempted,
@@ -1056,7 +1344,10 @@ def analyze_extraction_outcome(manifest: Dict[str, Any], extraction_log: List[Di
         failure_reasons=failure_reasons,
         failures_by_page=dict(failures_by_page),
         failures_by_colorspace=dict(failures_by_colorspace),
-        failures_by_size_range=dict(failures_by_size_range)
+        failures_by_size_range=dict(failures_by_size_range),
+        failures_by_page_bucket=dict(failures_by_page_bucket),
+        silent_drops_proof=silent_drops_proof,
+        failed_image_ids=failed_image_ids
     )
 
 def analyze_classification_outcome(manifest: Dict[str, Any]) -> ClassificationOutcome:

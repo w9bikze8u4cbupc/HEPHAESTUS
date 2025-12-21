@@ -7,7 +7,7 @@ All analytics are DERIVED from artifacts, never authoritative.
 Schema Version: 1.0.0
 """
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from pathlib import Path
@@ -49,6 +49,14 @@ class ExtractionOutcome:
     failures_by_page: Dict[int, int]  # page_index -> failure_count
     failures_by_colorspace: Dict[str, int]  # colorspace -> failure_count
     failures_by_size_range: Dict[str, int]  # size_range -> failure_count
+    failures_by_page_bucket: Dict[str, int] = field(default_factory=dict)  # early/middle/late -> failure_count
+    # Zero silent drops proof
+    silent_drops_proof: Dict[str, Any] = field(default_factory=dict)  # Invariant validation data
+    # Failure drill-down identifiers
+    failed_image_ids: List[str] = field(default_factory=list)       # Exact image IDs that failed
+    # Enhanced failure analysis
+    failure_patterns: Dict[str, Any] = field(default_factory=dict)  # Pattern analysis across dimensions
+    failure_severity_distribution: Dict[str, int] = field(default_factory=dict)  # severity -> count
 
 
 @dataclass(frozen=True)
@@ -57,11 +65,18 @@ class ClassificationOutcome:
     total_components: int             # Components classified
     classification_distribution: Dict[str, int]  # classification -> count
     confidence_stats: Dict[str, float]  # min, max, mean, median, std
-    low_confidence_count: int         # Components below threshold (e.g., 0.5)
+    low_confidence_count: int         # Components below threshold (e.g., 0.6)
     high_confidence_count: int        # Components above threshold (e.g., 0.8)
     unknown_classification_count: int  # Components classified as "unknown"
     # Confidence distribution by classification type
-    confidence_by_type: Dict[str, Dict[str, float]]  # type -> {min, max, mean, etc.}
+    confidence_by_type: Dict[str, Dict[str, float]] = field(default_factory=dict)  # type -> {min, max, mean, etc.}
+    # Fixed-bin confidence histogram
+    confidence_histogram: Dict[str, int] = field(default_factory=dict)  # bin_range -> count (e.g., "0.0-0.2" -> 15)
+    # Low-confidence clusters with exact IDs
+    low_confidence_components: List[Dict[str, Any]] = field(default_factory=list)  # Component details below threshold
+    # Anomaly detection
+    is_anomalous: bool = False               # Deviates >2σ from corpus mean
+    anomaly_details: Dict[str, Any] = field(default_factory=dict)  # Specific anomaly metrics
 
 
 @dataclass(frozen=True)
@@ -78,6 +93,11 @@ class DeduplicationOutcome:
     group_size_distribution: Dict[int, int]  # group_size -> count
     # Deduplication by component type
     dedup_by_type: Dict[str, Dict[str, int]]  # type -> {canonical, duplicate}
+    # Cross-rulebook potential analysis (flags only)
+    potential_cross_duplicates: List[Dict[str, Any]] = field(default_factory=list)  # Flagged potential duplicates
+    # Over/under-merging indicators
+    over_splitting_indicators: List[Dict[str, Any]] = field(default_factory=list)  # Many singletons of same type
+    under_merging_indicators: List[Dict[str, Any]] = field(default_factory=list)   # Very large groups with details
 
 
 @dataclass(frozen=True)
@@ -91,8 +111,15 @@ class TextExtractionOutcome:
     components_without_text: int     # Components with no intersecting text
     text_intersection_ratio: float   # components_with_text / total_components
     # Error analysis
-    error_types: Dict[str, int]      # error_type -> count
-    pages_by_block_count: Dict[str, int]  # block_count_range -> page_count
+    error_types: Dict[str, int] = field(default_factory=dict)      # error_type -> count
+    pages_by_block_count: Dict[str, int] = field(default_factory=dict)  # block_count_range -> page_count
+    # Text-classification correlation with strict AABB intersection
+    text_confidence_correlation: Dict[str, Dict[str, int]] = field(default_factory=dict)  # text_presence -> confidence_bin -> count
+    # Pages with errors (explicit visibility)
+    error_page_details: List[Dict[str, Any]] = field(default_factory=list)  # Page-level error information
+    # Enhanced text analysis
+    text_density_distribution: Dict[str, int] = field(default_factory=dict)  # density_range -> page_count
+    intersection_quality_metrics: Dict[str, float] = field(default_factory=dict)  # Quality metrics for bbox intersections
 
 
 @dataclass(frozen=True)
@@ -231,8 +258,8 @@ def _validate_rulebook_analytics(rb: RulebookAnalytics) -> List[str]:
 # Constants for analytics
 SCHEMA_VERSION = "1.0.0"
 CONFIDENCE_THRESHOLDS = {
-    "low": 0.5,
-    "high": 0.8
+    "low": 0.6,      # Explicit threshold for low confidence
+    "high": 0.8      # Explicit threshold for high confidence
 }
 SIZE_RANGES = {
     "small": (0, 100),      # 0-100 pixels
@@ -240,3 +267,12 @@ SIZE_RANGES = {
     "large": (500, 2000),   # 500-2000 pixels
     "xlarge": (2000, float('inf'))  # >2000 pixels
 }
+PAGE_BUCKETS = {
+    "early": (0, 0.33),     # First third of pages
+    "middle": (0.33, 0.67), # Middle third of pages
+    "late": (0.67, 1.0)     # Last third of pages
+}
+CONFIDENCE_BINS = [
+    "0.0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"
+]
+ANOMALY_SIGMA_THRESHOLD = 2.0  # Standard deviations for anomaly detection
