@@ -39,11 +39,11 @@ TIER_2_EXPLORATORY_MANIFEST = {
 }
 
 # Tier 2 Promotion Gate Configuration
-PROMOTE_TIER_2_FIELDS = False  # Master switch: when True, shadow checks become blocking Tier 1
+PROMOTE_TIER_2_FIELDS = True  # Master switch: when True, shadow checks become blocking Tier 1
 
 TIER_2_PROMOTION_POLICY = {
     'experimental_risk_score': {
-        'promotion_ready': False,  # Set True when field meets promotion criteria
+        'promotion_ready': True,  # Set True when field meets promotion criteria
         'promotion_requirements': [
             'Stable formula validated across 10+ rulebooks',
             'Correlation with manual QA assessment established',
