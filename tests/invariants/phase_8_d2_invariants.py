@@ -203,6 +203,7 @@ def _validate_tier_1_additive_fields(results: Dict[str, Any], qa_dir: Path, rule
     d2_additive_fields = ['coverage_density', 'classification_confidence_distribution', 'component_type_entropy']
     
     missing_d2_fields = []
+    invalid_d2_values = []
     v82_scorecards = []
     
     for rulebook_id in rulebook_ids:
@@ -220,6 +221,30 @@ def _validate_tier_1_additive_fields(results: Dict[str, Any], qa_dir: Path, rule
                     for field in d2_additive_fields:
                         if field not in scorecard_data:
                             missing_d2_fields.append(f"{rulebook_id}.{field}")
+                    
+                    # Tier 1 monotonicity checks for 8.2 scorecards
+                    if 'classification_confidence_distribution' in scorecard_data:
+                        dist = scorecard_data['classification_confidence_distribution']
+                        if isinstance(dist, dict) and 'known_ratio' in dist and 'unknown_ratio' in dist:
+                            known = dist['known_ratio']
+                            unknown = dist['unknown_ratio']
+                            ratio_sum = known + unknown
+                            # Check ratios sum to 1.0 within epsilon
+                            if abs(ratio_sum - 1.0) > 1e-9:
+                                invalid_d2_values.append(f"{rulebook_id}.classification_confidence_distribution ratios sum to {ratio_sum}, expected 1.0")
+                            # Check ratios are in valid range
+                            if not (0.0 <= known <= 1.0) or not (0.0 <= unknown <= 1.0):
+                                invalid_d2_values.append(f"{rulebook_id}.classification_confidence_distribution ratios out of [0,1] range")
+                    
+                    if 'coverage_density' in scorecard_data:
+                        coverage = scorecard_data['coverage_density']
+                        if not (0.0 <= coverage <= 1.0):
+                            invalid_d2_values.append(f"{rulebook_id}.coverage_density = {coverage}, expected [0,1]")
+                    
+                    if 'component_type_entropy' in scorecard_data:
+                        entropy = scorecard_data['component_type_entropy']
+                        if entropy < 0.0:
+                            invalid_d2_values.append(f"{rulebook_id}.component_type_entropy = {entropy}, expected >= 0")
                 
             except json.JSONDecodeError:
                 # Already caught in Tier 0
@@ -239,6 +264,13 @@ def _validate_tier_1_additive_fields(results: Dict[str, Any], qa_dir: Path, rule
                            f"REQUIRED: v8.2 scorecards must include: {d2_additive_fields}")
     elif v82_scorecards:  # Only check if we have v8.2 scorecards
         _add_success(results, "d2_additive_fields_present", "All D2 additive fields present", 1)
+    
+    if invalid_d2_values:
+        _add_tier_1_failure(results, "d2_field_values_invalid", 
+                           f"TIER 1 ANALYTICAL: Invalid D2 field values: {invalid_d2_values}. "
+                           f"REQUIRED: All D2 metrics must satisfy monotonicity constraints")
+    elif v82_scorecards:  # Only check if we have v8.2 scorecards
+        _add_success(results, "d2_field_values_valid", "All D2 field values satisfy constraints", 1)
 
 
 def _validate_tier_1_determinism(results: Dict[str, Any], qa_dir: Path, rulebook_ids: List[str]):

@@ -55,9 +55,43 @@ def generate_scorecards(analytics_file, out_dir, schema_version="8.1", verbose=F
 
         # Add Phase 8 D2 fields for schema 8.2
         if schema_version == "8.2":
-            scorecard['coverage_density'] = scorecard['success_rate']
-            scorecard['classification_confidence_distribution'] = {'known_ratio': 1.0 - scorecard['failure_rate'], 'unknown_ratio': scorecard['failure_rate']}
-            scorecard['component_type_entropy'] = 0.0
+            # Real computation: coverage_density from text coverage and extraction success
+            text_coverage = rb.get('pdf_characteristics', {}).get('text_coverage_ratio', 0.0)
+            extraction_success = scorecard['success_rate']
+            scorecard['coverage_density'] = min(1.0, (text_coverage + extraction_success) / 2.0)
+            
+            # Real computation: classification_confidence_distribution from actual classification data
+            classification = rb.get('classification_outcome', {})
+            total_components = classification.get('total_components', 0)
+            unknown_count = classification.get('unknown_classification_count', 0)
+            
+            if total_components > 0:
+                known_ratio = (total_components - unknown_count) / total_components
+                unknown_ratio = unknown_count / total_components
+            else:
+                known_ratio = 1.0
+                unknown_ratio = 0.0
+                
+            scorecard['classification_confidence_distribution'] = {
+                'known_ratio': round(known_ratio, 6),
+                'unknown_ratio': round(unknown_ratio, 6)
+            }
+            
+            # Real computation: component_type_entropy from classification distribution
+            classification_dist = classification.get('classification_distribution', {})
+            if total_components > 0 and classification_dist:
+                # Shannon entropy calculation
+                import math
+                entropy = 0.0
+                for count in classification_dist.values():
+                    if count > 0:
+                        p = count / total_components
+                        entropy -= p * math.log2(p)
+                # Normalize by max possible entropy (log2 of number of types)
+                max_entropy = math.log2(len(classification_dist)) if len(classification_dist) > 1 else 1.0
+                scorecard['component_type_entropy'] = round(entropy / max_entropy, 6)
+            else:
+                scorecard['component_type_entropy'] = 0.0
         
         # Write JSON
         json_file = rulebooks_dir / f"{rulebook_id}.json"
