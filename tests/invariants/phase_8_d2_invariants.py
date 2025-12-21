@@ -38,6 +38,45 @@ TIER_2_EXPLORATORY_MANIFEST = {
     }
 }
 
+# Tier 2 Promotion Gate Configuration
+PROMOTE_TIER_2_FIELDS = False  # Master switch: when True, shadow checks become blocking Tier 1
+
+TIER_2_PROMOTION_POLICY = {
+    'experimental_risk_score': {
+        'promotion_ready': False,  # Set True when field meets promotion criteria
+        'promotion_requirements': [
+            'Stable formula validated across 10+ rulebooks',
+            'Correlation with manual QA assessment established',
+            'Input correlation validation passes (unknown/low_conf/failure)',
+            'No anomalous outliers in risk score distribution'
+        ],
+        'promotion_owner': 'director',
+        'shadow_checks_enabled': True  # Run deeper validation as non-blocking
+    },
+    'ml_confidence_prediction': {
+        'promotion_ready': False,
+        'promotion_requirements': [
+            'ML model trained and validated with >80% prediction accuracy',
+            'Monotonicity constraints validated (higher unknown_ratio should not increase predicted_accuracy)',
+            'Confidence interval bounds validated against historical data',
+            'Cross-validation performed on held-out test set'
+        ],
+        'promotion_owner': 'director',
+        'shadow_checks_enabled': True
+    },
+    'cross_rulebook_similarity': {
+        'promotion_ready': False,
+        'promotion_requirements': [
+            'Similarity algorithm validated for QA triage utility',
+            'Corpus-level symmetry properties validated',
+            'Edge case handling verified (single rulebook, identical distributions)',
+            'Anomaly detection correlation established'
+        ],
+        'promotion_owner': 'director',
+        'shadow_checks_enabled': True
+    }
+}
+
 
 def validate_phase_8_d2_scorecards(analytics_dir: Path, qa_dir: Path) -> Dict[str, Any]:
     """Validate Phase 8 D2 QA scorecard schema versioning and analytical expansion."""
@@ -88,10 +127,20 @@ def validate_phase_8_d2_scorecards(analytics_dir: Path, qa_dir: Path) -> Dict[st
     # TIER 2 (Exploratory) - Future Metrics
     _validate_tier_2_exploratory(results, qa_rulebooks_dir, rulebook_ids)
     
-    # Overall pass/fail based on Tier 0 and Tier 1 only
+    # TIER 2 PROMOTION GATE - Shadow checks (non-blocking unless promoted)
+    _validate_tier_2_promotion_shadow_checks(results, qa_rulebooks_dir, rulebook_ids)
+    
+    # Overall pass/fail based on Tier 0 and Tier 1 only (unless Tier 2 fields are promoted)
     tier_0_passed = len(results["tier_failures"]["tier_0"]) == 0
     tier_1_passed = len(results["tier_failures"]["tier_1"]) == 0
-    results["passed"] = tier_0_passed and tier_1_passed
+    
+    # If PROMOTE_TIER_2_FIELDS is True, promoted shadow check failures become blocking
+    tier_2_promoted_passed = True
+    if PROMOTE_TIER_2_FIELDS:
+        promoted_failures = [f for f in results["tier_failures"]["tier_2"] if f.startswith("shadow_")]
+        tier_2_promoted_passed = len(promoted_failures) == 0
+    
+    results["passed"] = tier_0_passed and tier_1_passed and tier_2_promoted_passed
     
     return results
 
@@ -473,6 +522,159 @@ def _validate_tier_2_exploratory(results: Dict[str, Any], qa_dir: Path, rulebook
         _add_success(results, "exploratory_fields_implemented", "All exploratory fields implemented", 2)
 
 
+def _validate_tier_2_promotion_shadow_checks(results: Dict[str, Any], qa_dir: Path, rulebook_ids: List[str]):
+    """TIER 2 PROMOTION GATE: Shadow checks for promotion readiness (non-blocking unless promoted)."""
+    
+    # Load scorecard data for analysis
+    scorecard_data_by_id = {}
+    for rulebook_id in rulebook_ids:
+        json_file = qa_dir / f"{rulebook_id}.json"
+        if json_file.exists():
+            try:
+                with open(json_file, 'r') as f:
+                    scorecard_data_by_id[rulebook_id] = json.load(f)
+            except json.JSONDecodeError:
+                # Already caught in Tier 0
+                pass
+    
+    # Shadow check: experimental_risk_score input correlation validation
+    if TIER_2_PROMOTION_POLICY['experimental_risk_score']['shadow_checks_enabled']:
+        _shadow_check_experimental_risk_correlation(results, scorecard_data_by_id)
+    
+    # Shadow check: ml_confidence_prediction monotonicity validation
+    if TIER_2_PROMOTION_POLICY['ml_confidence_prediction']['shadow_checks_enabled']:
+        _shadow_check_ml_confidence_monotonicity(results, scorecard_data_by_id)
+    
+    # Shadow check: cross_rulebook_similarity corpus-level validation
+    if TIER_2_PROMOTION_POLICY['cross_rulebook_similarity']['shadow_checks_enabled']:
+        _shadow_check_similarity_corpus_properties(results, scorecard_data_by_id, rulebook_ids)
+
+
+def _shadow_check_experimental_risk_correlation(results: Dict[str, Any], scorecard_data: Dict[str, Any]):
+    """Shadow check: experimental_risk_score should correlate with input components."""
+    
+    correlation_violations = []
+    
+    for rulebook_id, data in scorecard_data.items():
+        if 'experimental_risk_score' not in data:
+            continue
+            
+        risk_score = data['experimental_risk_score']
+        unknown_ratio = data.get('classification_confidence_distribution', {}).get('unknown_ratio', 0.0)
+        failure_rate = data.get('failure_rate', 0.0)
+        
+        # Sanity check: risk score should increase with unknown_ratio and failure_rate
+        # Allow some tolerance for low_confidence component and anomaly bump
+        expected_min_risk = 0.4 * unknown_ratio + 0.3 * failure_rate  # Minimum without low_conf
+        
+        # Risk score should be at least the minimum (within small tolerance for rounding)
+        if risk_score < expected_min_risk - 0.01:
+            correlation_violations.append(
+                f"{rulebook_id}: risk_score={risk_score:.6f} < expected_min={expected_min_risk:.6f} "
+                f"(unknown_ratio={unknown_ratio:.6f}, failure_rate={failure_rate:.6f})"
+            )
+    
+    if correlation_violations:
+        failure_message = f"TIER 2 SHADOW CHECK: experimental_risk_score input correlation violations:\n" + \
+                         "\n".join([f"    {v}" for v in correlation_violations]) + \
+                         "\nThis is a shadow check and does not block CI unless field is promoted to Tier 1."
+        
+        if PROMOTE_TIER_2_FIELDS and TIER_2_PROMOTION_POLICY['experimental_risk_score']['promotion_ready']:
+            _add_tier_1_failure(results, "shadow_experimental_risk_correlation", failure_message)
+        else:
+            _add_tier_2_failure(results, "shadow_experimental_risk_correlation", failure_message)
+    else:
+        tier = 1 if (PROMOTE_TIER_2_FIELDS and TIER_2_PROMOTION_POLICY['experimental_risk_score']['promotion_ready']) else 2
+        _add_success(results, "shadow_experimental_risk_correlation", "experimental_risk_score input correlation validated", tier)
+
+
+def _shadow_check_ml_confidence_monotonicity(results: Dict[str, Any], scorecard_data: Dict[str, Any]):
+    """Shadow check: ml_confidence_prediction should respect monotonicity constraints."""
+    
+    monotonicity_violations = []
+    
+    for rulebook_id, data in scorecard_data.items():
+        if 'ml_confidence_prediction' not in data:
+            continue
+            
+        ml_pred = data['ml_confidence_prediction']
+        predicted_accuracy = ml_pred.get('predicted_accuracy', 0.0)
+        confidence_interval = ml_pred.get('confidence_interval', 0.0)
+        unknown_ratio = data.get('classification_confidence_distribution', {}).get('unknown_ratio', 0.0)
+        
+        # Monotonicity check: higher unknown_ratio should generally decrease predicted_accuracy
+        # This is a soft constraint - we check for extreme violations only
+        if unknown_ratio > 0.5 and predicted_accuracy > 0.8:
+            monotonicity_violations.append(
+                f"{rulebook_id}: high unknown_ratio={unknown_ratio:.6f} but high predicted_accuracy={predicted_accuracy:.6f}"
+            )
+        
+        # Confidence interval should increase with uncertainty
+        if unknown_ratio > 0.3 and confidence_interval < 0.2:
+            monotonicity_violations.append(
+                f"{rulebook_id}: high unknown_ratio={unknown_ratio:.6f} but low confidence_interval={confidence_interval:.6f}"
+            )
+    
+    if monotonicity_violations:
+        failure_message = f"TIER 2 SHADOW CHECK: ml_confidence_prediction monotonicity violations:\n" + \
+                         "\n".join([f"    {v}" for v in monotonicity_violations]) + \
+                         "\nThis is a shadow check and does not block CI unless field is promoted to Tier 1."
+        
+        if PROMOTE_TIER_2_FIELDS and TIER_2_PROMOTION_POLICY['ml_confidence_prediction']['promotion_ready']:
+            _add_tier_1_failure(results, "shadow_ml_confidence_monotonicity", failure_message)
+        else:
+            _add_tier_2_failure(results, "shadow_ml_confidence_monotonicity", failure_message)
+    else:
+        tier = 1 if (PROMOTE_TIER_2_FIELDS and TIER_2_PROMOTION_POLICY['ml_confidence_prediction']['promotion_ready']) else 2
+        _add_success(results, "shadow_ml_confidence_monotonicity", "ml_confidence_prediction monotonicity validated", tier)
+
+
+def _shadow_check_similarity_corpus_properties(results: Dict[str, Any], scorecard_data: Dict[str, Any], rulebook_ids: List[str]):
+    """Shadow check: cross_rulebook_similarity should have reasonable corpus-level properties."""
+    
+    corpus_violations = []
+    similarity_scores = []
+    
+    # Collect all similarity data
+    for rulebook_id, data in scorecard_data.items():
+        if 'cross_rulebook_similarity' not in data:
+            continue
+            
+        sim_data = data['cross_rulebook_similarity']
+        most_similar = sim_data.get('most_similar', '')
+        similarity_score = sim_data.get('similarity_score', 0.0)
+        
+        similarity_scores.append(similarity_score)
+        
+        # Check for edge cases
+        if len(rulebook_ids) == 1 and most_similar != "none":
+            corpus_violations.append(f"{rulebook_id}: single rulebook corpus should have most_similar='none', got '{most_similar}'")
+        
+        # Check for unreasonably high similarity (potential duplicate detection)
+        if similarity_score > 0.99 and most_similar != "none":
+            corpus_violations.append(f"{rulebook_id}: suspiciously high similarity_score={similarity_score:.6f} to '{most_similar}'")
+    
+    # Corpus-level distribution check
+    if len(similarity_scores) > 2:
+        avg_similarity = sum(similarity_scores) / len(similarity_scores)
+        # Expect some diversity in similarity scores (not all identical)
+        if all(abs(score - avg_similarity) < 0.001 for score in similarity_scores):
+            corpus_violations.append(f"All similarity scores identical (avg={avg_similarity:.6f}), suggests computation error")
+    
+    if corpus_violations:
+        failure_message = f"TIER 2 SHADOW CHECK: cross_rulebook_similarity corpus property violations:\n" + \
+                         "\n".join([f"    {v}" for v in corpus_violations]) + \
+                         "\nThis is a shadow check and does not block CI unless field is promoted to Tier 1."
+        
+        if PROMOTE_TIER_2_FIELDS and TIER_2_PROMOTION_POLICY['cross_rulebook_similarity']['promotion_ready']:
+            _add_tier_1_failure(results, "shadow_similarity_corpus_properties", failure_message)
+        else:
+            _add_tier_2_failure(results, "shadow_similarity_corpus_properties", failure_message)
+    else:
+        tier = 1 if (PROMOTE_TIER_2_FIELDS and TIER_2_PROMOTION_POLICY['cross_rulebook_similarity']['promotion_ready']) else 2
+        _add_success(results, "shadow_similarity_corpus_properties", "cross_rulebook_similarity corpus properties validated", tier)
+
+
 if __name__ == "__main__":
     import sys
     
@@ -514,12 +716,41 @@ if __name__ == "__main__":
     print(f"  Tier 2 (Exploratory): {tier_2_failures} warnings")
     print()
     
+    # Promotion readiness summary
+    print("=== TIER 2 PROMOTION READINESS ===")
+    print(f"Promotion Gate Status: {'ENABLED' if PROMOTE_TIER_2_FIELDS else 'DISABLED'}")
+    
+    ready_count = 0
+    for field_name, policy in TIER_2_PROMOTION_POLICY.items():
+        status = "READY" if policy['promotion_ready'] else "NOT READY"
+        shadow_status = "ENABLED" if policy['shadow_checks_enabled'] else "DISABLED"
+        print(f"  {field_name}: {status} (shadow checks: {shadow_status})")
+        if policy['promotion_ready']:
+            ready_count += 1
+    
+    print(f"Fields ready for promotion: {ready_count}/{len(TIER_2_PROMOTION_POLICY)}")
+    print()
+    
     if tier_0_failures > 0:
         print("❌ TIER 0 FAILURES: Foundational invariants violated. These are immutable Phase 8 D1 requirements.")
     if tier_1_failures > 0:
         print("❌ TIER 1 FAILURES: Analytical invariants violated. Phase 8 D2 implementation incomplete.")
     if tier_2_failures > 0:
-        print("⚠️  TIER 2 WARNINGS: Exploratory features not implemented. This does not block CI.")
+        shadow_failures = [f for f in results["tier_failures"]["tier_2"] if f.startswith("shadow_")]
+        regular_failures = [f for f in results["tier_failures"]["tier_2"] if not f.startswith("shadow_")]
+        
+        if shadow_failures:
+            print(f"⚠️  TIER 2 SHADOW CHECK WARNINGS: {len(shadow_failures)} shadow checks failed (promotion readiness issues).")
+        if regular_failures:
+            print(f"⚠️  TIER 2 WARNINGS: {len(regular_failures)} exploratory features not implemented. This does not block CI.")
     
-    # Exit code: fail only on Tier 0 or Tier 1 failures
+    # Promotion gate status
+    if PROMOTE_TIER_2_FIELDS:
+        promoted_shadow_failures = [f for f in results["tier_failures"]["tier_2"] if f.startswith("shadow_")]
+        if promoted_shadow_failures:
+            print(f"❌ PROMOTION GATE ACTIVE: {len(promoted_shadow_failures)} promoted shadow checks are now blocking CI.")
+        else:
+            print("✅ PROMOTION GATE ACTIVE: All promoted shadow checks passing.")
+    
+    # Exit code: fail only on Tier 0 or Tier 1 failures (or promoted Tier 2 shadow checks)
     sys.exit(0 if results["passed"] else 1)
