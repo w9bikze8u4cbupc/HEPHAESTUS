@@ -83,6 +83,78 @@ jobs:
           echo "This is acceptable in CI environments without PDF corpus"
         fi
 
+  phase-7-corpus-analytics:
+    name: Phase 7 Corpus Analytics Invariants
+    runs-on: ubuntu-latest
+    needs: phase-5-6-invariants
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install typer
+    
+    - name: Generate corpus analytics (if test data available)
+      run: |
+        if [ -d "eval/phase_5_6_test" ]; then
+          echo "Generating Phase 7 corpus analytics..."
+          python -m hephaestus.analytics.corpus --input-dir eval/phase_5_6_test --out analytics/ci_test --reports
+          echo "✅ Corpus analytics generated successfully"
+        else
+          echo "Skipping corpus analytics - no test data available"
+        fi
+    
+    - name: Verify Phase 7 invariants
+      run: |
+        if [ -d "analytics/ci_test" ]; then
+          echo "Verifying Phase 7 corpus analytics invariants..."
+          python tests/invariants/phase_7_invariants.py analytics/ci_test
+          echo "✅ Phase 7 invariants verified"
+        else
+          echo "Skipping Phase 7 invariants - no analytics generated"
+        fi
+    
+    - name: Validate analytics artifacts
+      run: |
+        if [ -d "analytics/ci_test" ]; then
+          echo "Validating analytics artifacts..."
+          
+          # Check required files exist
+          test -f "analytics/ci_test/corpus_analytics.json" || (echo "❌ corpus_analytics.json missing" && exit 1)
+          test -f "analytics/ci_test/analytics_overview.md" || (echo "❌ analytics_overview.md missing" && exit 1)
+          test -f "analytics/ci_test/extraction_failures.md" || (echo "❌ extraction_failures.md missing" && exit 1)
+          test -f "analytics/ci_test/classification_analysis.md" || (echo "❌ classification_analysis.md missing" && exit 1)
+          test -f "analytics/ci_test/deduplication_report.md" || (echo "❌ deduplication_report.md missing" && exit 1)
+          test -f "analytics/ci_test/text_extraction_report.md" || (echo "❌ text_extraction_report.md missing" && exit 1)
+          
+          # Validate JSON structure
+          python -c "
+import json
+with open('analytics/ci_test/corpus_analytics.json') as f:
+    analytics = json.load(f)
+    
+assert analytics['schema_version'] == '1.0.0'
+assert 'rulebook_analytics' in analytics
+assert 'corpus_aggregates' in analytics
+assert len(analytics['rulebook_analytics']) > 0
+
+print('✅ Analytics JSON structure is valid')
+"
+          
+          echo "✅ All analytics artifacts validated"
+        else
+          echo "Skipping artifact validation - no analytics generated"
+        fi
+
   lint-invariants:
     name: Lint Invariant Code
     runs-on: ubuntu-latest
@@ -105,6 +177,9 @@ jobs:
       run: |
         echo "Linting Phase 5.6+ invariant code..."
         flake8 tests/invariants/ --max-line-length=100 --ignore=E501
+        
+        echo "Linting Phase 7 analytics code..."
+        flake8 src/hephaestus/analytics/ --max-line-length=100 --ignore=E501
         
         echo "Type checking invariant modules..."
         mypy tests/invariants/ --ignore-missing-imports || echo "Type checking completed with warnings"
