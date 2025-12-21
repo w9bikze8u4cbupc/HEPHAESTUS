@@ -60,6 +60,7 @@ coverage.xml
 # Output directories
 output/
 components/
+analytics/
 
 # Logs
 *.log
