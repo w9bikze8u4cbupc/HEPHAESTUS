@@ -39,6 +39,46 @@ def generate_scorecards(analytics_file, out_dir, schema_version="8.1", verbose=F
     
     files_created = []
     
+    # For cross_rulebook_similarity: collect all classification distributions first
+    similarity_data = {}
+    if schema_version == "8.2":
+        # Build global label set (stable sorted)
+        all_labels = set()
+        for rb in data['rulebook_analytics']:
+            classification = rb.get('classification_outcome', {})
+            classification_dist = classification.get('classification_distribution', {})
+            all_labels.update(classification_dist.keys())
+        
+        # Create stable ordered label list
+        global_labels = sorted(list(all_labels))
+        
+        # Build normalized vectors for each rulebook
+        for rb in data['rulebook_analytics']:
+            rulebook_id = rb['identity']['rulebook_id']
+            classification = rb.get('classification_outcome', {})
+            classification_dist = classification.get('classification_distribution', {})
+            total_components = classification.get('total_components', 0)
+            
+            # Create vector of counts per label
+            vector = []
+            for label in global_labels:
+                count = classification_dist.get(label, 0)
+                vector.append(count)
+            
+            # Normalize to unit length (L2 norm)
+            import math
+            vector_sum_sq = sum(x * x for x in vector)
+            if vector_sum_sq > 0:
+                norm = math.sqrt(vector_sum_sq)
+                normalized_vector = [x / norm for x in vector]
+            else:
+                normalized_vector = [0.0] * len(global_labels)
+            
+            similarity_data[rulebook_id] = {
+                'vector': normalized_vector,
+                'total_components': total_components
+            }
+    
     for rb in data['rulebook_analytics']:
         rulebook_id = rb['identity']['rulebook_id']
         
@@ -130,6 +170,37 @@ def generate_scorecards(analytics_file, out_dir, schema_version="8.1", verbose=F
             scorecard['ml_confidence_prediction'] = {
                 'predicted_accuracy': round(predicted_accuracy, 6),
                 'confidence_interval': round(confidence_interval, 6)
+            }
+            
+            # Tier 2: cross_rulebook_similarity - cosine similarity over classification distributions
+            # Find most similar other rulebook using cosine similarity
+            current_vector = similarity_data[rulebook_id]['vector']
+            best_similarity = -1.0
+            best_match = None
+            
+            for other_id, other_data in similarity_data.items():
+                if other_id == rulebook_id:
+                    continue  # Skip self
+                
+                other_vector = other_data['vector']
+                
+                # Compute cosine similarity: dot product of normalized vectors
+                dot_product = sum(a * b for a, b in zip(current_vector, other_vector))
+                
+                # Handle tie-breaking: highest score, then lexicographically smallest id
+                if dot_product > best_similarity or (dot_product == best_similarity and (best_match is None or other_id < best_match)):
+                    best_similarity = dot_product
+                    best_match = other_id
+            
+            # Handle edge case: no other rulebooks or all zero vectors
+            if best_match is None:
+                best_match = "none"
+                best_similarity = 0.0
+            
+            scorecard['cross_rulebook_similarity'] = {
+                'most_similar': best_match,
+                'similarity_score': round(max(0.0, min(1.0, best_similarity)), 6),  # Clamp to [0,1]
+                'similarity_basis': 'cosine(classification_distribution)'
             }
         
         # Write JSON

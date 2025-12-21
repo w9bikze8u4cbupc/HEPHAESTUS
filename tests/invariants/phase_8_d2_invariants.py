@@ -405,12 +405,28 @@ def _validate_tier_2_exploratory(results: Dict[str, Any], qa_dir: Path, rulebook
                                 for key in required_keys:
                                     if key not in field_value:
                                         field_validation_errors.append(f"{rulebook_id}.{field_name}: missing required key '{key}'")
+                                
+                                # Validate most_similar is not self and is valid rulebook_id
+                                if 'most_similar' in field_value:
+                                    most_similar = field_value['most_similar']
+                                    if most_similar == rulebook_id:
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.most_similar: cannot be self-referential")
+                                    elif most_similar != "none" and most_similar not in rulebook_ids:
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.most_similar: '{most_similar}' not a valid rulebook_id in corpus")
+                                
+                                # Validate similarity_score range
                                 if 'similarity_score' in field_value:
                                     score = field_value['similarity_score']
                                     if not isinstance(score, (int, float)):
                                         field_validation_errors.append(f"{rulebook_id}.{field_name}.similarity_score: expected float, got {type(score).__name__}")
                                     elif not (0.0 <= score <= 1.0):
                                         field_validation_errors.append(f"{rulebook_id}.{field_name}.similarity_score: value {score} outside range [0.0, 1.0]")
+                                
+                                # Validate similarity_basis matches expected method
+                                if 'similarity_basis' in field_value:
+                                    basis = field_value['similarity_basis']
+                                    if basis != 'cosine(classification_distribution)':
+                                        field_validation_errors.append(f"{rulebook_id}.{field_name}.similarity_basis: expected 'cosine(classification_distribution)', got '{basis}'")
                         
                 except json.JSONDecodeError:
                     # Already caught in Tier 0
