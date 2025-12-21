@@ -174,21 +174,31 @@ print('✅ Analytics JSON structure is valid')
         python -m pip install --upgrade pip
         pip install -e .
     
-    - name: Generate QA scorecards (if analytics available)
+    - name: Generate Phase 8 D1 scorecards (schema 8.1)
       run: |
         if [ -d "analytics/ci_test" ]; then
-          echo "Generating Phase 8 QA scorecards..."
-          python -m hephaestus.analytics.qa_scorecards --analytics analytics/ci_test --out qa_test --verbose
-          echo "✅ QA scorecards generated successfully"
+          echo "Generating Phase 8 D1 QA scorecards (schema 8.1)..."
+          python -m hephaestus.analytics.qa_scorecards --analytics analytics/ci_test --out qa_test_d1 --schema-version 8.1 --verbose
+          echo "✅ Phase 8 D1 scorecards generated successfully"
         else
-          echo "Skipping QA scorecards - no analytics available"
+          echo "Skipping Phase 8 D1 scorecards - no analytics available"
+        fi
+    
+    - name: Generate Phase 8 D2 scorecards (schema 8.2)
+      run: |
+        if [ -d "analytics/ci_test" ]; then
+          echo "Generating Phase 8 D2 QA scorecards (schema 8.2)..."
+          python -m hephaestus.analytics.qa_scorecards --analytics analytics/ci_test --out qa_test_d2 --schema-version 8.2 --verbose
+          echo "✅ Phase 8 D2 scorecards generated successfully"
+        else
+          echo "Skipping Phase 8 D2 scorecards - no analytics available"
         fi
     
     - name: Verify Phase 8 D1 invariants
       run: |
-        if [ -d "qa_test" ]; then
+        if [ -d "qa_test_d1" ]; then
           echo "Verifying Phase 8 D1 QA scorecard invariants..."
-          python tests/invariants/phase_8_invariants.py analytics/ci_test qa_test
+          python tests/invariants/phase_8_invariants.py analytics/ci_test qa_test_d1
           echo "✅ Phase 8 D1 invariants verified"
         else
           echo "Skipping Phase 8 D1 invariants - no scorecards generated"
@@ -196,13 +206,23 @@ print('✅ Analytics JSON structure is valid')
     
     - name: Verify Phase 8 D2 invariants
       run: |
-        if [ -d "qa_test" ]; then
+        if [ -d "qa_test_d2" ]; then
           echo "Verifying Phase 8 D2 schema versioning and expansion invariants..."
-          python tests/invariants/phase_8_d2_invariants.py analytics/ci_test qa_test
+          python tests/invariants/phase_8_d2_invariants.py analytics/ci_test qa_test_d2
           echo "✅ Phase 8 D2 invariants verified"
         else
           echo "Skipping Phase 8 D2 invariants - no scorecards generated"
         fi
+    
+    - name: Upload QA scorecards artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: qa-scorecards-${{ github.run_number }}
+        path: |
+          qa_test_d1/
+          qa_test_d2/
+        retention-days: 7
 
   lint-invariants:
     name: Lint Invariant Code

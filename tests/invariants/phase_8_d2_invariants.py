@@ -278,6 +278,7 @@ def _validate_tier_1_determinism(results: Dict[str, Any], qa_dir: Path, rulebook
     
     # Check for deterministic JSON key ordering and stable float representation
     non_deterministic_files = []
+    first_diff_details = None
     
     for rulebook_id in rulebook_ids:
         json_file = qa_dir / f"{rulebook_id}.json"
@@ -294,15 +295,34 @@ def _validate_tier_1_determinism(results: Dict[str, Any], qa_dir: Path, rulebook
                 # Check if content is deterministically formatted
                 if content.strip() != canonical_content.strip():
                     non_deterministic_files.append(rulebook_id)
+                    
+                    # Capture diff details for first failing file only
+                    if first_diff_details is None:
+                        import difflib
+                        actual_lines = content.strip().split('\n')
+                        expected_lines = canonical_content.strip().split('\n')
+                        diff_lines = list(difflib.unified_diff(
+                            actual_lines, expected_lines,
+                            fromfile=f"actual_{rulebook_id}.json",
+                            tofile=f"expected_{rulebook_id}.json",
+                            lineterm='',
+                            n=3
+                        ))
+                        # Limit diff output to prevent log flooding
+                        if len(diff_lines) > 50:
+                            diff_lines = diff_lines[:47] + ['...', '(diff truncated - too many lines)', '...']
+                        first_diff_details = '\n'.join(diff_lines)
                 
             except json.JSONDecodeError:
                 # Already caught in Tier 0
                 pass
     
     if non_deterministic_files:
-        _add_tier_1_failure(results, "non_deterministic_output", 
-                           f"TIER 1 ANALYTICAL: Non-deterministic JSON formatting in: {non_deterministic_files}. "
-                           f"REQUIRED: All JSON must be deterministically formatted (sorted keys, stable floats)")
+        failure_message = f"TIER 1 ANALYTICAL: Non-deterministic JSON formatting in: {non_deterministic_files}. " \
+                         f"REQUIRED: All JSON must be deterministically formatted (sorted keys, stable floats)"
+        if first_diff_details:
+            failure_message += f"\n\nFirst failing file diff:\n{first_diff_details}"
+        _add_tier_1_failure(results, "non_deterministic_output", failure_message)
     else:
         _add_success(results, "deterministic_output", "All JSON output is deterministic", 1)
 
