@@ -17,12 +17,6 @@ regions = [
     "opencv-python-headless>=4.8.0,<5.0.0",
     "numpy>=1.24.0,<2.0.0",
 ]
-
-[project.optional-dependencies]
-regions = [
-    "opencv-python-headless>=4.8.0,<5.0.0",
-    "numpy>=1.24.0,<2.0.0",
-]
 dev = [
     "pytest>=8.0.0",
     "hypothesis>=6.0.0",

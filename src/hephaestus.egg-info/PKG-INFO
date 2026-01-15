@@ -8,6 +8,10 @@ Description-Content-Type: text/markdown
 Requires-Dist: pymupdf>=1.24.0
 Requires-Dist: Pillow>=10.0.0
 Requires-Dist: typer[all]>=0.12.0
+Requires-Dist: imagehash>=4.3.1
+Provides-Extra: regions
+Requires-Dist: opencv-python-headless<5.0.0,>=4.8.0; extra == "regions"
+Requires-Dist: numpy<2.0.0,>=1.24.0; extra == "regions"
 Provides-Extra: dev
 Requires-Dist: pytest>=8.0.0; extra == "dev"
 Requires-Dist: hypothesis>=6.0.0; extra == "dev"
@@ -19,13 +23,20 @@ Requires-Dist: mypy>=1.10.0; extra == "dev"
 
 HEPHAESTUS is a modular system that extracts board-game components from rulebook PDFs. It processes PDF documents to identify, extract, and organize component images with structured metadata output.
 
-## Features (Phase 1)
+## Features
 
+### Phase 1 (Complete)
 - **PDF Ingestion**: Robust PDF parsing with error handling for corrupted and encrypted files
 - **Image Extraction**: Extract embedded raster images from PDF pages
 - **Smart Filtering**: Configurable size-based filtering to exclude decorative elements
 - **Stable Output**: Deterministic naming and PNG export with structured organization
 - **CLI Interface**: Simple command-line tool with comprehensive options
+
+### Phase 2 (Current)
+- **Hybrid Classification**: Intelligent component vs non-component classification
+- **Heuristic Analysis**: Deterministic rules based on dimensions, aspect ratio, and color
+- **Vision Integration**: Extensible architecture for AI-powered classification (stubbed)
+- **Classification Reporting**: Detailed breakdown of component types in CLI output
 
 ## Installation
 
@@ -40,6 +51,16 @@ HEPHAESTUS is a modular system that extracts board-game components from rulebook
 git clone https://github.com/your-org/HEPHAESTUS.git
 cd HEPHAESTUS
 pip install -e ".[dev]"
+```
+
+### Quick test
+
+```bash
+# Test the CLI
+python -m hephaestus.cli --help
+
+# Run tests
+pytest tests/ -v
 ```
 
 ## Usage
@@ -94,16 +115,16 @@ HEPHAESTUS follows a modular pipeline architecture:
 
 1. **PDF Ingestion** (`pdf/ingestion.py`) - Document parsing and validation
 2. **Image Extraction** (`pdf/images.py`) - Embedded image extraction and filtering
-3. **File Output** - PNG conversion and structured file organization
-4. **CLI Interface** (`cli.py`) - Command-line user interface
+3. **Classification** (`classifier/`) - Hybrid heuristic + AI component classification
+4. **File Output** - PNG conversion and structured file organization
+5. **CLI Interface** (`cli.py`) - Command-line user interface
 
 ## Future Phases
 
-- **AI Classification**: Distinguish component images from decorative content
-- **Spatial Text Analysis**: Associate text labels with nearby images
-- **Deduplication**: Remove visually similar duplicate images
-- **Structured Manifest**: JSON output with complete component metadata
-- **Web Interface**: Visual review and editing interface
+- **Phase 3**: Spatial Text Analysis - Associate text labels with nearby images
+- **Phase 4**: Deduplication Engine - Remove visually similar duplicate images  
+- **Phase 5**: Structured Manifest - JSON output with complete component metadata
+- **Phase 6**: Web Interface - Visual review and editing interface
 
 ## License
 

@@ -63,6 +63,11 @@ components/
 /analytics/
 /qa/
 /eval/
+test_legacy_check/
+HEPHAESTUS_OUTPUT_*/
+
+# Test PDFs (keep fixtures, ignore acceptance test PDFs)
+acceptance_test/*.pdf
 
 # Logs
 *.log
