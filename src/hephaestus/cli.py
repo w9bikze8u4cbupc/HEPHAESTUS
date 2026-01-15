@@ -74,7 +74,7 @@ def safe_echo(message: str) -> None:
 @app.command()
 def extract(
     pdf_path: Path = typer.Argument(..., exists=True, readable=True, help="Path to the PDF file to process"),
-    out: Path = typer.Option(Path("output"), "--out", "-o", help="Output directory for extracted images"),
+    out: Path = typer.Option(Path("output"), "--out", "-o", "--output", help="Output directory for extracted images"),
     min_width: int = typer.Option(50, help="Minimum image width in pixels"),
     min_height: int = typer.Option(50, help="Minimum image height in pixels"),
     text_expand: float = typer.Option(24.0, help="Text proximity expansion distance in points"),
