@@ -79,11 +79,14 @@ class MobiusExtractionResult:
     # Total pages processed
     pages_processed: int
     
-    # Total regions detected
+    # Total regions detected (before filtering)
     regions_detected: int
     
     # Regions filtered out
     regions_filtered: int
+    
+    # Filtered regions with details (for manifest)
+    filtered_regions_detail: List[Tuple[int, Tuple[float, float, float, float], str]]  # (page_idx, bbox, reason)
     
     # Configuration used
     config: RegionDetectionConfig
@@ -105,7 +108,7 @@ def extract_mobius_components(
         dpi: DPI for page rendering (default 150)
     
     Returns:
-        MobiusExtractionResult with all extracted components
+        MobiusExtractionResult with all extracted components and filtered regions
     """
     if config is None:
         config = RegionDetectionConfig()
@@ -122,6 +125,7 @@ def extract_mobius_components(
     components = []
     total_regions = 0
     total_filtered = 0
+    filtered_regions_detail = []
     
     for page_idx in range(doc.page_count):
         logger.debug(f"Processing page {page_idx + 1}/{doc.page_count}")
@@ -132,23 +136,32 @@ def extract_mobius_components(
         # Render page to image
         page_image = render_page_to_image(page, dpi=dpi)
         
-        # Detect regions
-        regions = detect_regions(page_image, config)
-        total_regions += len(regions)
+        # Detect regions (returns RegionDetectionResult with accepted + filtered)
+        result = detect_regions(page_image, config)
+        regions = result.accepted_regions
+        filtered = result.filtered_regions
         
-        logger.debug(f"Page {page_idx}: detected {len(regions)} regions")
+        total_regions += len(regions) + len(filtered)
+        total_filtered += len(filtered)
         
-        # Extract each region as a component
+        logger.debug(f"Page {page_idx}: detected {len(regions)} regions, filtered {len(filtered)}")
+        
+        # Record filtered regions for manifest
+        page_width = page.rect.width
+        page_height = page.rect.height
+        img_height, img_width = page_image.shape[:2]
+        
+        for filtered_region in filtered:
+            pdf_bbox = filtered_region.to_pdf_coords(page_width, page_height, img_width, img_height)
+            filtered_regions_detail.append((page_idx, pdf_bbox, filtered_region.rejection_reason))
+        
+        # Extract each accepted region as a component
         for crop_idx, region in enumerate(regions):
             # Extract crop from page image
             x, y, w, h = region.bbox
             crop_image = page_image[y:y+h, x:x+w].copy()
             
             # Get PDF coordinates
-            page_width = page.rect.width
-            page_height = page.rect.height
-            img_height, img_width = page_image.shape[:2]
-            
             pdf_bbox = region.to_pdf_coords(page_width, page_height, img_width, img_height)
             
             # Generate component ID
@@ -186,13 +199,14 @@ def extract_mobius_components(
             
             components.append(component)
     
-    logger.info(f"MOBIUS extraction complete: {len(components)} components from {total_regions} regions")
+    logger.info(f"MOBIUS extraction complete: {len(components)} components from {total_regions} regions ({total_filtered} filtered)")
     
     return MobiusExtractionResult(
         components=components,
         pages_processed=doc.page_count,
         regions_detected=total_regions,
         regions_filtered=total_filtered,
+        filtered_regions_detail=filtered_regions_detail,
         config=config
     )
 

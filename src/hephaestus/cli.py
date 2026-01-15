@@ -164,6 +164,7 @@ def extract(
                 safe_echo(f"📄 Pages: {result.pages_processed}")
                 safe_echo(f"🖼️  Components extracted: {len(result.components)}")
                 safe_echo(f"🔍 Regions detected: {result.regions_detected}")
+                safe_echo(f"🚫 Regions filtered: {result.regions_filtered}")
                 if vocabulary:
                     safe_echo(f"🎯 Component matches: {matched_count}/{len(result.components)}")
                 safe_echo(f"📁 Output directory: {mobius_ready_dir}")

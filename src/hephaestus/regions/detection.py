@@ -95,10 +95,51 @@ class DetectedRegion:
         return (x0, y0, x1, y1)
 
 
+@dataclass
+class FilteredRegion:
+    """A region that was filtered out (not exported)."""
+    
+    # Bounding box in image coordinates (x, y, w, h)
+    bbox: Tuple[int, int, int, int]
+    
+    # Area in pixels
+    area: int
+    
+    # Rejection reason (canonical enum string)
+    rejection_reason: str
+    
+    def to_pdf_coords(self, page_width: float, page_height: float, img_width: int, img_height: int) -> Tuple[float, float, float, float]:
+        """Convert image coordinates to PDF coordinates."""
+        x, y, w, h = self.bbox
+        
+        # Scale factors
+        scale_x = page_width / img_width
+        scale_y = page_height / img_height
+        
+        # Convert to PDF coordinates (x0, y0, x1, y1)
+        x0 = x * scale_x
+        y0 = y * scale_y
+        x1 = (x + w) * scale_x
+        y1 = (y + h) * scale_y
+        
+        return (x0, y0, x1, y1)
+
+
+@dataclass
+class RegionDetectionResult:
+    """Result of region detection including filtered regions."""
+    
+    # Regions that passed all filters (will be exported)
+    accepted_regions: List[DetectedRegion]
+    
+    # Regions that were filtered out (will not be exported)
+    filtered_regions: List[FilteredRegion]
+
+
 def detect_regions(
     image: np.ndarray,
     config: Optional[RegionDetectionConfig] = None
-) -> List[DetectedRegion]:
+) -> RegionDetectionResult:
     """
     Detect component regions in a rendered page image.
     
@@ -110,7 +151,7 @@ def detect_regions(
         config: Detection configuration (uses defaults if None)
     
     Returns:
-        List of detected regions, sorted by position (top-to-bottom, left-to-right)
+        RegionDetectionResult with accepted and filtered regions
     """
     if config is None:
         config = RegionDetectionConfig()
@@ -155,34 +196,45 @@ def detect_regions(
     
     # Extract bounding boxes and filter
     regions = []
+    filtered_regions = []
+    
     for contour in all_contours:
         # Get bounding rectangle
         x, y, w, h = cv2.boundingRect(contour)
         area = w * h
+        bbox = (x, y, w, h)
         
         # Filter 1: Area thresholds
         if area < min_area_absolute:
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="too_small"))
             continue
         if area > max_area:
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="oversize_region"))
             continue
         
         # Filter 2: Border exclusion (headers/footers/margins)
         if y < top_margin:  # Touches top margin
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_top"))
             continue
         if y + h > page_height - bottom_margin:  # Touches bottom margin
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_bottom"))
             continue
         if x < left_margin:  # Touches left margin
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_left"))
             continue
         if x + w > page_width - right_margin:  # Touches right margin
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_right"))
             continue
         
         # Filter 3: Aspect ratio constraint (reject extreme banners)
         aspect_ratio = max(w / h, h / w) if h > 0 else float('inf')
         if aspect_ratio > config.max_aspect_ratio:
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="aspect_ratio"))
             continue
         
-        # Filter 4: Text-likeness heuristic (enhanced multi-gate check)
+        # Filter 4: Text-likeness heuristic (BLOCKING - hard rejection)
         if _is_text_panel(gray[y:y+h, x:x+w], edges_pass1[y:y+h, x:x+w], config):
+            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="text_panel"))
             continue
         
         # Calculate confidence based on contour properties
@@ -203,7 +255,7 @@ def detect_regions(
             is_merged=False
         ))
     
-    logger.debug(f"Filtered to {len(regions)} candidate regions")
+    logger.debug(f"Filtered to {len(regions)} candidate regions, rejected {len(filtered_regions)}")
     
     # Merge overlapping regions (handles duplicates from multi-pass)
     regions = _merge_overlapping_regions(regions, config.merge_threshold)
@@ -213,7 +265,10 @@ def detect_regions(
     # Sort by position (top-to-bottom, left-to-right)
     regions = _sort_regions_by_position(regions)
     
-    return regions
+    return RegionDetectionResult(
+        accepted_regions=regions,
+        filtered_regions=filtered_regions
+    )
 
 
 def _is_text_like_region(gray_region: np.ndarray, edges_region: np.ndarray, threshold: float) -> bool:

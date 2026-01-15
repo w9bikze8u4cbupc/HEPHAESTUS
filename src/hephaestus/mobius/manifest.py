@@ -50,6 +50,15 @@ class MobiusManifestItem:
 
 
 @dataclass
+class FilteredRegionRecord:
+    """Record of a filtered (rejected) region."""
+    
+    page_index: int
+    bbox: Tuple[float, float, float, float]  # PDF coordinates
+    rejection_reason: str
+
+
+@dataclass
 class MobiusManifest:
     """Complete MOBIUS manifest."""
     
@@ -68,6 +77,12 @@ class MobiusManifest:
     regions_detected: int = 0
     regions_filtered: int = 0
     
+    # Filtered regions summary (counts by reason)
+    filtered_summary: Dict[str, int] = None
+    
+    # Filtered regions detail (for audit)
+    filtered_regions: List[FilteredRegionRecord] = None
+    
     # Configuration
     detection_config: Dict = None
     
@@ -79,6 +94,10 @@ class MobiusManifest:
             self.items = []
         if self.detection_config is None:
             self.detection_config = {}
+        if self.filtered_summary is None:
+            self.filtered_summary = {}
+        if self.filtered_regions is None:
+            self.filtered_regions = []
 
 
 def build_mobius_manifest(
@@ -125,6 +144,19 @@ def build_mobius_manifest(
         )
         items.append(item)
     
+    # Build filtered regions records
+    filtered_regions = []
+    filtered_summary = {}
+    
+    for page_idx, bbox, reason in result.filtered_regions_detail:
+        filtered_regions.append(FilteredRegionRecord(
+            page_index=page_idx,
+            bbox=bbox,
+            rejection_reason=reason
+        ))
+        # Count by reason
+        filtered_summary[reason] = filtered_summary.get(reason, 0) + 1
+    
     # Build config dict
     config_dict = {
         "min_area": result.config.min_area,
@@ -149,11 +181,13 @@ def build_mobius_manifest(
         components_extracted=len(result.components),
         regions_detected=result.regions_detected,
         regions_filtered=result.regions_filtered,
+        filtered_summary=filtered_summary,
+        filtered_regions=filtered_regions,
         detection_config=config_dict,
         items=items
     )
     
-    logger.info(f"Built manifest with {len(items)} components")
+    logger.info(f"Built manifest with {len(items)} components, {len(filtered_regions)} filtered regions")
     
     return manifest
 
