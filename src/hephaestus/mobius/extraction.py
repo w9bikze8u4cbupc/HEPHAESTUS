@@ -12,6 +12,8 @@ import hashlib
 from ..pdf.ingestion import PdfDocument
 from ..regions.detection import detect_regions, RegionDetectionConfig, DetectedRegion
 from ..regions.rendering import render_page_to_image
+from ..text.spatial import extract_spatial_text
+from ..text.index import SpatialTextIndex
 from ..logging import get_logger
 
 logger = get_logger(__name__)
@@ -90,7 +92,7 @@ class MobiusExtractionResult:
 def extract_mobius_components(
     doc: PdfDocument,
     config: Optional[RegionDetectionConfig] = None,
-    component_vocabulary: Optional[Dict[str, List[str]]] = None,
+    component_vocabulary: Optional["ComponentVocabulary"] = None,
     dpi: int = 150
 ) -> MobiusExtractionResult:
     """
@@ -99,7 +101,7 @@ def extract_mobius_components(
     Args:
         doc: PDF document to process
         config: Region detection configuration (uses defaults if None)
-        component_vocabulary: Optional component names + aliases for matching
+        component_vocabulary: Optional component vocabulary for matching
         dpi: DPI for page rendering (default 150)
     
     Returns:
@@ -109,6 +111,13 @@ def extract_mobius_components(
         config = RegionDetectionConfig()
     
     logger.info(f"Starting MOBIUS extraction: {doc.page_count} pages at {dpi} DPI")
+    
+    # Extract spatial text for component matching
+    text_index = None
+    if component_vocabulary:
+        logger.info("Extracting spatial text for component matching...")
+        text_spans = extract_spatial_text(doc)
+        text_index = SpatialTextIndex(text_spans)
     
     components = []
     total_regions = 0
@@ -163,10 +172,17 @@ def extract_mobius_components(
             # Compute content hash
             component.compute_content_hash()
             
-            # TODO: Match against component vocabulary if provided
-            if component_vocabulary:
-                # Placeholder for component matching logic
-                pass
+            # Match against component vocabulary if provided
+            if component_vocabulary and text_index:
+                from .matching import match_component_to_vocabulary
+                matched_name, match_score = match_component_to_vocabulary(
+                    pdf_bbox, page_idx, text_index, component_vocabulary
+                )
+                component.component_match = matched_name
+                component.match_score = match_score
+                
+                if matched_name:
+                    logger.debug(f"Component {component_id} matched to '{matched_name}' (score: {match_score:.2f})")
             
             components.append(component)
     

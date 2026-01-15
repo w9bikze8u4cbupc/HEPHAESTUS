@@ -52,6 +52,14 @@ class RegionDetectionConfig:
     
     # Text-likeness threshold (edge density for text detection)
     text_edge_density_threshold: float = 0.15
+    
+    # Text panel detection: connected components threshold
+    # Text blocks have many small connected components (letters)
+    text_cc_density_threshold: float = 0.02  # CCs per 100 pixels
+    
+    # Text panel detection: horizontal line alignment
+    # Text panels have strong horizontal structure
+    text_horizontal_ratio_threshold: float = 1.5  # horizontal edges / vertical edges
 
 
 @dataclass
@@ -94,8 +102,8 @@ def detect_regions(
     """
     Detect component regions in a rendered page image.
     
-    Uses edge detection and contour finding to identify rectangular regions
-    that likely contain game components.
+    Uses multi-pass edge detection and contour finding to identify rectangular regions
+    that likely contain game components. Two passes optimize for different component sizes.
     
     Args:
         image: RGB or grayscale numpy array
@@ -127,21 +135,27 @@ def detect_regions(
     left_margin = int(page_width * config.left_margin_ratio)
     right_margin = int(page_width * config.right_margin_ratio)
     
-    # Edge detection
-    edges = cv2.Canny(gray, config.canny_low, config.canny_high)
+    # Pass 1: Standard detection (larger components)
+    edges_pass1 = cv2.Canny(gray, config.canny_low, config.canny_high)
+    kernel_pass1 = np.ones((config.dilate_kernel_size, config.dilate_kernel_size), np.uint8)
+    dilated_pass1 = cv2.dilate(edges_pass1, kernel_pass1, iterations=config.dilate_iterations)
+    contours_pass1, _ = cv2.findContours(dilated_pass1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
-    # Morphological operations to connect nearby edges
-    kernel = np.ones((config.dilate_kernel_size, config.dilate_kernel_size), np.uint8)
-    dilated = cv2.dilate(edges, kernel, iterations=config.dilate_iterations)
+    # Pass 2: Fine-grained detection (smaller components like tokens/icons)
+    # Use lower Canny thresholds and less dilation
+    edges_pass2 = cv2.Canny(gray, config.canny_low // 2, config.canny_high // 2)
+    kernel_pass2 = np.ones((3, 3), np.uint8)
+    dilated_pass2 = cv2.dilate(edges_pass2, kernel_pass2, iterations=1)
+    contours_pass2, _ = cv2.findContours(dilated_pass2, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
-    # Find contours
-    contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Combine contours from both passes
+    all_contours = list(contours_pass1) + list(contours_pass2)
     
-    logger.debug(f"Found {len(contours)} raw contours")
+    logger.debug(f"Found {len(contours_pass1)} contours (pass 1) + {len(contours_pass2)} contours (pass 2) = {len(all_contours)} total")
     
     # Extract bounding boxes and filter
     regions = []
-    for contour in contours:
+    for contour in all_contours:
         # Get bounding rectangle
         x, y, w, h = cv2.boundingRect(contour)
         area = w * h
@@ -167,8 +181,8 @@ def detect_regions(
         if aspect_ratio > config.max_aspect_ratio:
             continue
         
-        # Filter 4: Text-likeness heuristic (cheap edge density check)
-        if _is_text_like_region(gray[y:y+h, x:x+w], edges[y:y+h, x:x+w], config.text_edge_density_threshold):
+        # Filter 4: Text-likeness heuristic (enhanced multi-gate check)
+        if _is_text_panel(gray[y:y+h, x:x+w], edges_pass1[y:y+h, x:x+w], config):
             continue
         
         # Calculate confidence based on contour properties
@@ -191,7 +205,7 @@ def detect_regions(
     
     logger.debug(f"Filtered to {len(regions)} candidate regions")
     
-    # Merge overlapping regions
+    # Merge overlapping regions (handles duplicates from multi-pass)
     regions = _merge_overlapping_regions(regions, config.merge_threshold)
     
     logger.debug(f"After merging: {len(regions)} final regions")
@@ -219,6 +233,59 @@ def _is_text_like_region(gray_region: np.ndarray, edges_region: np.ndarray, thre
     
     # Text regions typically have edge density > threshold
     return edge_density > threshold
+
+
+def _is_text_panel(gray_region: np.ndarray, edges_region: np.ndarray, config: RegionDetectionConfig) -> bool:
+    """
+    Enhanced text panel detection using multiple heuristics.
+    
+    Text panels (like "Components list") have distinctive characteristics:
+    1. High edge density (many thin strokes)
+    2. Many small connected components (individual letters)
+    3. Strong horizontal structure (lines of text)
+    
+    Args:
+        gray_region: Grayscale crop of the region
+        edges_region: Edge-detected crop of the region
+        config: Detection configuration with thresholds
+    
+    Returns:
+        True if region is likely a text panel
+    """
+    if gray_region.size == 0 or edges_region.size == 0:
+        return False
+    
+    h, w = gray_region.shape
+    area = h * w
+    
+    # Gate 1: Edge density (original heuristic)
+    edge_pixels = np.count_nonzero(edges_region)
+    edge_density = edge_pixels / area if area > 0 else 0.0
+    
+    if edge_density > config.text_edge_density_threshold:
+        # Likely text-heavy, apply additional gates
+        
+        # Gate 2: Connected components density
+        # Text has many small disconnected components (letters)
+        num_labels, labels = cv2.connectedComponents(edges_region)
+        cc_density = (num_labels - 1) / (area / 100.0) if area > 0 else 0.0  # CCs per 100 pixels
+        
+        if cc_density > config.text_cc_density_threshold:
+            # Gate 3: Horizontal structure (lines of text)
+            # Compute horizontal vs vertical edge strength
+            sobel_x = cv2.Sobel(gray_region, cv2.CV_64F, 1, 0, ksize=3)
+            sobel_y = cv2.Sobel(gray_region, cv2.CV_64F, 0, 1, ksize=3)
+            
+            horizontal_strength = np.sum(np.abs(sobel_y))  # Horizontal edges (text lines)
+            vertical_strength = np.sum(np.abs(sobel_x))    # Vertical edges
+            
+            if vertical_strength > 0:
+                horizontal_ratio = horizontal_strength / vertical_strength
+                if horizontal_ratio > config.text_horizontal_ratio_threshold:
+                    # All three gates passed: this is a text panel
+                    return True
+    
+    return False
 
 
 def _calculate_iou(bbox1: Tuple[int, int, int, int], bbox2: Tuple[int, int, int, int]) -> float:

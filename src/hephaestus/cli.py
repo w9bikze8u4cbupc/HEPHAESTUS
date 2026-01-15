@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 import sys
 import os
 
@@ -76,6 +77,7 @@ def extract(
     pdf_path: Path = typer.Argument(..., exists=True, readable=True, help="Path to the PDF file to process"),
     out: Path = typer.Option(Path("output"), "--out", "-o", "--output", help="Output directory for extracted images"),
     mode: str = typer.Option("legacy", "--mode", help="Extraction mode: 'legacy' (embedded images) or 'mobius' (region crops)"),
+    components: Optional[Path] = typer.Option(None, "--components", help="Component vocabulary JSON for MOBIUS matching"),
     min_width: int = typer.Option(50, help="Minimum image width in pixels"),
     min_height: int = typer.Option(50, help="Minimum image height in pixels"),
     text_expand: float = typer.Option(24.0, help="Text proximity expansion distance in points"),
@@ -108,9 +110,21 @@ def extract(
         try:
             from .mobius.extraction import extract_mobius_components, save_mobius_components
             from .mobius.manifest import build_mobius_manifest, write_mobius_manifest
+            from .mobius.matching import ComponentVocabulary
         except ImportError as e:
             logger.error("MOBIUS mode requires regions extra: pip install -e .[regions]")
             raise typer.Exit(code=1) from e
+        
+        # Load component vocabulary if provided
+        vocabulary = None
+        if components:
+            logger.info(f"Loading component vocabulary from {components}")
+            try:
+                vocabulary = ComponentVocabulary.from_json(components)
+                logger.info(f"Loaded vocabulary for '{vocabulary.game}' with {len(vocabulary.components)} components")
+            except Exception as e:
+                logger.error(f"Failed to load component vocabulary: {e}")
+                raise typer.Exit(code=1) from e
         
         try:
             logger.info(f"Opening PDF: {pdf_path}")
@@ -118,7 +132,7 @@ def extract(
                 logger.info(f"Successfully opened PDF with {doc.page_count} pages")
                 
                 # Extract components using region detection
-                result = extract_mobius_components(doc)
+                result = extract_mobius_components(doc, component_vocabulary=vocabulary)
                 
                 if not result.components:
                     logger.warning("No component regions detected")
@@ -127,15 +141,22 @@ def extract(
                 
                 logger.info(f"Detected {len(result.components)} component regions")
                 
+                # Create MOBIUS_READY output structure
+                mobius_ready_dir = out / "MOBIUS_READY"
+                mobius_ready_dir.mkdir(parents=True, exist_ok=True)
+                
                 # Save components
                 rulebook_id = pdf_path.stem
-                path_mapping = save_mobius_components(result.components, out, rulebook_id)
+                path_mapping = save_mobius_components(result.components, mobius_ready_dir, rulebook_id)
                 
                 # Generate manifest
                 if write_manifest:
                     manifest = build_mobius_manifest(pdf_path, result, path_mapping)
-                    manifest_path = write_mobius_manifest(manifest, out)
+                    manifest_path = write_mobius_manifest(manifest, mobius_ready_dir)
                     logger.info(f"Wrote MOBIUS manifest to {manifest_path}")
+                
+                # Count matched components
+                matched_count = sum(1 for c in result.components if c.component_match is not None)
                 
                 # Display summary
                 safe_echo(f"\n✅ MOBIUS extraction complete!")
@@ -143,7 +164,9 @@ def extract(
                 safe_echo(f"📄 Pages: {result.pages_processed}")
                 safe_echo(f"🖼️  Components extracted: {len(result.components)}")
                 safe_echo(f"🔍 Regions detected: {result.regions_detected}")
-                safe_echo(f"📁 Output directory: {out}")
+                if vocabulary:
+                    safe_echo(f"🎯 Component matches: {matched_count}/{len(result.components)}")
+                safe_echo(f"📁 Output directory: {mobius_ready_dir}")
                 if write_manifest:
                     safe_echo(f"📋 Manifest: manifest.json")
                 
