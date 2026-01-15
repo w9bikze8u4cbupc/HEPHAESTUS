@@ -75,6 +75,7 @@ def safe_echo(message: str) -> None:
 def extract(
     pdf_path: Path = typer.Argument(..., exists=True, readable=True, help="Path to the PDF file to process"),
     out: Path = typer.Option(Path("output"), "--out", "-o", "--output", help="Output directory for extracted images"),
+    mode: str = typer.Option("legacy", "--mode", help="Extraction mode: 'legacy' (embedded images) or 'mobius' (region crops)"),
     min_width: int = typer.Option(50, help="Minimum image width in pixels"),
     min_height: int = typer.Option(50, help="Minimum image height in pixels"),
     text_expand: float = typer.Option(24.0, help="Text proximity expansion distance in points"),
@@ -86,12 +87,77 @@ def extract(
     include_non_components: bool = typer.Option(False, help="Include non-components in structured folders"),
 ) -> None:
     """
-    Extract embedded images from a PDF and save them as PNG files.
+    Extract components from a PDF and save them as PNG files.
     
-    This command processes the specified PDF file, extracts all embedded raster images,
-    applies size-based filtering, and saves the results to the output directory.
+    Supports two modes:
+    - legacy: Extract embedded images (Phase 8 behavior)
+    - mobius: Extract component regions via page rendering (Phase 9)
     """
     logger = get_logger(__name__)
+    
+    # Validate mode
+    if mode not in ["legacy", "mobius"]:
+        logger.error(f"Invalid mode: {mode}. Must be 'legacy' or 'mobius'")
+        raise typer.Exit(code=1)
+    
+    # MOBIUS mode: region-based extraction
+    if mode == "mobius":
+        logger.info(f"MOBIUS mode: region-based component extraction")
+        
+        # Check for regions dependency
+        try:
+            from .mobius.extraction import extract_mobius_components, save_mobius_components
+            from .mobius.manifest import build_mobius_manifest, write_mobius_manifest
+        except ImportError as e:
+            logger.error("MOBIUS mode requires regions extra: pip install -e .[regions]")
+            raise typer.Exit(code=1) from e
+        
+        try:
+            logger.info(f"Opening PDF: {pdf_path}")
+            with PdfDocument(pdf_path) as doc:
+                logger.info(f"Successfully opened PDF with {doc.page_count} pages")
+                
+                # Extract components using region detection
+                result = extract_mobius_components(doc)
+                
+                if not result.components:
+                    logger.warning("No component regions detected")
+                    logger.info("Try adjusting region detection parameters")
+                    return
+                
+                logger.info(f"Detected {len(result.components)} component regions")
+                
+                # Save components
+                rulebook_id = pdf_path.stem
+                path_mapping = save_mobius_components(result.components, out, rulebook_id)
+                
+                # Generate manifest
+                if write_manifest:
+                    manifest = build_mobius_manifest(pdf_path, result, path_mapping)
+                    manifest_path = write_mobius_manifest(manifest, out)
+                    logger.info(f"Wrote MOBIUS manifest to {manifest_path}")
+                
+                # Display summary
+                safe_echo(f"\n✅ MOBIUS extraction complete!")
+                safe_echo(f"📄 Processed: {pdf_path}")
+                safe_echo(f"📄 Pages: {result.pages_processed}")
+                safe_echo(f"🖼️  Components extracted: {len(result.components)}")
+                safe_echo(f"🔍 Regions detected: {result.regions_detected}")
+                safe_echo(f"📁 Output directory: {out}")
+                if write_manifest:
+                    safe_echo(f"📋 Manifest: manifest.json")
+                
+                return
+                
+        except EncryptedPdfError as exc:
+            logger.error(f"Cannot process encrypted PDF: {exc}")
+            raise typer.Exit(code=2) from exc
+        except PdfOpenError as exc:
+            logger.error(f"Failed to open PDF: {exc}")
+            raise typer.Exit(code=1) from exc
+    
+    # Legacy mode: embedded image extraction (Phase 8)
+    logger.info(f"Legacy mode: embedded image extraction")
 
     try:
         logger.info(f"Opening PDF: {pdf_path}")
