@@ -61,6 +61,12 @@ class MobiusManifestItem:
     edge_density: float = 0.0
     rank_within_page: int = 0
     
+    # G6 metrics
+    bbox_width_in: float = 0.0
+    bbox_height_in: float = 0.0
+    uniformity_ratio: float = 0.0
+    render_dpi_used: int = 0
+    
     # Content hash for deduplication
     content_hash: str
     
@@ -152,7 +158,11 @@ def build_mobius_manifest(
             component_likeness_score=component.component_likeness_score,
             stddev_luma=component.stddev_luma,
             edge_density=component.edge_density,
-            rank_within_page=component.rank_within_page
+            rank_within_page=component.rank_within_page,
+            bbox_width_in=component.bbox_width_in,
+            bbox_height_in=component.bbox_height_in,
+            uniformity_ratio=component.uniformity_ratio,
+            render_dpi_used=component.render_dpi_used
         )
         items.append(item)
     

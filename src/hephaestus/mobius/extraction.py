@@ -65,6 +65,12 @@ class MobiusComponent:
     rank_within_page: int = 0
     rejection_reason: Optional[str] = None
     
+    # G6 metrics
+    bbox_width_in: float = 0.0  # Physical width in inches
+    bbox_height_in: float = 0.0  # Physical height in inches
+    uniformity_ratio: float = 0.0  # Near-uniform metric
+    render_dpi_used: int = 0  # Actual DPI used for clip render
+    
     # Rejection reason (G3.2, if rejected)
     rejection_reason: Optional[str] = None
     
@@ -189,8 +195,14 @@ def extract_mobius_components(
                 role_distribution[figure.image_role] = role_distribution.get(figure.image_role, 0) + 1
                 continue
             
-            # G5.4: Prefer embedded images when they are higher fidelity
-            best_image_data = figure.image_data
+            # G6.2: Mandatory clip re-render for every accepted component
+            from .figures import render_bbox_clip_high_fidelity
+            
+            clip_image, clip_dpi = render_bbox_clip_high_fidelity(page, figure.bbox_pdf, target_dpi=600)
+            figure.render_dpi_used = clip_dpi
+            
+            # G6.5: Prefer embedded images when they are truly higher fidelity
+            best_image_data = clip_image
             best_source_type = "rendered_page"
             best_source_id = f"p{page_index}_f{figure.figure_index}"
             
@@ -200,13 +212,20 @@ def extract_mobius_components(
                 iou = _compute_bbox_iou_pdf(figure.bbox_pdf, emb_img.bbox)
                 
                 if iou >= 0.6:
-                    # Check if embedded has higher effective resolution
-                    rendered_px_area = figure.bbox_pixels[2] * figure.bbox_pixels[3]
-                    embedded_px_area = emb_img.width * emb_img.height
+                    # G6.5: Compute effective DPI for embedded vs clip-render
+                    # Embedded effective DPI = embedded_px / bbox_in
+                    emb_bbox_width_pt = emb_img.bbox.x1 - emb_img.bbox.x0
+                    emb_bbox_height_pt = emb_img.bbox.y1 - emb_img.bbox.y0
+                    emb_bbox_width_in = emb_bbox_width_pt / 72.0
+                    emb_bbox_height_in = emb_bbox_height_pt / 72.0
                     
-                    if embedded_px_area > rendered_px_area * 1.2:
+                    embedded_dpi_w = emb_img.width / emb_bbox_width_in if emb_bbox_width_in > 0 else 0
+                    embedded_dpi_h = emb_img.height / emb_bbox_height_in if emb_bbox_height_in > 0 else 0
+                    embedded_effective_dpi = min(embedded_dpi_w, embedded_dpi_h)
+                    
+                    # Prefer embedded only if meaningfully higher fidelity
+                    if embedded_effective_dpi >= clip_dpi * 1.15:
                         # Use embedded image instead
-                        # Convert pixmap to numpy array
                         import fitz
                         if emb_img.pixmap.n < 4:  # RGB or grayscale
                             best_image_data = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
@@ -220,7 +239,7 @@ def extract_mobius_components(
                         
                         best_source_type = "embedded_preferred"
                         best_source_id = emb_img.id
-                        logger.debug(f"Using embedded image {emb_img.id} instead of rendered (IoU={iou:.2f}, embedded_px={embedded_px_area} > rendered_px={rendered_px_area})")
+                        logger.debug(f"Using embedded image {emb_img.id} instead of clip-render (IoU={iou:.2f}, embedded_dpi={embedded_effective_dpi:.0f} > clip_dpi={clip_dpi}*1.15)")
                         break
             
             component = MobiusComponent(
@@ -233,12 +252,16 @@ def extract_mobius_components(
                 width=best_image_data.shape[1] if len(best_image_data.shape) >= 2 else figure.bbox_pixels[2],
                 height=best_image_data.shape[0] if len(best_image_data.shape) >= 1 else figure.bbox_pixels[3],
                 page_index=page_index,
+                bbox_width_in=figure.bbox_width_in,
+                bbox_height_in=figure.bbox_height_in,
                 width_ratio=figure.width_ratio,
                 height_ratio=figure.height_ratio,
                 text_overlap_ratio=figure.text_overlap_ratio,
                 component_likeness_score=figure.component_likeness_score,
                 stddev_luma=figure.stddev_luma,
                 edge_density=figure.edge_density,
+                uniformity_ratio=figure.uniformity_ratio,
+                render_dpi_used=figure.render_dpi_used,
                 rank_within_page=figure.rank_within_page
             )
             component.compute_content_hash()

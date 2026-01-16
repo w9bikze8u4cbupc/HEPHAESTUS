@@ -35,6 +35,11 @@ class RenderedFigure:
     # DPI used for rendering
     dpi: int
     
+    # G6.1: PDF-space (physical) measurements
+    bbox_width_in: float = 0.0  # Width in inches
+    bbox_height_in: float = 0.0  # Height in inches
+    bbox_area_in2: float = 0.0  # Area in square inches
+    
     # Page coverage ratios (for role classification)
     width_ratio: float = 0.0
     height_ratio: float = 0.0
@@ -46,6 +51,10 @@ class RenderedFigure:
     component_likeness_score: float = 0.0
     stddev_luma: float = 0.0
     edge_density: float = 0.0
+    uniformity_ratio: float = 0.0  # G6.3: Near-uniform metric
+    
+    # G6.2: Clip re-render metadata
+    render_dpi_used: int = 0  # Actual DPI used for clip render
     
     # Classification
     image_role: str = "component_atomic"
@@ -171,11 +180,32 @@ def extract_rendered_figures(
     for i, fig in enumerate(candidates):
         fig.figure_index = i
         
-        # G4.1: Compute page coverage ratios
+        # G6.1: Compute PDF-space (physical) measurements
+        bbox_width_pt = fig.bbox_pdf[2] - fig.bbox_pdf[0]
+        bbox_height_pt = fig.bbox_pdf[3] - fig.bbox_pdf[1]
+        fig.bbox_width_in = bbox_width_pt / 72.0  # 72 points = 1 inch
+        fig.bbox_height_in = bbox_height_pt / 72.0
+        fig.bbox_area_in2 = fig.bbox_width_in * fig.bbox_height_in
+        
+        # Compute page coverage ratios
         bbox_w = fig.bbox_pixels[2]
         bbox_h = fig.bbox_pixels[3]
         fig.width_ratio = bbox_w / img_width
         fig.height_ratio = bbox_h / img_height
+        
+        # G6.1: PDF-space size gates (replace pixel-based gates)
+        min_bbox_in = 0.35  # Minimum 0.35 inches for smallest meaningful components
+        min_bbox_area_in2 = 0.20 * 0.20  # Minimum 0.04 square inches
+        
+        if fig.bbox_width_in < min_bbox_in or fig.bbox_height_in < min_bbox_in:
+            fig.rejection_reason = f"too_small_physical_w{fig.bbox_width_in:.2f}in_h{fig.bbox_height_in:.2f}in_min{min_bbox_in}in"
+            figures.append(fig)
+            continue
+        
+        if fig.bbox_area_in2 < min_bbox_area_in2:
+            fig.rejection_reason = f"too_small_physical_area_{fig.bbox_area_in2:.3f}in2_min{min_bbox_area_in2}in2"
+            figures.append(fig)
+            continue
         
         # G4.1: Apply page-relative role classification
         if fig.width_ratio >= 0.80 and fig.height_ratio >= 0.80:
@@ -186,6 +216,19 @@ def extract_rendered_figures(
         elif fig.width_ratio >= 0.60 and fig.height_ratio >= 0.60:
             fig.image_role = "illustration"
             fig.rejection_reason = f"large_page_coverage_w{fig.width_ratio:.2f}_h{fig.height_ratio:.2f}"
+            figures.append(fig)
+            continue
+        
+        # G5.2: Page-relative "component band" gate (secondary to physical size)
+        # Reject micro-fragments
+        if fig.width_ratio < 0.03 and fig.height_ratio < 0.03:
+            fig.rejection_reason = f"micro_fragment_w{fig.width_ratio:.3f}_h{fig.height_ratio:.3f}"
+            figures.append(fig)
+            continue
+        
+        # Reject near-full-page
+        if fig.width_ratio > 0.85 and fig.height_ratio > 0.85:
+            fig.rejection_reason = f"near_full_page_w{fig.width_ratio:.2f}_h{fig.height_ratio:.2f}"
             figures.append(fig)
             continue
         
@@ -200,47 +243,12 @@ def extract_rendered_figures(
             figures.append(fig)
             continue
         
-        # G4.4: Compute quality metrics
-        fig.stddev_luma, fig.edge_density = _compute_quality_metrics(fig.image_data)
+        # G6.3: Compute quality metrics (including uniformity)
+        fig.stddev_luma, fig.edge_density, fig.uniformity_ratio = _compute_quality_metrics_g6(fig.image_data)
         
-        # G4.4: Reject low-information backgrounds
-        # Conservative thresholds calibrated from Terraforming Mars
-        T_std = 5.0  # Low texture threshold
-        T_edge = 0.01  # Low edge density threshold
-        
-        if fig.stddev_luma < T_std and fig.edge_density < T_edge:
-            fig.rejection_reason = f"low_information_std{fig.stddev_luma:.2f}_edge{fig.edge_density:.4f}"
-            figures.append(fig)
-            continue
-        
-        # G5.1: Hard minimum size gate (non-negotiable)
-        min_dim_px = 160  # Minimum dimension at DPI=400
-        min_area_px = 160 * 160  # Minimum area
-        
-        bbox_w = fig.bbox_pixels[2]
-        bbox_h = fig.bbox_pixels[3]
-        bbox_area = bbox_w * bbox_h
-        
-        if bbox_w < min_dim_px or bbox_h < min_dim_px:
-            fig.rejection_reason = f"too_small_dim_w{bbox_w}_h{bbox_h}_min{min_dim_px}"
-            figures.append(fig)
-            continue
-        
-        if bbox_area < min_area_px:
-            fig.rejection_reason = f"too_small_area_{bbox_area}_min{min_area_px}"
-            figures.append(fig)
-            continue
-        
-        # G5.2: Page-relative "component band" gate
-        # Reject tiny relative to page (micro-fragments)
-        if fig.width_ratio < 0.03 and fig.height_ratio < 0.03:
-            fig.rejection_reason = f"micro_fragment_w{fig.width_ratio:.3f}_h{fig.height_ratio:.3f}"
-            figures.append(fig)
-            continue
-        
-        # Reject near-full-page (already caught by G4.1 at 0.80, but add 0.85 for safety)
-        if fig.width_ratio > 0.85 and fig.height_ratio > 0.85:
-            fig.rejection_reason = f"near_full_page_w{fig.width_ratio:.2f}_h{fig.height_ratio:.2f}"
+        # G6.3: Strong background/texture rejection
+        if fig.edge_density < 0.015 and fig.stddev_luma < 10 and fig.uniformity_ratio > 0.80:
+            fig.rejection_reason = f"background_texture_edge{fig.edge_density:.4f}_std{fig.stddev_luma:.2f}_unif{fig.uniformity_ratio:.2f}"
             figures.append(fig)
             continue
         
@@ -375,20 +383,20 @@ def _compute_text_overlap_ratio(
     return overlap_ratio
 
 
-def _compute_quality_metrics(image_data: np.ndarray) -> Tuple[float, float]:
+def _compute_quality_metrics_g6(image_data: np.ndarray) -> Tuple[float, float, float]:
     """
-    Compute quality metrics for low-information rejection (G4.4).
+    Compute quality metrics for G6.3 background rejection.
     
     Args:
         image_data: RGB numpy array
     
     Returns:
-        (stddev_luma, edge_density)
+        (stddev_luma, edge_density, uniformity_ratio)
     """
     try:
         import cv2
     except ImportError:
-        return (0.0, 0.0)
+        return (0.0, 0.0, 0.0)
     
     # Convert to grayscale
     if len(image_data.shape) == 3:
@@ -405,7 +413,70 @@ def _compute_quality_metrics(image_data: np.ndarray) -> Tuple[float, float]:
     total_pixels = gray.shape[0] * gray.shape[1]
     edge_density = edge_pixels / total_pixels if total_pixels > 0 else 0.0
     
-    return (stddev_luma, edge_density)
+    # G6.3: Compute uniformity ratio (percentage of pixels near median)
+    median_luma = np.median(gray)
+    # Count pixels within tight band around median (±15 luma values)
+    near_median = np.abs(gray - median_luma) <= 15
+    uniformity_ratio = np.count_nonzero(near_median) / total_pixels if total_pixels > 0 else 0.0
+    
+    return (stddev_luma, edge_density, uniformity_ratio)
+
+
+def render_bbox_clip_high_fidelity(
+    page: "fitz.Page",
+    bbox_pdf: Tuple[float, float, float, float],
+    target_dpi: int = 600
+) -> Tuple[np.ndarray, int]:
+    """
+    G6.2: Render a specific bbox region at high DPI using clip rendering.
+    
+    Args:
+        page: PyMuPDF page object
+        bbox_pdf: Bounding box in PDF coordinates (x0, y0, x1, y1)
+        target_dpi: Target DPI for rendering (default 600, optionally 800 for very small)
+    
+    Returns:
+        (image_data as RGB numpy array, actual_dpi_used)
+    """
+    import fitz
+    
+    # Compute bbox physical size
+    bbox_width_pt = bbox_pdf[2] - bbox_pdf[0]
+    bbox_height_pt = bbox_pdf[3] - bbox_pdf[1]
+    bbox_width_in = bbox_width_pt / 72.0
+    bbox_height_in = bbox_height_pt / 72.0
+    
+    # For very small bboxes, use higher DPI
+    if bbox_width_in < 0.5 or bbox_height_in < 0.5:
+        target_dpi = 800
+    
+    # Compute zoom factor
+    zoom = target_dpi / 72.0
+    mat = fitz.Matrix(zoom, zoom)
+    
+    # Create clip rectangle
+    clip = fitz.Rect(bbox_pdf)
+    
+    # Render with clipping at target DPI
+    pix = page.get_pixmap(matrix=mat, clip=clip, colorspace=fitz.csRGB)
+    
+    # Convert to numpy array
+    img = np.frombuffer(pix.samples, dtype=np.uint8)
+    img = img.reshape(pix.height, pix.width, 3)
+    
+    # Verify quality floor: min dimension >= 400px
+    min_dim = min(pix.width, pix.height)
+    if min_dim < 400:
+        # Increase DPI to meet quality floor
+        required_zoom = 400 / min(bbox_width_pt, bbox_height_pt) * 72.0
+        target_dpi = int(required_zoom)
+        zoom = target_dpi / 72.0
+        mat = fitz.Matrix(zoom, zoom)
+        pix = page.get_pixmap(matrix=mat, clip=clip, colorspace=fitz.csRGB)
+        img = np.frombuffer(pix.samples, dtype=np.uint8)
+        img = img.reshape(pix.height, pix.width, 3)
+    
+    return (img, target_dpi)
 
 
 def _compute_component_likeness_score(fig: RenderedFigure) -> float:
