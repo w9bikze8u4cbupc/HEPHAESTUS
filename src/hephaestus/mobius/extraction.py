@@ -1,19 +1,17 @@
 """
 MOBIUS-mode component extraction.
 
-Extracts individual component regions from PDF pages using region detection.
+Extracts components using image-role classification and sheet segmentation.
 """
 
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Dict, Tuple
 import hashlib
+import numpy as np
 
 from ..pdf.ingestion import PdfDocument
-from ..regions.detection import detect_regions, RegionDetectionConfig, DetectedRegion
-from ..regions.rendering import render_page_to_image
-from ..text.spatial import extract_spatial_text
-from ..text.index import SpatialTextIndex
+from ..pdf.images import extract_embedded_images
 from ..logging import get_logger
 
 logger = get_logger(__name__)
@@ -26,31 +24,29 @@ class MobiusComponent:
     # Unique identifier
     component_id: str
     
-    # Source page
-    page_index: int
+    # Source information
+    source_type: str  # "embedded" or "vector_render"
+    source_image_id: str  # Original image ID from PDF
     
-    # Crop index on this page
-    crop_index: int
+    # Sheet information (if derived from sheet)
+    sheet_id: Optional[str] = None
+    component_bbox_in_sheet: Optional[Tuple[int, int, int, int]] = None
     
-    # Bounding box in PDF coordinates (x0, y0, x1, y1)
-    bbox: Tuple[float, float, float, float]
+    # Image role
+    image_role: str = "component_atomic"
+    
+    # Bounding box in PDF coordinates (x0, y0, x1, y1) - for source image
+    source_bbox: Optional[Tuple[float, float, float, float]] = None
     
     # Image data (RGB numpy array)
-    image_data: "np.ndarray"
+    image_data: "np.ndarray" = None
     
     # Dimensions
-    width: int
-    height: int
+    width: int = 0
+    height: int = 0
     
-    # Confidence score from region detection
-    confidence: float
-    
-    # Whether this is a grouped/composite component
-    is_group: bool = False
-    
-    # Group metadata (if is_group=True)
-    group_reason: Optional[str] = None
-    group_members: Optional[List[str]] = None
+    # Page index
+    page_index: int = 0
     
     # Component match (from MOBIUS vocabulary, if provided)
     component_match: Optional[str] = None
@@ -58,9 +54,6 @@ class MobiusComponent:
     
     # Deterministic hash of image content
     content_hash: Optional[str] = None
-    
-    # Text density (for debugging/audit)
-    debug_text_density: float = 0.0
     
     def compute_content_hash(self) -> str:
         """Compute deterministic hash of image content."""
@@ -82,146 +75,145 @@ class MobiusExtractionResult:
     # Total pages processed
     pages_processed: int
     
-    # Total regions detected (before filtering)
-    regions_detected: int
+    # Image role distribution
+    role_distribution: Dict[str, int]
     
-    # Regions filtered out
-    regions_filtered: int
+    # Total embedded images found
+    total_embedded_images: int
     
-    # Filtered regions with details (for manifest)
-    filtered_regions_detail: List[Tuple[int, Tuple[float, float, float, float], str, float]]  # (page_idx, bbox, reason, text_density)
-    
-    # Configuration used
-    config: RegionDetectionConfig
+    # Images by role
+    images_by_role: Dict[str, int]
 
 
 def extract_mobius_components(
     doc: PdfDocument,
-    config: Optional[RegionDetectionConfig] = None,
     component_vocabulary: Optional["ComponentVocabulary"] = None,
-    dpi: int = 150
+    min_width: int = 50,
+    min_height: int = 50
 ) -> MobiusExtractionResult:
     """
-    Extract components using MOBIUS-mode region detection.
+    Extract components using image-role–driven MOBIUS extraction.
+    
+    Pipeline:
+    1. Extract embedded images (primary source)
+    2. Classify each image by role
+    3. Segment component_sheet images only
+    4. Export atomic components
     
     Args:
         doc: PDF document to process
-        config: Region detection configuration (uses defaults if None)
         component_vocabulary: Optional component vocabulary for matching
-        dpi: DPI for page rendering (default 150)
+        min_width: Minimum image width for extraction
+        min_height: Minimum image height for extraction
     
     Returns:
-        MobiusExtractionResult with all extracted components and filtered regions
+        MobiusExtractionResult with all extracted components
     """
-    if config is None:
-        config = RegionDetectionConfig()
+    from .roles import classify_image_role, ImageRole
+    from .sheets import segment_component_sheet
     
-    logger.info(f"Starting MOBIUS extraction: {doc.page_count} pages at {dpi} DPI")
+    logger.info(f"Starting MOBIUS extraction (image-role–driven): {doc.page_count} pages")
     
-    # Extract spatial text for component matching
-    text_index = None
-    if component_vocabulary:
-        logger.info("Extracting spatial text for component matching...")
-        text_spans = extract_spatial_text(doc)
-        text_index = SpatialTextIndex(text_spans)
+    # Step 1: Extract embedded images (primary source)
+    logger.info("Step 1: Extracting embedded images...")
+    embedded_images = extract_embedded_images(doc, min_width=min_width, min_height=min_height)
+    
+    logger.info(f"Found {len(embedded_images)} embedded images")
     
     components = []
-    total_regions = 0
-    total_filtered = 0
-    filtered_regions_detail = []
+    role_distribution = {}
+    images_by_role = {}
     
-    for page_idx in range(doc.page_count):
-        logger.debug(f"Processing page {page_idx + 1}/{doc.page_count}")
+    # Step 2: Classify each image by role
+    logger.info("Step 2: Classifying images by role...")
+    
+    for img in embedded_images:
+        # Convert pixmap to numpy array
+        import fitz
+        if img.pixmap.n < 4:  # RGB or grayscale
+            image_data = np.frombuffer(img.pixmap.samples, dtype=np.uint8).reshape(img.pixmap.height, img.pixmap.width, img.pixmap.n)
+        else:  # RGBA - convert to RGB
+            rgba = np.frombuffer(img.pixmap.samples, dtype=np.uint8).reshape(img.pixmap.height, img.pixmap.width, img.pixmap.n)
+            image_data = rgba[:, :, :3]  # Drop alpha channel
         
-        # Get page object via pages() iterator or direct access
-        page = doc._doc.load_page(page_idx)
-        
-        # Extract text blocks for text density filtering
-        text_blocks = page.get_text("blocks")
-        
-        # Render page to image
-        page_image = render_page_to_image(page, dpi=dpi)
-        
-        # Get page dimensions
-        page_width = page.rect.width
-        page_height = page.rect.height
-        img_height, img_width = page_image.shape[:2]
-        
-        # Detect regions (pass text blocks for PDF text density filtering)
-        result = detect_regions(
-            page_image, 
-            config, 
-            page_text_blocks=text_blocks,
-            page_width=page_width,
-            page_height=page_height
+        # Classify image role
+        classification = classify_image_role(
+            img.pixmap,
+            img.width,
+            img.height,
+            img.page_index,
+            0  # image_index not available in ExtractedImage
         )
-        regions = result.accepted_regions
-        filtered = result.filtered_regions
         
-        total_regions += len(regions) + len(filtered)
-        total_filtered += len(filtered)
+        role = classification.role
+        role_str = role.value
         
-        logger.debug(f"Page {page_idx}: detected {len(regions)} regions, filtered {len(filtered)}")
+        # Track role distribution
+        role_distribution[role_str] = role_distribution.get(role_str, 0) + 1
+        images_by_role[role_str] = images_by_role.get(role_str, 0) + 1
         
-        # Record filtered regions for manifest
-        for filtered_region in filtered:
-            pdf_bbox = filtered_region.to_pdf_coords(page_width, page_height, img_width, img_height)
-            filtered_regions_detail.append((page_idx, pdf_bbox, filtered_region.rejection_reason, filtered_region.text_density))
+        logger.debug(f"Image {img.id}: role={role_str}, rationale={classification.rationale}")
         
-        # Extract each accepted region as a component
-        for crop_idx, region in enumerate(regions):
-            # Extract crop from page image
-            x, y, w, h = region.bbox
-            crop_image = page_image[y:y+h, x:x+w].copy()
-            
-            # Get PDF coordinates
-            pdf_bbox = region.to_pdf_coords(page_width, page_height, img_width, img_height)
-            
-            # Generate component ID
-            component_id = f"p{page_idx}_c{crop_idx}"
-            
-            # Create component
+        # Step 3: Process based on role
+        if role == ImageRole.COMPONENT_ATOMIC:
+            # Export whole, never crop
             component = MobiusComponent(
-                component_id=component_id,
-                page_index=page_idx,
-                crop_index=crop_idx,
-                bbox=pdf_bbox,
-                image_data=crop_image,
-                width=w,
-                height=h,
-                confidence=region.confidence,
-                is_group=region.is_merged,  # Merged regions are groups
-                group_reason="overlap" if region.is_merged else None,
-                group_members=None,  # TODO: track merged region IDs
-                debug_text_density=region.text_density
+                component_id=f"atomic_{img.id}",
+                source_type="embedded",
+                source_image_id=img.id,
+                image_role=role_str,
+                source_bbox=img.bbox,
+                image_data=image_data,
+                width=img.width,
+                height=img.height,
+                page_index=img.page_index
             )
-            
-            # Compute content hash
             component.compute_content_hash()
-            
-            # Match against component vocabulary if provided
-            if component_vocabulary and text_index:
-                from .matching import match_component_to_vocabulary
-                matched_name, match_score = match_component_to_vocabulary(
-                    pdf_bbox, page_idx, text_index, component_vocabulary
-                )
-                component.component_match = matched_name
-                component.match_score = match_score
-                
-                if matched_name:
-                    logger.debug(f"Component {component_id} matched to '{matched_name}' (score: {match_score:.2f})")
-            
             components.append(component)
+            
+        elif role == ImageRole.COMPONENT_SHEET:
+            # Segment into multiple atomic components
+            logger.info(f"Segmenting component sheet: {img.id}")
+            segments = segment_component_sheet(image_data, img.id)
+            
+            for segment in segments:
+                component = MobiusComponent(
+                    component_id=f"sheet_{img.id}_seg{segment.segment_index}",
+                    source_type="embedded",
+                    source_image_id=img.id,
+                    sheet_id=img.id,
+                    component_bbox_in_sheet=segment.bbox,
+                    image_role="component_atomic",  # Segments become atomic
+                    source_bbox=img.bbox,
+                    image_data=segment.image_data,
+                    width=segment.bbox[2],
+                    height=segment.bbox[3],
+                    page_index=img.page_index
+                )
+                component.compute_content_hash()
+                components.append(component)
+        
+        elif role == ImageRole.ILLUSTRATION:
+            # Ignore by default (could export if explicitly needed)
+            logger.debug(f"Ignoring illustration: {img.id}")
+            
+        elif role == ImageRole.DIAGRAM:
+            # Never export
+            logger.debug(f"Ignoring diagram: {img.id}")
+            
+        elif role == ImageRole.ART:
+            # Ignore
+            logger.debug(f"Ignoring art: {img.id}")
     
-    logger.info(f"MOBIUS extraction complete: {len(components)} components from {total_regions} regions ({total_filtered} filtered)")
+    logger.info(f"MOBIUS extraction complete: {len(components)} components from {len(embedded_images)} images")
+    logger.info(f"Role distribution: {role_distribution}")
     
     return MobiusExtractionResult(
         components=components,
         pages_processed=doc.page_count,
-        regions_detected=total_regions,
-        regions_filtered=total_filtered,
-        filtered_regions_detail=filtered_regions_detail,
-        config=config
+        role_distribution=role_distribution,
+        total_embedded_images=len(embedded_images),
+        images_by_role=images_by_role
     )
 
 
@@ -233,7 +225,7 @@ def save_mobius_components(
     """
     Save MOBIUS components to disk with deterministic naming.
     
-    Naming convention: <rulebook>__p<page>__c<crop>__<component>__s<score>.png
+    Naming convention: <rulebook>__<component_id>.png
     
     Args:
         components: List of components to save
@@ -253,10 +245,7 @@ def save_mobius_components(
     
     for component in components:
         # Build filename
-        component_name = component.component_match or "unknown"
-        score_str = f"{int(component.match_score * 100):03d}"
-        
-        filename = f"{rulebook_id}__p{component.page_index}__c{component.crop_index}__{component_name}__s{score_str}.png"
+        filename = f"{rulebook_id}__{component.component_id}.png"
         filepath = images_dir / filename
         
         # Convert RGB to BGR for OpenCV

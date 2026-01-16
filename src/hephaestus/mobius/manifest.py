@@ -1,7 +1,7 @@
 """
 MOBIUS manifest generation.
 
-Creates manifest.json for MOBIUS-mode extractions with component metadata.
+Creates manifest.json for MOBIUS-mode extractions with image-role metadata.
 """
 
 from dataclasses import dataclass, asdict
@@ -23,23 +23,27 @@ class MobiusManifestItem:
     # Component identification
     component_id: str
     file_name: str
-    page_index: int
-    crop_index: int
     
-    # Bounding box in PDF coordinates (x0, y0, x1, y1)
-    bbox: Tuple[float, float, float, float]
+    # Source information
+    source_type: str
+    source_image_id: str
+    
+    # Sheet information (if derived from sheet)
+    sheet_id: Optional[str]
+    component_bbox_in_sheet: Optional[Tuple[int, int, int, int]]
+    
+    # Image role
+    image_role: str
+    
+    # Source bbox in PDF coordinates
+    source_bbox: Optional[Tuple[float, float, float, float]]
     
     # Dimensions
     width: int
     height: int
     
-    # Detection confidence
-    confidence: float
-    
-    # Grouping metadata
-    is_group: bool
-    group_reason: Optional[str]
-    group_members: Optional[List[str]]
+    # Page index
+    page_index: int
     
     # Component matching (from MOBIUS vocabulary)
     component_match: Optional[str]
@@ -47,19 +51,6 @@ class MobiusManifestItem:
     
     # Content hash for deduplication
     content_hash: str
-    
-    # Debug/audit field
-    debug_text_density: float = 0.0
-
-
-@dataclass
-class FilteredRegionRecord:
-    """Record of a filtered (rejected) region."""
-    
-    page_index: int
-    bbox: Tuple[float, float, float, float]  # PDF coordinates
-    rejection_reason: str
-    debug_text_density: float = 0.0
 
 
 @dataclass
@@ -67,7 +58,7 @@ class MobiusManifest:
     """Complete MOBIUS manifest."""
     
     # Metadata
-    schema_version: str = "9.0-mobius"
+    schema_version: str = "9.1-mobius-role-driven"
     extraction_mode: str = "mobius"
     generated_at: str = ""
     
@@ -78,17 +69,11 @@ class MobiusManifest:
     # Extraction summary
     pages_processed: int = 0
     components_extracted: int = 0
-    regions_detected: int = 0
-    regions_filtered: int = 0
+    total_embedded_images: int = 0
     
-    # Filtered regions summary (counts by reason)
-    filtered_summary: Dict[str, int] = None
-    
-    # Filtered regions detail (for audit)
-    filtered_regions: List[FilteredRegionRecord] = None
-    
-    # Configuration
-    detection_config: Dict = None
+    # Image role distribution
+    role_distribution: Dict[str, int] = None
+    images_by_role: Dict[str, int] = None
     
     # Components
     items: List[MobiusManifestItem] = None
@@ -96,12 +81,10 @@ class MobiusManifest:
     def __post_init__(self):
         if self.items is None:
             self.items = []
-        if self.detection_config is None:
-            self.detection_config = {}
-        if self.filtered_summary is None:
-            self.filtered_summary = {}
-        if self.filtered_regions is None:
-            self.filtered_regions = []
+        if self.role_distribution is None:
+            self.role_distribution = {}
+        if self.images_by_role is None:
+            self.images_by_role = {}
 
 
 def build_mobius_manifest(
@@ -133,50 +116,20 @@ def build_mobius_manifest(
         item = MobiusManifestItem(
             component_id=component.component_id,
             file_name=filepath.name,
-            page_index=component.page_index,
-            crop_index=component.crop_index,
-            bbox=component.bbox,
+            source_type=component.source_type,
+            source_image_id=component.source_image_id,
+            sheet_id=component.sheet_id,
+            component_bbox_in_sheet=component.component_bbox_in_sheet,
+            image_role=component.image_role,
+            source_bbox=component.source_bbox,
             width=component.width,
             height=component.height,
-            confidence=component.confidence,
-            is_group=component.is_group,
-            group_reason=component.group_reason,
-            group_members=component.group_members,
+            page_index=component.page_index,
             component_match=component.component_match,
             match_score=component.match_score,
-            content_hash=component.content_hash or "",
-            debug_text_density=component.debug_text_density
+            content_hash=component.content_hash or ""
         )
         items.append(item)
-    
-    # Build filtered regions records
-    filtered_regions = []
-    filtered_summary = {}
-    
-    for page_idx, bbox, reason, text_density in result.filtered_regions_detail:
-        filtered_regions.append(FilteredRegionRecord(
-            page_index=page_idx,
-            bbox=bbox,
-            rejection_reason=reason,
-            debug_text_density=text_density
-        ))
-        # Count by reason
-        filtered_summary[reason] = filtered_summary.get(reason, 0) + 1
-    
-    # Build config dict
-    config_dict = {
-        "min_area": result.config.min_area,
-        "max_area_ratio": result.config.max_area_ratio,
-        "min_area_ratio": result.config.min_area_ratio,
-        "max_aspect_ratio": result.config.max_aspect_ratio,
-        "border_margins": {
-            "top": result.config.top_margin_ratio,
-            "bottom": result.config.bottom_margin_ratio,
-            "left": result.config.left_margin_ratio,
-            "right": result.config.right_margin_ratio
-        },
-        "text_edge_density_threshold": result.config.text_edge_density_threshold
-    }
     
     # Create manifest
     manifest = MobiusManifest(
@@ -185,15 +138,13 @@ def build_mobius_manifest(
         pdf_name=pdf_path.name,
         pages_processed=result.pages_processed,
         components_extracted=len(result.components),
-        regions_detected=result.regions_detected,
-        regions_filtered=result.regions_filtered,
-        filtered_summary=filtered_summary,
-        filtered_regions=filtered_regions,
-        detection_config=config_dict,
+        total_embedded_images=result.total_embedded_images,
+        role_distribution=result.role_distribution,
+        images_by_role=result.images_by_role,
         items=items
     )
     
-    logger.info(f"Built manifest with {len(items)} components, {len(filtered_regions)} filtered regions")
+    logger.info(f"Built manifest with {len(items)} components")
     
     return manifest
 

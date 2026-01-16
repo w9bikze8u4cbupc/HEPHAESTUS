@@ -102,9 +102,9 @@ def extract(
         logger.error(f"Invalid mode: {mode}. Must be 'legacy' or 'mobius'")
         raise typer.Exit(code=1)
     
-    # MOBIUS mode: region-based extraction
+    # MOBIUS mode: image-role–driven extraction
     if mode == "mobius":
-        logger.info(f"MOBIUS mode: region-based component extraction")
+        logger.info(f"MOBIUS mode: image-role–driven component extraction")
         
         # Check for regions dependency
         try:
@@ -131,15 +131,21 @@ def extract(
             with PdfDocument(pdf_path) as doc:
                 logger.info(f"Successfully opened PDF with {doc.page_count} pages")
                 
-                # Extract components using region detection
-                result = extract_mobius_components(doc, component_vocabulary=vocabulary)
+                # Extract components using image-role classification
+                result = extract_mobius_components(
+                    doc, 
+                    component_vocabulary=vocabulary,
+                    min_width=min_width,
+                    min_height=min_height
+                )
                 
                 if not result.components:
-                    logger.warning("No component regions detected")
-                    logger.info("Try adjusting region detection parameters")
+                    logger.warning("No components extracted")
+                    logger.info(f"Embedded images found: {result.total_embedded_images}")
+                    logger.info(f"Role distribution: {result.role_distribution}")
                     return
                 
-                logger.info(f"Detected {len(result.components)} component regions")
+                logger.info(f"Extracted {len(result.components)} components from {result.total_embedded_images} embedded images")
                 
                 # Create MOBIUS_READY output structure
                 mobius_ready_dir = out / "MOBIUS_READY"
@@ -162,9 +168,9 @@ def extract(
                 safe_echo(f"\n✅ MOBIUS extraction complete!")
                 safe_echo(f"📄 Processed: {pdf_path}")
                 safe_echo(f"📄 Pages: {result.pages_processed}")
-                safe_echo(f"🖼️  Components extracted: {len(result.components)}")
-                safe_echo(f"🔍 Regions detected: {result.regions_detected}")
-                safe_echo(f"🚫 Regions filtered: {result.regions_filtered}")
+                safe_echo(f"🖼️  Embedded images: {result.total_embedded_images}")
+                safe_echo(f"🎯 Components extracted: {len(result.components)}")
+                safe_echo(f"📊 Role distribution: {result.role_distribution}")
                 if vocabulary:
                     safe_echo(f"🎯 Component matches: {matched_count}/{len(result.components)}")
                 safe_echo(f"📁 Output directory: {mobius_ready_dir}")
