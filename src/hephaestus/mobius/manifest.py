@@ -51,6 +51,24 @@ class MobiusManifestItem:
     
     # Content hash for deduplication
     content_hash: str
+    
+    # G4 metrics (for rendered figures)
+    width_ratio: float = 0.0
+    height_ratio: float = 0.0
+    text_overlap_ratio: float = 0.0
+    component_likeness_score: float = 0.0
+    stddev_luma: float = 0.0
+    edge_density: float = 0.0
+    rank_within_page: int = 0
+    
+    # Content hash for deduplication
+    content_hash: str
+    
+    # G3.5: Component-likeness score
+    component_likeness_score: float = 0.0
+    
+    # G3.5: Rejection reason (if rejected)
+    rejection_reason: Optional[str] = None
 
 
 @dataclass
@@ -127,7 +145,14 @@ def build_mobius_manifest(
             page_index=component.page_index,
             component_match=component.component_match,
             match_score=component.match_score,
-            content_hash=component.content_hash or ""
+            content_hash=component.content_hash or "",
+            width_ratio=component.width_ratio,
+            height_ratio=component.height_ratio,
+            text_overlap_ratio=component.text_overlap_ratio,
+            component_likeness_score=component.component_likeness_score,
+            stddev_luma=component.stddev_luma,
+            edge_density=component.edge_density,
+            rank_within_page=component.rank_within_page
         )
         items.append(item)
     

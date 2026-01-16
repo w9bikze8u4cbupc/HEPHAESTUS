@@ -34,6 +34,23 @@ class RenderedFigure:
     
     # DPI used for rendering
     dpi: int
+    
+    # Page coverage ratios (for role classification)
+    width_ratio: float = 0.0
+    height_ratio: float = 0.0
+    
+    # Text overlap ratio (for text panel rejection)
+    text_overlap_ratio: float = 0.0
+    
+    # Quality metrics
+    component_likeness_score: float = 0.0
+    stddev_luma: float = 0.0
+    edge_density: float = 0.0
+    
+    # Classification
+    image_role: str = "component_atomic"
+    rejection_reason: Optional[str] = None
+    rank_within_page: int = 0
 
 
 def extract_rendered_figures(
@@ -42,17 +59,20 @@ def extract_rendered_figures(
     page_width: float,
     page_height: float,
     page_index: int,
-    dpi: int = 200
+    dpi: int = 400
 ) -> List[RenderedFigure]:
     """
     Extract figures from rendered page using text masking.
     
-    Pipeline:
+    Pipeline (Order G4):
     1. Build text mask from text block coordinates
     2. Mask out text regions from rendered image
     3. Detect connected components in remaining pixels
     4. Filter and merge candidate bboxes
-    5. Extract figure crops
+    5. Compute quality metrics and text overlap
+    6. Apply rejection gates (page coverage, text overlap, low-information)
+    7. Rank remaining candidates
+    8. Extract figure crops
     
     Args:
         page_image: Rendered page as RGB numpy array
@@ -63,7 +83,7 @@ def extract_rendered_figures(
         dpi: DPI used for rendering
     
     Returns:
-        List of RenderedFigure objects
+        List of RenderedFigure objects (includes rejected figures with rejection_reason)
     """
     try:
         import cv2
@@ -98,20 +118,20 @@ def extract_rendered_figures(
     
     logger.debug(f"Page {page_index}: found {num_labels-1} connected components")
     
-    # Step 4: Filter and extract candidate bboxes
-    figures = []
+    # Step 4: Extract candidate bboxes with basic geometric filtering
+    candidates = []
     page_area = img_width * img_height
     
     for i in range(1, num_labels):  # Skip background (label 0)
         x, y, w, h, area = stats[i]
         
-        # Filter 1: Size thresholds
+        # Filter 1: Size thresholds (basic sanity)
         if area < 1000:  # Too small (< 1000 pixels)
             continue
-        if area > page_area * 0.7:  # Too large (> 70% of page)
+        if area > page_area * 0.95:  # Too large (> 95% of page - likely full page)
             continue
         
-        # Filter 2: Aspect ratio
+        # Filter 2: Aspect ratio (basic sanity)
         aspect_ratio = max(w / h, h / w) if h > 0 else float('inf')
         if aspect_ratio > 10.0:  # Extreme banner
             continue
@@ -130,7 +150,7 @@ def extract_rendered_figures(
         pdf_x1 = (x + w) * scale_x
         pdf_y1 = (y + h) * scale_y
         
-        # Extract figure crop from original (non-masked) image
+        # Extract figure crop from original (non-masked) image - NO RESIZING (G4.5)
         figure_crop = page_image[y:y+h, x:x+w].copy()
         
         figure = RenderedFigure(
@@ -138,19 +158,83 @@ def extract_rendered_figures(
             bbox_pdf=(pdf_x0, pdf_y0, pdf_x1, pdf_y1),
             image_data=figure_crop,
             page_index=page_index,
-            figure_index=len(figures),
+            figure_index=len(candidates),
             dpi=dpi
         )
-        figures.append(figure)
+        candidates.append(figure)
     
     # Step 5: Merge overlapping figures
-    figures = _merge_overlapping_figures(figures)
+    candidates = _merge_overlapping_figures(candidates)
     
-    # Reassign indices after merging
-    for i, fig in enumerate(figures):
+    # Step 6: Compute metrics and apply rejection gates
+    figures = []
+    for i, fig in enumerate(candidates):
         fig.figure_index = i
+        
+        # G4.1: Compute page coverage ratios
+        bbox_w = fig.bbox_pixels[2]
+        bbox_h = fig.bbox_pixels[3]
+        fig.width_ratio = bbox_w / img_width
+        fig.height_ratio = bbox_h / img_height
+        
+        # G4.1: Apply page-relative role classification
+        if fig.width_ratio >= 0.80 and fig.height_ratio >= 0.80:
+            fig.image_role = "art"
+            fig.rejection_reason = f"full_page_coverage_w{fig.width_ratio:.2f}_h{fig.height_ratio:.2f}"
+            figures.append(fig)
+            continue
+        elif fig.width_ratio >= 0.60 and fig.height_ratio >= 0.60:
+            fig.image_role = "illustration"
+            fig.rejection_reason = f"large_page_coverage_w{fig.width_ratio:.2f}_h{fig.height_ratio:.2f}"
+            figures.append(fig)
+            continue
+        
+        # G4.2: Compute text overlap ratio
+        fig.text_overlap_ratio = _compute_text_overlap_ratio(
+            fig.bbox_pdf, text_blocks, page_width, page_height
+        )
+        
+        # G4.2: Hard reject text panels
+        if fig.text_overlap_ratio >= 0.08:
+            fig.rejection_reason = f"text_panel_overlap{fig.text_overlap_ratio:.3f}"
+            figures.append(fig)
+            continue
+        
+        # G4.4: Compute quality metrics
+        fig.stddev_luma, fig.edge_density = _compute_quality_metrics(fig.image_data)
+        
+        # G4.4: Reject low-information backgrounds
+        # Conservative thresholds calibrated from Terraforming Mars
+        T_std = 5.0  # Low texture threshold
+        T_edge = 0.01  # Low edge density threshold
+        
+        if fig.stddev_luma < T_std and fig.edge_density < T_edge:
+            fig.rejection_reason = f"low_information_std{fig.stddev_luma:.2f}_edge{fig.edge_density:.4f}"
+            figures.append(fig)
+            continue
+        
+        # G4.3: Compute component likeness score
+        fig.component_likeness_score = _compute_component_likeness_score(fig)
+        
+        # Passed all gates - mark as component_atomic
+        fig.image_role = "component_atomic"
+        figures.append(fig)
     
-    logger.info(f"Page {page_index}: extracted {len(figures)} rendered figures")
+    # G4.3: Rank within page (stable sort)
+    # Sort by: (-score, x0, y0, width, height) for determinism
+    accepted = [f for f in figures if f.rejection_reason is None]
+    accepted.sort(key=lambda f: (
+        -f.component_likeness_score,
+        f.bbox_pdf[0],
+        f.bbox_pdf[1],
+        f.bbox_pixels[2],
+        f.bbox_pixels[3]
+    ))
+    
+    for rank, fig in enumerate(accepted):
+        fig.rank_within_page = rank
+    
+    logger.info(f"Page {page_index}: {len(accepted)} accepted, {len(figures) - len(accepted)} rejected")
     
     return figures
 
@@ -209,6 +293,136 @@ def _build_text_mask(
         mask[pix_y0:pix_y1, pix_x0:pix_x1] = 255
     
     return mask
+
+
+def _compute_text_overlap_ratio(
+    bbox_pdf: Tuple[float, float, float, float],
+    text_blocks: List,
+    page_width: float,
+    page_height: float
+) -> float:
+    """
+    Compute text overlap ratio for a candidate bbox (G4.2).
+    
+    Args:
+        bbox_pdf: Candidate bbox in PDF coordinates (x0, y0, x1, y1)
+        text_blocks: PyMuPDF text blocks
+        page_width: PDF page width
+        page_height: PDF page height
+    
+    Returns:
+        Text overlap ratio (0.0-1.0)
+    """
+    if not text_blocks:
+        return 0.0
+    
+    cand_x0, cand_y0, cand_x1, cand_y1 = bbox_pdf
+    cand_area = (cand_x1 - cand_x0) * (cand_y1 - cand_y0)
+    
+    if cand_area <= 0:
+        return 0.0
+    
+    total_overlap = 0.0
+    
+    for block in text_blocks:
+        if len(block) < 5:
+            continue
+        
+        text_x0, text_y0, text_x1, text_y1 = block[:4]
+        
+        # Compute intersection
+        inter_x0 = max(cand_x0, text_x0)
+        inter_y0 = max(cand_y0, text_y0)
+        inter_x1 = min(cand_x1, text_x1)
+        inter_y1 = min(cand_y1, text_y1)
+        
+        if inter_x1 > inter_x0 and inter_y1 > inter_y0:
+            inter_area = (inter_x1 - inter_x0) * (inter_y1 - inter_y0)
+            total_overlap += inter_area
+    
+    overlap_ratio = total_overlap / cand_area
+    return overlap_ratio
+
+
+def _compute_quality_metrics(image_data: np.ndarray) -> Tuple[float, float]:
+    """
+    Compute quality metrics for low-information rejection (G4.4).
+    
+    Args:
+        image_data: RGB numpy array
+    
+    Returns:
+        (stddev_luma, edge_density)
+    """
+    try:
+        import cv2
+    except ImportError:
+        return (0.0, 0.0)
+    
+    # Convert to grayscale
+    if len(image_data.shape) == 3:
+        gray = cv2.cvtColor(image_data, cv2.COLOR_RGB2GRAY)
+    else:
+        gray = image_data
+    
+    # Compute luma standard deviation
+    stddev_luma = float(np.std(gray))
+    
+    # Compute edge density
+    edges = cv2.Canny(gray, 50, 150)
+    edge_pixels = np.count_nonzero(edges)
+    total_pixels = gray.shape[0] * gray.shape[1]
+    edge_density = edge_pixels / total_pixels if total_pixels > 0 else 0.0
+    
+    return (stddev_luma, edge_density)
+
+
+def _compute_component_likeness_score(fig: RenderedFigure) -> float:
+    """
+    Compute component likeness score for ranking (G4.3).
+    
+    Simple heuristic based on:
+    - Size (prefer medium-sized components)
+    - Aspect ratio (prefer reasonable ratios)
+    - Edge density (prefer structured content)
+    - Texture (prefer textured content)
+    
+    Args:
+        fig: RenderedFigure
+    
+    Returns:
+        Score (0.0-1.0, higher is better)
+    """
+    score = 0.0
+    
+    # Size score: prefer medium-sized components (10k-500k pixels)
+    area = fig.bbox_pixels[2] * fig.bbox_pixels[3]
+    if 10_000 <= area <= 500_000:
+        score += 0.3
+    elif 1_000 <= area < 10_000:
+        score += 0.15
+    
+    # Aspect ratio score: prefer reasonable ratios (1:1 to 3:1)
+    w, h = fig.bbox_pixels[2], fig.bbox_pixels[3]
+    aspect_ratio = max(w / h, h / w) if h > 0 else 10.0
+    if aspect_ratio <= 3.0:
+        score += 0.3
+    elif aspect_ratio <= 5.0:
+        score += 0.15
+    
+    # Edge density score: prefer structured content
+    if fig.edge_density >= 0.05:
+        score += 0.2
+    elif fig.edge_density >= 0.02:
+        score += 0.1
+    
+    # Texture score: prefer textured content
+    if fig.stddev_luma >= 20.0:
+        score += 0.2
+    elif fig.stddev_luma >= 10.0:
+        score += 0.1
+    
+    return min(score, 1.0)
 
 
 def _merge_overlapping_figures(figures: List[RenderedFigure]) -> List[RenderedFigure]:
@@ -281,8 +495,6 @@ def _calculate_iou_pixels(bbox1: Tuple[int, int, int, int], bbox2: Tuple[int, in
 
 def _merge_two_figures(fig1: RenderedFigure, fig2: RenderedFigure) -> RenderedFigure:
     """Merge two overlapping figures."""
-    import cv2
-    
     x1, y1, w1, h1 = fig1.bbox_pixels
     x2, y2, w2, h2 = fig2.bbox_pixels
     
@@ -301,8 +513,7 @@ def _merge_two_figures(fig1: RenderedFigure, fig2: RenderedFigure) -> RenderedFi
     pdf_y1 = max(fig1.bbox_pdf[3], fig2.bbox_pdf[3])
     merged_bbox_pdf = (pdf_x0, pdf_y0, pdf_x1, pdf_y1)
     
-    # Create merged image (use fig1's parent image if available, otherwise composite)
-    # For simplicity, just use fig1's image data (assumes they're from same page)
+    # Use fig1's image data (assumes they're from same page)
     merged_image = fig1.image_data
     
     return RenderedFigure(

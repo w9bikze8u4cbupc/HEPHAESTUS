@@ -25,7 +25,7 @@ class MobiusComponent:
     component_id: str
     
     # Source information
-    source_type: str  # "embedded" or "vector_render"
+    source_type: str  # "embedded" or "rendered_page"
     source_image_id: str  # Original image ID from PDF
     
     # Sheet information (if derived from sheet)
@@ -54,6 +54,19 @@ class MobiusComponent:
     
     # Deterministic hash of image content
     content_hash: Optional[str] = None
+    
+    # G4 metrics (for rendered figures)
+    width_ratio: float = 0.0
+    height_ratio: float = 0.0
+    text_overlap_ratio: float = 0.0
+    component_likeness_score: float = 0.0
+    stddev_luma: float = 0.0
+    edge_density: float = 0.0
+    rank_within_page: int = 0
+    rejection_reason: Optional[str] = None
+    
+    # Rejection reason (G3.2, if rejected)
+    rejection_reason: Optional[str] = None
     
     def compute_content_hash(self) -> str:
         """Compute deterministic hash of image content."""
@@ -90,7 +103,7 @@ def extract_mobius_components(
     component_vocabulary: Optional["ComponentVocabulary"] = None,
     min_width: int = 50,
     min_height: int = 50,
-    render_dpi: int = 200
+    render_dpi: int = 400
 ) -> MobiusExtractionResult:
     """
     Extract components using two-source MOBIUS extraction.
@@ -124,16 +137,18 @@ def extract_mobius_components(
     # SOURCE A (PRIMARY): Rendered page figures with text masking
     logger.info("Source A: Extracting rendered page figures...")
     
+    all_figures = []  # Track all figures (accepted + rejected)
+    
     for page_index in range(doc.page_count):
         page = doc._doc[page_index]
         
-        # Render page
+        # Render page at 400 DPI (G4.5)
         page_image = render_page_to_image(page, dpi=render_dpi)
         
-        # Extract text blocks for masking
+        # Extract text blocks for masking and overlap computation
         text_blocks = page.get_text("blocks")
         
-        # Extract figures
+        # Extract figures (includes rejected with rejection_reason)
         figures = extract_rendered_figures(
             page_image,
             text_blocks,
@@ -143,25 +158,48 @@ def extract_mobius_components(
             dpi=render_dpi
         )
         
-        # Convert figures to components
+        all_figures.extend(figures)
+        
+        # Convert accepted figures to components
         for figure in figures:
+            if figure.rejection_reason is not None:
+                # Track rejected figures in role distribution
+                role_distribution[figure.image_role] = role_distribution.get(figure.image_role, 0) + 1
+                continue
+            
             component = MobiusComponent(
                 component_id=f"rendered_p{page_index}_f{figure.figure_index}",
                 source_type="rendered_page",
                 source_image_id=f"p{page_index}_f{figure.figure_index}",
-                image_role="component_atomic",
+                image_role=figure.image_role,
                 source_bbox=figure.bbox_pdf,
                 image_data=figure.image_data,
                 width=figure.bbox_pixels[2],
                 height=figure.bbox_pixels[3],
-                page_index=page_index
+                page_index=page_index,
+                width_ratio=figure.width_ratio,
+                height_ratio=figure.height_ratio,
+                text_overlap_ratio=figure.text_overlap_ratio,
+                component_likeness_score=figure.component_likeness_score,
+                stddev_luma=figure.stddev_luma,
+                edge_density=figure.edge_density,
+                rank_within_page=figure.rank_within_page
             )
             component.compute_content_hash()
             components.append(component)
             source_distribution["rendered_page"] += 1
             role_distribution["component_atomic"] = role_distribution.get("component_atomic", 0) + 1
     
-    logger.info(f"Source A: extracted {source_distribution['rendered_page']} rendered figures")
+    logger.info(f"Source A: extracted {source_distribution['rendered_page']} rendered figures ({len(all_figures)} total candidates)")
+    
+    # Log rejection summary
+    rejection_counts = {}
+    for fig in all_figures:
+        if fig.rejection_reason:
+            reason_key = fig.rejection_reason.split('_')[0] if '_' in fig.rejection_reason else fig.rejection_reason[:20]
+            rejection_counts[reason_key] = rejection_counts.get(reason_key, 0) + 1
+    if rejection_counts:
+        logger.info(f"Source A rejection summary: {rejection_counts}")
     
     # SOURCE B (SECONDARY): Embedded images with corrected role classification
     logger.info("Source B: Extracting embedded images...")
