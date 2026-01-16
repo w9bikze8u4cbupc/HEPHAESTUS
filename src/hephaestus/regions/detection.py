@@ -60,6 +60,14 @@ class RegionDetectionConfig:
     # Text panel detection: horizontal line alignment
     # Text panels have strong horizontal structure
     text_horizontal_ratio_threshold: float = 1.5  # horizontal edges / vertical edges
+    
+    # Text density threshold (characters per 1000 square pixels)
+    # Text panels have high character density
+    text_density_threshold: float = 1.5  # chars per 1000 px²
+    
+    # PDF text density threshold (characters per square point)
+    # Text panels have high character density
+    text_density_threshold: float = 0.005  # chars per sq pt (lowered to catch component lists)
 
 
 @dataclass
@@ -77,6 +85,9 @@ class DetectedRegion:
     
     # Whether this region was merged from multiple detections
     is_merged: bool = False
+    
+    # Text density (for debugging/audit)
+    text_density: float = 0.0
     
     def to_pdf_coords(self, page_width: float, page_height: float, img_width: int, img_height: int) -> Tuple[float, float, float, float]:
         """Convert image coordinates to PDF coordinates."""
@@ -108,6 +119,9 @@ class FilteredRegion:
     # Rejection reason (canonical enum string)
     rejection_reason: str
     
+    # Text density (for debugging/audit)
+    text_density: float = 0.0
+    
     def to_pdf_coords(self, page_width: float, page_height: float, img_width: int, img_height: int) -> Tuple[float, float, float, float]:
         """Convert image coordinates to PDF coordinates."""
         x, y, w, h = self.bbox
@@ -138,7 +152,10 @@ class RegionDetectionResult:
 
 def detect_regions(
     image: np.ndarray,
-    config: Optional[RegionDetectionConfig] = None
+    config: Optional[RegionDetectionConfig] = None,
+    page_text_blocks: Optional[List] = None,
+    page_width: Optional[float] = None,
+    page_height: Optional[float] = None
 ) -> RegionDetectionResult:
     """
     Detect component regions in a rendered page image.
@@ -149,6 +166,9 @@ def detect_regions(
     Args:
         image: RGB or grayscale numpy array
         config: Detection configuration (uses defaults if None)
+        page_text_blocks: Optional list of PyMuPDF text blocks for text density filtering
+        page_width: PDF page width (required if page_text_blocks provided)
+        page_height: PDF page height (required if page_text_blocks provided)
     
     Returns:
         RegionDetectionResult with accepted and filtered regions
@@ -165,16 +185,16 @@ def detect_regions(
         gray = image.copy()
     
     # Calculate page area for filtering
-    page_height, page_width = gray.shape
-    page_area = page_height * page_width
+    img_height, img_width = gray.shape
+    page_area = img_height * img_width
     max_area = int(page_area * config.max_area_ratio)
     min_area_absolute = max(config.min_area, int(page_area * config.min_area_ratio))
     
     # Calculate border exclusion zones
-    top_margin = int(page_height * config.top_margin_ratio)
-    bottom_margin = int(page_height * config.bottom_margin_ratio)
-    left_margin = int(page_width * config.left_margin_ratio)
-    right_margin = int(page_width * config.right_margin_ratio)
+    top_margin = int(img_height * config.top_margin_ratio)
+    bottom_margin = int(img_height * config.bottom_margin_ratio)
+    left_margin = int(img_width * config.left_margin_ratio)
+    right_margin = int(img_width * config.right_margin_ratio)
     
     # Pass 1: Standard detection (larger components)
     edges_pass1 = cv2.Canny(gray, config.canny_low, config.canny_high)
@@ -216,13 +236,13 @@ def detect_regions(
         if y < top_margin:  # Touches top margin
             filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_top"))
             continue
-        if y + h > page_height - bottom_margin:  # Touches bottom margin
+        if y + h > img_height - bottom_margin:  # Touches bottom margin
             filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_bottom"))
             continue
         if x < left_margin:  # Touches left margin
             filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_left"))
             continue
-        if x + w > page_width - right_margin:  # Touches right margin
+        if x + w > img_width - right_margin:  # Touches right margin
             filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="border_right"))
             continue
         
@@ -232,10 +252,18 @@ def detect_regions(
             filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="aspect_ratio"))
             continue
         
-        # Filter 4: Text-likeness heuristic (BLOCKING - hard rejection)
-        if _is_text_panel(gray[y:y+h, x:x+w], edges_pass1[y:y+h, x:x+w], config):
-            filtered_regions.append(FilteredRegion(bbox=bbox, area=area, rejection_reason="text_panel"))
-            continue
+        # Filter 4: Text density check (BLOCKING - hard rejection)
+        text_density = 0.0
+        if page_text_blocks and page_width and page_height:
+            is_text_dense, text_density = _is_text_dense_region(
+                bbox, page_text_blocks, page_width, page_height, 
+                img_width, img_height, config
+            )
+            if is_text_dense:
+                filtered_regions.append(FilteredRegion(
+                    bbox=bbox, area=area, rejection_reason="text_panel", text_density=text_density
+                ))
+                continue
         
         # Calculate confidence based on contour properties
         # Higher confidence for more rectangular shapes
@@ -252,7 +280,8 @@ def detect_regions(
             bbox=(x, y, w, h),
             area=area,
             confidence=confidence,
-            is_merged=False
+            is_merged=False,
+            text_density=text_density
         ))
     
     logger.debug(f"Filtered to {len(regions)} candidate regions, rejected {len(filtered_regions)}")
@@ -269,6 +298,78 @@ def detect_regions(
         accepted_regions=regions,
         filtered_regions=filtered_regions
     )
+
+
+def _is_text_dense_region(
+    pixel_bbox: Tuple[int, int, int, int],
+    page_text_blocks: List,
+    page_width: float,
+    page_height: float,
+    img_width: int,
+    img_height: int,
+    config: RegionDetectionConfig
+) -> Tuple[bool, float]:
+    """
+    Detect if a region has high PDF text density (text panels, lists, tables).
+    
+    Uses PyMuPDF-extracted text blocks transformed to pixel space.
+    Text panels have high character count relative to area.
+    
+    Args:
+        pixel_bbox: Region bounding box in PIXEL coordinates (x, y, w, h)
+        page_text_blocks: List of PyMuPDF text blocks from page.get_text("blocks")
+        page_width: PDF page width in points
+        page_height: PDF page height in points
+        img_width: Rendered image width in pixels
+        img_height: Rendered image height in pixels
+        config: Detection configuration with text_density_threshold
+    
+    Returns:
+        Tuple of (is_text_dense, text_density_value)
+    """
+    if not page_text_blocks:
+        return False, 0.0
+    
+    x, y, w, h = pixel_bbox
+    region_area = w * h
+    
+    if region_area <= 0:
+        return False, 0.0
+    
+    # Compute scale factors: PDF points -> pixels
+    scale_x = img_width / page_width
+    scale_y = img_height / page_height
+    
+    # Count characters in text blocks that intersect this region (in pixel space)
+    total_chars = 0
+    
+    for block in page_text_blocks:
+        # PyMuPDF text block format: (x0, y0, x1, y1, "text", block_no, block_type)
+        if len(block) < 5:
+            continue
+        
+        # Text block in PDF coordinates
+        pdf_bx0, pdf_by0, pdf_bx1, pdf_by1 = block[:4]
+        text = block[4]
+        
+        # Transform text block to pixel coordinates
+        pix_bx0 = int(pdf_bx0 * scale_x)
+        pix_by0 = int(pdf_by0 * scale_y)
+        pix_bx1 = int(pdf_bx1 * scale_x)
+        pix_by1 = int(pdf_by1 * scale_y)
+        
+        # Check if block intersects region (both in pixel space now)
+        if not (pix_bx1 < x or pix_bx0 > x + w or pix_by1 < y or pix_by0 > y + h):
+            # Intersection exists - count characters
+            total_chars += len(text.strip())
+    
+    # Calculate text density (characters per 1000 square pixels)
+    text_density = (total_chars / region_area) * 1000.0 if region_area > 0 else 0.0
+    
+    # Reject if density exceeds threshold
+    is_dense = text_density > config.text_density_threshold
+    
+    return is_dense, text_density
 
 
 def _is_text_like_region(gray_region: np.ndarray, edges_region: np.ndarray, threshold: float) -> bool:

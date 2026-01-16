@@ -47,6 +47,9 @@ class MobiusManifestItem:
     
     # Content hash for deduplication
     content_hash: str
+    
+    # Debug/audit field
+    debug_text_density: float = 0.0
 
 
 @dataclass
@@ -56,6 +59,7 @@ class FilteredRegionRecord:
     page_index: int
     bbox: Tuple[float, float, float, float]  # PDF coordinates
     rejection_reason: str
+    debug_text_density: float = 0.0
 
 
 @dataclass
@@ -140,7 +144,8 @@ def build_mobius_manifest(
             group_members=component.group_members,
             component_match=component.component_match,
             match_score=component.match_score,
-            content_hash=component.content_hash or ""
+            content_hash=component.content_hash or "",
+            debug_text_density=component.debug_text_density
         )
         items.append(item)
     
@@ -148,11 +153,12 @@ def build_mobius_manifest(
     filtered_regions = []
     filtered_summary = {}
     
-    for page_idx, bbox, reason in result.filtered_regions_detail:
+    for page_idx, bbox, reason, text_density in result.filtered_regions_detail:
         filtered_regions.append(FilteredRegionRecord(
             page_index=page_idx,
             bbox=bbox,
-            rejection_reason=reason
+            rejection_reason=reason,
+            debug_text_density=text_density
         ))
         # Count by reason
         filtered_summary[reason] = filtered_summary.get(reason, 0) + 1

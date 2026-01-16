@@ -59,6 +59,9 @@ class MobiusComponent:
     # Deterministic hash of image content
     content_hash: Optional[str] = None
     
+    # Text density (for debugging/audit)
+    debug_text_density: float = 0.0
+    
     def compute_content_hash(self) -> str:
         """Compute deterministic hash of image content."""
         import numpy as np
@@ -86,7 +89,7 @@ class MobiusExtractionResult:
     regions_filtered: int
     
     # Filtered regions with details (for manifest)
-    filtered_regions_detail: List[Tuple[int, Tuple[float, float, float, float], str]]  # (page_idx, bbox, reason)
+    filtered_regions_detail: List[Tuple[int, Tuple[float, float, float, float], str, float]]  # (page_idx, bbox, reason, text_density)
     
     # Configuration used
     config: RegionDetectionConfig
@@ -133,11 +136,25 @@ def extract_mobius_components(
         # Get page object via pages() iterator or direct access
         page = doc._doc.load_page(page_idx)
         
+        # Extract text blocks for text density filtering
+        text_blocks = page.get_text("blocks")
+        
         # Render page to image
         page_image = render_page_to_image(page, dpi=dpi)
         
-        # Detect regions (returns RegionDetectionResult with accepted + filtered)
-        result = detect_regions(page_image, config)
+        # Get page dimensions
+        page_width = page.rect.width
+        page_height = page.rect.height
+        img_height, img_width = page_image.shape[:2]
+        
+        # Detect regions (pass text blocks for PDF text density filtering)
+        result = detect_regions(
+            page_image, 
+            config, 
+            page_text_blocks=text_blocks,
+            page_width=page_width,
+            page_height=page_height
+        )
         regions = result.accepted_regions
         filtered = result.filtered_regions
         
@@ -147,13 +164,9 @@ def extract_mobius_components(
         logger.debug(f"Page {page_idx}: detected {len(regions)} regions, filtered {len(filtered)}")
         
         # Record filtered regions for manifest
-        page_width = page.rect.width
-        page_height = page.rect.height
-        img_height, img_width = page_image.shape[:2]
-        
         for filtered_region in filtered:
             pdf_bbox = filtered_region.to_pdf_coords(page_width, page_height, img_width, img_height)
-            filtered_regions_detail.append((page_idx, pdf_bbox, filtered_region.rejection_reason))
+            filtered_regions_detail.append((page_idx, pdf_bbox, filtered_region.rejection_reason, filtered_region.text_density))
         
         # Extract each accepted region as a component
         for crop_idx, region in enumerate(regions):
@@ -179,7 +192,8 @@ def extract_mobius_components(
                 confidence=region.confidence,
                 is_group=region.is_merged,  # Merged regions are groups
                 group_reason="overlap" if region.is_merged else None,
-                group_members=None  # TODO: track merged region IDs
+                group_members=None,  # TODO: track merged region IDs
+                debug_text_density=region.text_density
             )
             
             # Compute content hash
