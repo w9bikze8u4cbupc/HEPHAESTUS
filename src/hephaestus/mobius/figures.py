@@ -213,6 +213,37 @@ def extract_rendered_figures(
             figures.append(fig)
             continue
         
+        # G5.1: Hard minimum size gate (non-negotiable)
+        min_dim_px = 160  # Minimum dimension at DPI=400
+        min_area_px = 160 * 160  # Minimum area
+        
+        bbox_w = fig.bbox_pixels[2]
+        bbox_h = fig.bbox_pixels[3]
+        bbox_area = bbox_w * bbox_h
+        
+        if bbox_w < min_dim_px or bbox_h < min_dim_px:
+            fig.rejection_reason = f"too_small_dim_w{bbox_w}_h{bbox_h}_min{min_dim_px}"
+            figures.append(fig)
+            continue
+        
+        if bbox_area < min_area_px:
+            fig.rejection_reason = f"too_small_area_{bbox_area}_min{min_area_px}"
+            figures.append(fig)
+            continue
+        
+        # G5.2: Page-relative "component band" gate
+        # Reject tiny relative to page (micro-fragments)
+        if fig.width_ratio < 0.03 and fig.height_ratio < 0.03:
+            fig.rejection_reason = f"micro_fragment_w{fig.width_ratio:.3f}_h{fig.height_ratio:.3f}"
+            figures.append(fig)
+            continue
+        
+        # Reject near-full-page (already caught by G4.1 at 0.80, but add 0.85 for safety)
+        if fig.width_ratio > 0.85 and fig.height_ratio > 0.85:
+            fig.rejection_reason = f"near_full_page_w{fig.width_ratio:.2f}_h{fig.height_ratio:.2f}"
+            figures.append(fig)
+            continue
+        
         # G4.3: Compute component likeness score
         fig.component_likeness_score = _compute_component_likeness_score(fig)
         

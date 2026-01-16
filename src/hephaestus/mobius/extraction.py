@@ -134,8 +134,25 @@ def extract_mobius_components(
     images_by_role = {}
     source_distribution = {"rendered_page": 0, "embedded": 0}
     
+    # G5.3: Track candidates and rejections separately
+    candidates_total = 0
+    rejected_total = 0
+    rejection_reasons = {}
+    
     # SOURCE A (PRIMARY): Rendered page figures with text masking
     logger.info("Source A: Extracting rendered page figures...")
+    
+    # First, extract all embedded images for G5.4 comparison
+    logger.info("Pre-extracting embedded images for fidelity comparison...")
+    embedded_images = extract_embedded_images(doc, min_width=min_width, min_height=min_height)
+    logger.info(f"Found {len(embedded_images)} embedded images")
+    
+    # Build embedded image lookup by page
+    embedded_by_page = {}
+    for img in embedded_images:
+        if img.page_index not in embedded_by_page:
+            embedded_by_page[img.page_index] = []
+        embedded_by_page[img.page_index].append(img)
     
     all_figures = []  # Track all figures (accepted + rejected)
     
@@ -159,23 +176,62 @@ def extract_mobius_components(
         )
         
         all_figures.extend(figures)
+        candidates_total += len(figures)
         
         # Convert accepted figures to components
         for figure in figures:
             if figure.rejection_reason is not None:
-                # Track rejected figures in role distribution
+                # G5.3: Track rejections
+                rejected_total += 1
+                reason_key = figure.rejection_reason.split('_')[0] if '_' in figure.rejection_reason else figure.rejection_reason[:20]
+                rejection_reasons[reason_key] = rejection_reasons.get(reason_key, 0) + 1
+                # Track rejected role
                 role_distribution[figure.image_role] = role_distribution.get(figure.image_role, 0) + 1
                 continue
             
+            # G5.4: Prefer embedded images when they are higher fidelity
+            best_image_data = figure.image_data
+            best_source_type = "rendered_page"
+            best_source_id = f"p{page_index}_f{figure.figure_index}"
+            
+            page_embedded = embedded_by_page.get(page_index, [])
+            for emb_img in page_embedded:
+                # Compute IoU between rendered figure and embedded image (PDF space)
+                iou = _compute_bbox_iou_pdf(figure.bbox_pdf, emb_img.bbox)
+                
+                if iou >= 0.6:
+                    # Check if embedded has higher effective resolution
+                    rendered_px_area = figure.bbox_pixels[2] * figure.bbox_pixels[3]
+                    embedded_px_area = emb_img.width * emb_img.height
+                    
+                    if embedded_px_area > rendered_px_area * 1.2:
+                        # Use embedded image instead
+                        # Convert pixmap to numpy array
+                        import fitz
+                        if emb_img.pixmap.n < 4:  # RGB or grayscale
+                            best_image_data = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
+                                emb_img.pixmap.height, emb_img.pixmap.width, emb_img.pixmap.n
+                            )
+                        else:  # RGBA - convert to RGB
+                            rgba = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
+                                emb_img.pixmap.height, emb_img.pixmap.width, emb_img.pixmap.n
+                            )
+                            best_image_data = rgba[:, :, :3]  # Drop alpha channel
+                        
+                        best_source_type = "embedded_preferred"
+                        best_source_id = emb_img.id
+                        logger.debug(f"Using embedded image {emb_img.id} instead of rendered (IoU={iou:.2f}, embedded_px={embedded_px_area} > rendered_px={rendered_px_area})")
+                        break
+            
             component = MobiusComponent(
                 component_id=f"rendered_p{page_index}_f{figure.figure_index}",
-                source_type="rendered_page",
-                source_image_id=f"p{page_index}_f{figure.figure_index}",
+                source_type=best_source_type,
+                source_image_id=best_source_id,
                 image_role=figure.image_role,
                 source_bbox=figure.bbox_pdf,
-                image_data=figure.image_data,
-                width=figure.bbox_pixels[2],
-                height=figure.bbox_pixels[3],
+                image_data=best_image_data,
+                width=best_image_data.shape[1] if len(best_image_data.shape) >= 2 else figure.bbox_pixels[2],
+                height=best_image_data.shape[0] if len(best_image_data.shape) >= 1 else figure.bbox_pixels[3],
                 page_index=page_index,
                 width_ratio=figure.width_ratio,
                 height_ratio=figure.height_ratio,
@@ -187,118 +243,39 @@ def extract_mobius_components(
             )
             component.compute_content_hash()
             components.append(component)
-            source_distribution["rendered_page"] += 1
+            source_distribution[best_source_type] = source_distribution.get(best_source_type, 0) + 1
             role_distribution["component_atomic"] = role_distribution.get("component_atomic", 0) + 1
     
-    logger.info(f"Source A: extracted {source_distribution['rendered_page']} rendered figures ({len(all_figures)} total candidates)")
+    # G5.3: Log accurate accounting
+    logger.info(f"Source A: {len(components)} accepted, {rejected_total} rejected ({candidates_total} total candidates)")
+    logger.info(f"Source A rejection summary: {rejection_reasons}")
     
-    # Log rejection summary
-    rejection_counts = {}
-    for fig in all_figures:
-        if fig.rejection_reason:
-            reason_key = fig.rejection_reason.split('_')[0] if '_' in fig.rejection_reason else fig.rejection_reason[:20]
-            rejection_counts[reason_key] = rejection_counts.get(reason_key, 0) + 1
-    if rejection_counts:
-        logger.info(f"Source A rejection summary: {rejection_counts}")
-    
-    # SOURCE B (SECONDARY): Embedded images with corrected role classification
-    logger.info("Source B: Extracting embedded images...")
-    embedded_images = extract_embedded_images(doc, min_width=min_width, min_height=min_height)
-    
-    logger.info(f"Source B: found {len(embedded_images)} embedded images")
-    
+    # SOURCE B: Already processed in G5.4 (embedded images used for fidelity comparison)
+    # Track embedded images in role distribution for reporting
     for img in embedded_images:
-        # Get page dimensions for ratio-based classification
         page = doc._doc[img.page_index]
         page_width = page.rect.width
         page_height = page.rect.height
         
-        # Convert pixmap to numpy array
-        import fitz
-        if img.pixmap.n < 4:  # RGB or grayscale
-            image_data = np.frombuffer(img.pixmap.samples, dtype=np.uint8).reshape(img.pixmap.height, img.pixmap.width, img.pixmap.n)
-        else:  # RGBA - convert to RGB
-            rgba = np.frombuffer(img.pixmap.samples, dtype=np.uint8).reshape(img.pixmap.height, img.pixmap.width, img.pixmap.n)
-            image_data = rgba[:, :, :3]  # Drop alpha channel
-        
-        # Classify image role with page dimensions
+        # Classify for reporting only
         classification = classify_image_role(
             img.pixmap,
             img.width,
             img.height,
             img.page_index,
-            0,  # image_index not available in ExtractedImage
+            0,
             page_width=page_width,
             page_height=page_height,
             bbox=img.bbox
         )
         
-        role = classification.role
-        role_str = role.value
-        
-        # Track role distribution
-        role_distribution[role_str] = role_distribution.get(role_str, 0) + 1
-        images_by_role[role_str] = images_by_role.get(role_str, 0) + 1
-        
-        logger.debug(f"Image {img.id}: role={role_str}, rationale={classification.rationale}")
-        
-        # Process based on role
-        if role == ImageRole.COMPONENT_ATOMIC:
-            # Export whole, never crop
-            component = MobiusComponent(
-                component_id=f"embedded_{img.id}",
-                source_type="embedded",
-                source_image_id=img.id,
-                image_role=role_str,
-                source_bbox=img.bbox,
-                image_data=image_data,
-                width=img.width,
-                height=img.height,
-                page_index=img.page_index
-            )
-            component.compute_content_hash()
-            components.append(component)
-            source_distribution["embedded"] += 1
-            
-        elif role == ImageRole.COMPONENT_SHEET:
-            # Segment into multiple atomic components
-            logger.info(f"Segmenting component sheet: {img.id}")
-            segments = segment_component_sheet(image_data, img.id)
-            
-            for segment in segments:
-                component = MobiusComponent(
-                    component_id=f"sheet_{img.id}_seg{segment.segment_index}",
-                    source_type="embedded",
-                    source_image_id=img.id,
-                    sheet_id=img.id,
-                    component_bbox_in_sheet=segment.bbox,
-                    image_role="component_atomic",  # Segments become atomic
-                    source_bbox=img.bbox,
-                    image_data=segment.image_data,
-                    width=segment.bbox[2],
-                    height=segment.bbox[3],
-                    page_index=img.page_index
-                )
-                component.compute_content_hash()
-                components.append(component)
-                source_distribution["embedded"] += 1
-        
-        elif role == ImageRole.ILLUSTRATION:
-            # Ignore by default
-            logger.debug(f"Ignoring illustration: {img.id}")
-            
-        elif role == ImageRole.DIAGRAM:
-            # Ignore
-            logger.debug(f"Ignoring diagram: {img.id}")
-            
-        elif role == ImageRole.ART:
-            # Ignore (full-page art/backgrounds)
-            logger.debug(f"Ignoring art: {img.id}")
+        images_by_role[classification.role.value] = images_by_role.get(classification.role.value, 0) + 1
     
-    logger.info(f"Source B: extracted {source_distribution['embedded']} embedded components")
-    logger.info(f"MOBIUS extraction complete: {len(components)} total components")
+    # G5.3: Final accounting
+    logger.info(f"MOBIUS extraction complete: {len(components)} components exported")
     logger.info(f"Source distribution: {source_distribution}")
-    logger.info(f"Role distribution: {role_distribution}")
+    logger.info(f"Candidates: {candidates_total} total, {len(components)} accepted, {rejected_total} rejected")
+    logger.info(f"Role distribution (all candidates): {role_distribution}")
     
     return MobiusExtractionResult(
         components=components,
@@ -352,3 +329,44 @@ def save_mobius_components(
     logger.info(f"Saved {len(components)} MOBIUS components to {images_dir}")
     
     return path_mapping
+
+
+def _compute_bbox_iou_pdf(bbox1: Tuple[float, float, float, float], bbox2) -> float:
+    """
+    Compute IoU between two bboxes in PDF coordinate space.
+    
+    Args:
+        bbox1: Tuple (x0, y0, x1, y1) in PDF coordinates
+        bbox2: BBox object or tuple (x0, y0, x1, y1) in PDF coordinates
+    
+    Returns:
+        IoU ratio (0.0-1.0)
+    """
+    # Handle BBox object
+    if hasattr(bbox2, 'x0'):
+        x2_0, y2_0, x2_1, y2_1 = bbox2.x0, bbox2.y0, bbox2.x1, bbox2.y1
+    else:
+        x2_0, y2_0, x2_1, y2_1 = bbox2
+    
+    x1_0, y1_0, x1_1, y1_1 = bbox1
+    
+    # Compute intersection
+    inter_x0 = max(x1_0, x2_0)
+    inter_y0 = max(y1_0, y2_0)
+    inter_x1 = min(x1_1, x2_1)
+    inter_y1 = min(y1_1, y2_1)
+    
+    if inter_x1 <= inter_x0 or inter_y1 <= inter_y0:
+        return 0.0
+    
+    inter_area = (inter_x1 - inter_x0) * (inter_y1 - inter_y0)
+    
+    # Compute union
+    area1 = (x1_1 - x1_0) * (y1_1 - y1_0)
+    area2 = (x2_1 - x2_0) * (y2_1 - y2_0)
+    union = area1 + area2 - inter_area
+    
+    if union <= 0:
+        return 0.0
+    
+    return inter_area / union
