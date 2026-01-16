@@ -170,6 +170,7 @@ def extract(
                 safe_echo(f"📄 Pages: {result.pages_processed}")
                 safe_echo(f"🖼️  Embedded images: {result.total_embedded_images}")
                 safe_echo(f"🎯 Components extracted: {len(result.components)}")
+                safe_echo(f"📊 Source distribution: rendered={len([c for c in result.components if c.source_type == 'rendered_page'])}, embedded={len([c for c in result.components if c.source_type == 'embedded'])}")
                 safe_echo(f"📊 Role distribution: {result.role_distribution}")
                 if vocabulary:
                     safe_echo(f"🎯 Component matches: {matched_count}/{len(result.components)}")

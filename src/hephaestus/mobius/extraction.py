@@ -89,45 +89,92 @@ def extract_mobius_components(
     doc: PdfDocument,
     component_vocabulary: Optional["ComponentVocabulary"] = None,
     min_width: int = 50,
-    min_height: int = 50
+    min_height: int = 50,
+    render_dpi: int = 200
 ) -> MobiusExtractionResult:
     """
-    Extract components using image-role–driven MOBIUS extraction.
+    Extract components using two-source MOBIUS extraction.
     
     Pipeline:
-    1. Extract embedded images (primary source)
-    2. Classify each image by role
-    3. Segment component_sheet images only
-    4. Export atomic components
+    Source A (Primary): Rendered page figures with text masking
+    Source B (Secondary): Embedded images with role classification
     
     Args:
         doc: PDF document to process
         component_vocabulary: Optional component vocabulary for matching
         min_width: Minimum image width for extraction
         min_height: Minimum image height for extraction
+        render_dpi: DPI for page rendering (Source A)
     
     Returns:
         MobiusExtractionResult with all extracted components
     """
     from .roles import classify_image_role, ImageRole
     from .sheets import segment_component_sheet
+    from .figures import extract_rendered_figures
+    from ..regions.rendering import render_page_to_image
     
-    logger.info(f"Starting MOBIUS extraction (image-role–driven): {doc.page_count} pages")
-    
-    # Step 1: Extract embedded images (primary source)
-    logger.info("Step 1: Extracting embedded images...")
-    embedded_images = extract_embedded_images(doc, min_width=min_width, min_height=min_height)
-    
-    logger.info(f"Found {len(embedded_images)} embedded images")
+    logger.info(f"Starting MOBIUS extraction (two-source): {doc.page_count} pages")
     
     components = []
     role_distribution = {}
     images_by_role = {}
+    source_distribution = {"rendered_page": 0, "embedded": 0}
     
-    # Step 2: Classify each image by role
-    logger.info("Step 2: Classifying images by role...")
+    # SOURCE A (PRIMARY): Rendered page figures with text masking
+    logger.info("Source A: Extracting rendered page figures...")
+    
+    for page_index in range(doc.page_count):
+        page = doc._doc[page_index]
+        
+        # Render page
+        page_image = render_page_to_image(page, dpi=render_dpi)
+        
+        # Extract text blocks for masking
+        text_blocks = page.get_text("blocks")
+        
+        # Extract figures
+        figures = extract_rendered_figures(
+            page_image,
+            text_blocks,
+            page.rect.width,
+            page.rect.height,
+            page_index,
+            dpi=render_dpi
+        )
+        
+        # Convert figures to components
+        for figure in figures:
+            component = MobiusComponent(
+                component_id=f"rendered_p{page_index}_f{figure.figure_index}",
+                source_type="rendered_page",
+                source_image_id=f"p{page_index}_f{figure.figure_index}",
+                image_role="component_atomic",
+                source_bbox=figure.bbox_pdf,
+                image_data=figure.image_data,
+                width=figure.bbox_pixels[2],
+                height=figure.bbox_pixels[3],
+                page_index=page_index
+            )
+            component.compute_content_hash()
+            components.append(component)
+            source_distribution["rendered_page"] += 1
+            role_distribution["component_atomic"] = role_distribution.get("component_atomic", 0) + 1
+    
+    logger.info(f"Source A: extracted {source_distribution['rendered_page']} rendered figures")
+    
+    # SOURCE B (SECONDARY): Embedded images with corrected role classification
+    logger.info("Source B: Extracting embedded images...")
+    embedded_images = extract_embedded_images(doc, min_width=min_width, min_height=min_height)
+    
+    logger.info(f"Source B: found {len(embedded_images)} embedded images")
     
     for img in embedded_images:
+        # Get page dimensions for ratio-based classification
+        page = doc._doc[img.page_index]
+        page_width = page.rect.width
+        page_height = page.rect.height
+        
         # Convert pixmap to numpy array
         import fitz
         if img.pixmap.n < 4:  # RGB or grayscale
@@ -136,13 +183,16 @@ def extract_mobius_components(
             rgba = np.frombuffer(img.pixmap.samples, dtype=np.uint8).reshape(img.pixmap.height, img.pixmap.width, img.pixmap.n)
             image_data = rgba[:, :, :3]  # Drop alpha channel
         
-        # Classify image role
+        # Classify image role with page dimensions
         classification = classify_image_role(
             img.pixmap,
             img.width,
             img.height,
             img.page_index,
-            0  # image_index not available in ExtractedImage
+            0,  # image_index not available in ExtractedImage
+            page_width=page_width,
+            page_height=page_height,
+            bbox=img.bbox
         )
         
         role = classification.role
@@ -154,11 +204,11 @@ def extract_mobius_components(
         
         logger.debug(f"Image {img.id}: role={role_str}, rationale={classification.rationale}")
         
-        # Step 3: Process based on role
+        # Process based on role
         if role == ImageRole.COMPONENT_ATOMIC:
             # Export whole, never crop
             component = MobiusComponent(
-                component_id=f"atomic_{img.id}",
+                component_id=f"embedded_{img.id}",
                 source_type="embedded",
                 source_image_id=img.id,
                 image_role=role_str,
@@ -170,6 +220,7 @@ def extract_mobius_components(
             )
             component.compute_content_hash()
             components.append(component)
+            source_distribution["embedded"] += 1
             
         elif role == ImageRole.COMPONENT_SHEET:
             # Segment into multiple atomic components
@@ -192,20 +243,23 @@ def extract_mobius_components(
                 )
                 component.compute_content_hash()
                 components.append(component)
+                source_distribution["embedded"] += 1
         
         elif role == ImageRole.ILLUSTRATION:
-            # Ignore by default (could export if explicitly needed)
+            # Ignore by default
             logger.debug(f"Ignoring illustration: {img.id}")
             
         elif role == ImageRole.DIAGRAM:
-            # Never export
+            # Ignore
             logger.debug(f"Ignoring diagram: {img.id}")
             
         elif role == ImageRole.ART:
-            # Ignore
+            # Ignore (full-page art/backgrounds)
             logger.debug(f"Ignoring art: {img.id}")
     
-    logger.info(f"MOBIUS extraction complete: {len(components)} components from {len(embedded_images)} images")
+    logger.info(f"Source B: extracted {source_distribution['embedded']} embedded components")
+    logger.info(f"MOBIUS extraction complete: {len(components)} total components")
+    logger.info(f"Source distribution: {source_distribution}")
     logger.info(f"Role distribution: {role_distribution}")
     
     return MobiusExtractionResult(

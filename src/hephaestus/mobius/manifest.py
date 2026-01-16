@@ -122,8 +122,8 @@ def build_mobius_manifest(
             component_bbox_in_sheet=component.component_bbox_in_sheet,
             image_role=component.image_role,
             source_bbox=component.source_bbox,
-            width=component.width,
-            height=component.height,
+            width=int(component.width),  # Convert numpy int to Python int
+            height=int(component.height),  # Convert numpy int to Python int
             page_index=component.page_index,
             component_match=component.component_match,
             match_score=component.match_score,
