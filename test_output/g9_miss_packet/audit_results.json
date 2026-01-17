@@ -1,0 +1,315 @@
+{
+  "audit_date": "2026-01-17",
+  "total_audited": 3,
+  "results": [
+    {
+      "reference": "tm_ref_01.png",
+      "current_tier": "BOARD",
+      "top_candidate": "fb-terraforming-mars-rule__rendered_p4_f19.png",
+      "already_assigned": true,
+      "classification": "UNEXPECTED_CURRENT_TIER_SHOULD_MATCH",
+      "recommendation": "Investigation needed - current tier should have matched",
+      "passing_tiers": [
+        "ICON",
+        "MID",
+        "BOARD"
+      ],
+      "tier_results": {
+        "ICON": {
+          "passes": true,
+          "is_current_tier": false,
+          "passed_criteria": [
+            "phash=12<=16",
+            "dhash=10<=16"
+          ],
+          "checks": {
+            "phash": {
+              "value": 12,
+              "threshold": 16,
+              "passes": true
+            },
+            "dhash": {
+              "value": 10,
+              "threshold": 16,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.01,
+              "threshold": 0.08,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.7661917805671692,
+              "threshold": 0.82,
+              "passes": false
+            }
+          }
+        },
+        "MID": {
+          "passes": true,
+          "is_current_tier": false,
+          "passed_criteria": [
+            "phash=12<=12",
+            "dhash=10<=12"
+          ],
+          "checks": {
+            "phash": {
+              "value": 12,
+              "threshold": 12,
+              "passes": true
+            },
+            "dhash": {
+              "value": 10,
+              "threshold": 12,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.01,
+              "threshold": 0.12,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.7661917805671692,
+              "threshold": 0.85,
+              "passes": false
+            }
+          }
+        },
+        "BOARD": {
+          "passes": true,
+          "is_current_tier": true,
+          "passed_criteria": [
+            "dhash=10<=10"
+          ],
+          "checks": {
+            "phash": {
+              "value": 12,
+              "threshold": 10,
+              "passes": false
+            },
+            "dhash": {
+              "value": 10,
+              "threshold": 10,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.01,
+              "threshold": 0.15,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.7661917805671692,
+              "threshold": 0.88,
+              "passes": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "reference": "tm_ref_13.png",
+      "current_tier": "MID",
+      "top_candidate": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+      "already_assigned": true,
+      "classification": "UNEXPECTED_CURRENT_TIER_SHOULD_MATCH",
+      "recommendation": "Investigation needed - current tier should have matched",
+      "passing_tiers": [
+        "ICON",
+        "MID"
+      ],
+      "tier_results": {
+        "ICON": {
+          "passes": true,
+          "is_current_tier": false,
+          "passed_criteria": [
+            "phash=12<=16",
+            "dhash=14<=16"
+          ],
+          "checks": {
+            "phash": {
+              "value": 12,
+              "threshold": 16,
+              "passes": true
+            },
+            "dhash": {
+              "value": 14,
+              "threshold": 16,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.006787330316742082,
+              "threshold": 0.08,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.7800781279802322,
+              "threshold": 0.82,
+              "passes": false
+            }
+          }
+        },
+        "MID": {
+          "passes": true,
+          "is_current_tier": true,
+          "passed_criteria": [
+            "phash=12<=12"
+          ],
+          "checks": {
+            "phash": {
+              "value": 12,
+              "threshold": 12,
+              "passes": true
+            },
+            "dhash": {
+              "value": 14,
+              "threshold": 12,
+              "passes": false
+            },
+            "orb": {
+              "value": 0.006787330316742082,
+              "threshold": 0.12,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.7800781279802322,
+              "threshold": 0.85,
+              "passes": false
+            }
+          }
+        },
+        "BOARD": {
+          "passes": false,
+          "is_current_tier": false,
+          "passed_criteria": [],
+          "checks": {
+            "phash": {
+              "value": 12,
+              "threshold": 10,
+              "passes": false
+            },
+            "dhash": {
+              "value": 14,
+              "threshold": 10,
+              "passes": false
+            },
+            "orb": {
+              "value": 0.006787330316742082,
+              "threshold": 0.15,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.7800781279802322,
+              "threshold": 0.88,
+              "passes": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "reference": "tm_ref_24.png",
+      "current_tier": "ICON",
+      "top_candidate": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+      "already_assigned": true,
+      "classification": "UNEXPECTED_CURRENT_TIER_SHOULD_MATCH",
+      "recommendation": "Investigation needed - current tier should have matched",
+      "passing_tiers": [
+        "ICON",
+        "MID",
+        "BOARD"
+      ],
+      "tier_results": {
+        "ICON": {
+          "passes": true,
+          "is_current_tier": true,
+          "passed_criteria": [
+            "phash=15<=16",
+            "dhash=9<=16",
+            "fallback=0.862>=0.82"
+          ],
+          "checks": {
+            "phash": {
+              "value": 15,
+              "threshold": 16,
+              "passes": true
+            },
+            "dhash": {
+              "value": 9,
+              "threshold": 16,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.0,
+              "threshold": 0.08,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.8617254495620728,
+              "threshold": 0.82,
+              "passes": true
+            }
+          }
+        },
+        "MID": {
+          "passes": true,
+          "is_current_tier": false,
+          "passed_criteria": [
+            "dhash=9<=12",
+            "fallback=0.862>=0.85"
+          ],
+          "checks": {
+            "phash": {
+              "value": 15,
+              "threshold": 12,
+              "passes": false
+            },
+            "dhash": {
+              "value": 9,
+              "threshold": 12,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.0,
+              "threshold": 0.12,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.8617254495620728,
+              "threshold": 0.85,
+              "passes": true
+            }
+          }
+        },
+        "BOARD": {
+          "passes": true,
+          "is_current_tier": false,
+          "passed_criteria": [
+            "dhash=9<=10"
+          ],
+          "checks": {
+            "phash": {
+              "value": 15,
+              "threshold": 10,
+              "passes": false
+            },
+            "dhash": {
+              "value": 9,
+              "threshold": 10,
+              "passes": true
+            },
+            "orb": {
+              "value": 0.0,
+              "threshold": 0.15,
+              "passes": false
+            },
+            "fallback": {
+              "value": 0.8617254495620728,
+              "threshold": 0.88,
+              "passes": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}

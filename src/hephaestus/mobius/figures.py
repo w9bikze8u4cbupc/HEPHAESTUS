@@ -56,6 +56,13 @@ class RenderedFigure:
     # G6.2: Clip re-render metadata
     render_dpi_used: int = 0  # Actual DPI used for clip render
     
+    # G7.2: Size tier classification
+    size_tier: str = "MID"  # BOARD, MID, or ICON
+    
+    # G7.3: Raster upscale detection
+    raster_upscale_suspect: bool = False
+    render_info_gain: float = 0.0  # Information gain from low to high DPI
+    
     # Classification
     image_role: str = "component_atomic"
     rejection_reason: Optional[str] = None
@@ -193,17 +200,30 @@ def extract_rendered_figures(
         fig.width_ratio = bbox_w / img_width
         fig.height_ratio = bbox_h / img_height
         
-        # G6.1: PDF-space size gates (replace pixel-based gates)
-        min_bbox_in = 0.35  # Minimum 0.35 inches for smallest meaningful components
-        min_bbox_area_in2 = 0.20 * 0.20  # Minimum 0.04 square inches
+        # G7.2: Size-tiered role classification
+        fig.size_tier = _classify_size_tier(fig.bbox_width_in, fig.bbox_height_in, fig.width_ratio, fig.height_ratio)
+        
+        # G7.2: Apply tier-specific size gates
+        if fig.size_tier == "ICON":
+            # ICON tier: relaxed gates for small tokens (recall priority)
+            min_bbox_in = 0.22  # Minimum 0.22 inches (was 0.30)
+            min_bbox_area_in2 = 0.048  # 0.22 × 0.22 (was 0.09)
+        elif fig.size_tier == "MID":
+            # MID tier: moderate gates for cards/tiles
+            min_bbox_in = 0.23  # Minimum 0.23 inches (was 0.25)
+            min_bbox_area_in2 = 0.053  # 0.23 × 0.23 (was 0.0625)
+        else:  # BOARD
+            # BOARD tier: relaxed gates for large structured components
+            min_bbox_in = 0.20  # Minimum 0.20 inches
+            min_bbox_area_in2 = 0.04  # 0.20 × 0.20
         
         if fig.bbox_width_in < min_bbox_in or fig.bbox_height_in < min_bbox_in:
-            fig.rejection_reason = f"too_small_physical_w{fig.bbox_width_in:.2f}in_h{fig.bbox_height_in:.2f}in_min{min_bbox_in}in"
+            fig.rejection_reason = f"too_small_{fig.size_tier}_w{fig.bbox_width_in:.2f}in_h{fig.bbox_height_in:.2f}in_min{min_bbox_in}in"
             figures.append(fig)
             continue
         
         if fig.bbox_area_in2 < min_bbox_area_in2:
-            fig.rejection_reason = f"too_small_physical_area_{fig.bbox_area_in2:.3f}in2_min{min_bbox_area_in2}in2"
+            fig.rejection_reason = f"too_small_{fig.size_tier}_area_{fig.bbox_area_in2:.3f}in2_min{min_bbox_area_in2}in2"
             figures.append(fig)
             continue
         
@@ -477,6 +497,98 @@ def render_bbox_clip_high_fidelity(
         img = img.reshape(pix.height, pix.width, 3)
     
     return (img, target_dpi)
+
+
+def _classify_size_tier(bbox_width_in: float, bbox_height_in: float, width_ratio: float, height_ratio: float) -> str:
+    """
+    G7.2: Classify component into size tier (BOARD/MID/ICON).
+    
+    Args:
+        bbox_width_in: Width in inches
+        bbox_height_in: Height in inches
+        width_ratio: Width ratio relative to page
+        height_ratio: Height ratio relative to page
+    
+    Returns:
+        Size tier: "BOARD", "MID", or "ICON"
+    """
+    # BOARD: Near full-page, structured components (game boards, large reference sheets)
+    # Criteria: Large page coverage OR large physical size
+    if (width_ratio >= 0.50 and height_ratio >= 0.50) or (bbox_width_in >= 4.0 and bbox_height_in >= 4.0):
+        return "BOARD"
+    
+    # ICON: Small tokens, markers, icons
+    # Criteria: Small physical size AND small page coverage
+    if bbox_width_in < 1.0 and bbox_height_in < 1.0 and width_ratio < 0.15 and height_ratio < 0.15:
+        return "ICON"
+    
+    # MID: Cards, tiles, medium components (default)
+    return "MID"
+
+
+def compute_render_information_gain(
+    page: "fitz.Page",
+    bbox_pdf: Tuple[float, float, float, float],
+    low_dpi: int = 150,
+    high_dpi: int = 600
+) -> Tuple[float, bool]:
+    """
+    G7.3: Compute render information gain to detect raster-upscale suspects.
+    
+    Renders the same bbox at low and high DPI, then compares edge density.
+    If high DPI doesn't add meaningful edges, the source is likely raster-upscaled.
+    
+    Args:
+        page: PyMuPDF page object
+        bbox_pdf: Bounding box in PDF coordinates
+        low_dpi: Low DPI for baseline render (default 150)
+        high_dpi: High DPI for comparison render (default 600)
+    
+    Returns:
+        (info_gain, is_suspect) where:
+        - info_gain: Ratio of edge_density_high / edge_density_low
+        - is_suspect: True if info_gain < 1.3 (insufficient gain)
+    """
+    import fitz
+    
+    try:
+        import cv2
+    except ImportError:
+        return (1.0, False)
+    
+    # Render at low DPI
+    zoom_low = low_dpi / 72.0
+    mat_low = fitz.Matrix(zoom_low, zoom_low)
+    clip = fitz.Rect(bbox_pdf)
+    pix_low = page.get_pixmap(matrix=mat_low, clip=clip, colorspace=fitz.csRGB)
+    img_low = np.frombuffer(pix_low.samples, dtype=np.uint8).reshape(pix_low.height, pix_low.width, 3)
+    
+    # Render at high DPI
+    zoom_high = high_dpi / 72.0
+    mat_high = fitz.Matrix(zoom_high, zoom_high)
+    pix_high = page.get_pixmap(matrix=mat_high, clip=clip, colorspace=fitz.csRGB)
+    img_high = np.frombuffer(pix_high.samples, dtype=np.uint8).reshape(pix_high.height, pix_high.width, 3)
+    
+    # Compute edge density for both
+    gray_low = cv2.cvtColor(img_low, cv2.COLOR_RGB2GRAY)
+    gray_high = cv2.cvtColor(img_high, cv2.COLOR_RGB2GRAY)
+    
+    edges_low = cv2.Canny(gray_low, 50, 150)
+    edges_high = cv2.Canny(gray_high, 50, 150)
+    
+    edge_density_low = np.count_nonzero(edges_low) / (gray_low.shape[0] * gray_low.shape[1])
+    edge_density_high = np.count_nonzero(edges_high) / (gray_high.shape[0] * gray_high.shape[1])
+    
+    # Compute information gain
+    if edge_density_low > 0:
+        info_gain = edge_density_high / edge_density_low
+    else:
+        info_gain = 1.0 if edge_density_high == 0 else 2.0
+    
+    # Suspect if gain is less than 1.3x (insufficient detail added by higher DPI)
+    is_suspect = info_gain < 1.3
+    
+    return (info_gain, is_suspect)
 
 
 def _compute_component_likeness_score(fig: RenderedFigure) -> float:

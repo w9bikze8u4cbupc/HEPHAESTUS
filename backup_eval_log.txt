@@ -1,0 +1,115 @@
+
+=== G7.2 Recall Evaluation (1:1 Matching, Tiered Thresholds) ===
+Reference images: 31
+  ICON: 26 (phash<=16, dhash<=16, ORB>=0.08, fallback>=0.82)
+  MID: 4 (phash<=12, dhash<=12, ORB>=0.12, fallback>=0.85)
+  BOARD: 1 (phash<=10, dhash<=10, ORB>=0.15, fallback>=0.88)
+Extracted components: 28
+
+Computing candidate matches with tier-aware scoring...
+Performing 1:1 greedy assignment...
+  [ICON] tm_ref_21.png -> fb-terraforming-mars-rule__rendered_p14_f16.png (score=4.000, method=phash)
+  [MID] tm_ref_10.png -> fb-terraforming-mars-rule__rendered_p5_f3.png (score=4.000, method=phash)
+  [ICON] tm_ref_30.png -> fb-terraforming-mars-rule__rendered_p14_f29.png (score=6.000, method=phash)
+  [ICON] tm_ref_03.png -> fb-terraforming-mars-rule__rendered_p4_f19.png (score=7.000, method=dhash)
+  [ICON] tm_ref_16.png -> fb-terraforming-mars-rule__rendered_p14_f31.png (score=7.000, method=phash)
+  [ICON] tm_ref_29.png -> fb-terraforming-mars-rule__rendered_p14_f35.png (score=7.000, method=phash)
+  [ICON] tm_ref_02.png -> fb-terraforming-mars-rule__rendered_p12_f6.png (score=8.000, method=dhash)
+  [ICON] tm_ref_25.png -> fb-terraforming-mars-rule__rendered_p14_f26.png (score=9.000, method=dhash)
+  [ICON] tm_ref_19.png -> fb-terraforming-mars-rule__rendered_p13_f15.png (score=9.000, method=dhash)
+  [ICON] tm_ref_22.png -> fb-terraforming-mars-rule__rendered_p14_f15.png (score=9.000, method=dhash)
+  [ICON] tm_ref_26.png -> fb-terraforming-mars-rule__rendered_p13_f18.png (score=9.000, method=phash)
+  [ICON] tm_ref_17.png -> fb-terraforming-mars-rule__rendered_p14_f28.png (score=10.000, method=phash)
+  [ICON] tm_ref_15.png -> fb-terraforming-mars-rule__rendered_p14_f32.png (score=10.000, method=phash)
+  [ICON] tm_ref_23.png -> fb-terraforming-mars-rule__rendered_p14_f17.png (score=9.000, method=dhash)
+  [ICON] tm_ref_18.png -> fb-terraforming-mars-rule__rendered_p13_f6.png (score=11.000, method=phash)
+  [MID] tm_ref_14.png -> fb-terraforming-mars-rule__rendered_p8_f26.png (score=10.000, method=phash)
+  [ICON] tm_ref_06.png -> fb-terraforming-mars-rule__rendered_p8_f27.png (score=11.000, method=phash)
+  [MID] tm_ref_11.png -> fb-terraforming-mars-rule__rendered_p13_f16.png (score=10.000, method=dhash)
+  [ICON] tm_ref_08.png -> fb-terraforming-mars-rule__rendered_p9_f9.png (score=12.000, method=phash)
+  [ICON] tm_ref_07.png -> fb-terraforming-mars-rule__rendered_p14_f11.png (score=13.000, method=dhash)
+  [ICON] tm_ref_04.png -> fb-terraforming-mars-rule__rendered_p13_f11.png (score=12.000, method=phash)
+  [ICON] tm_ref_31.png -> fb-terraforming-mars-rule__rendered_p9_f13.png (score=12.000, method=dhash)
+  [ICON] tm_ref_05.png -> fb-terraforming-mars-rule__rendered_p13_f17.png (score=13.000, method=phash)
+  [ICON] tm_ref_27.png -> fb-terraforming-mars-rule__rendered_p13_f10.png (score=13.000, method=phash)
+  [ICON] tm_ref_20.png -> fb-terraforming-mars-rule__rendered_p11_f5.png (score=14.000, method=dhash)
+  [ICON] tm_ref_28.png -> fb-terraforming-mars-rule__rendered_p13_f26.png (score=12.000, method=phash)
+  [ICON] tm_ref_12.png -> fb-terraforming-mars-rule__rendered_p11_f4.png (score=14.000, method=dhash)
+  [ICON] tm_ref_09.png -> fb-terraforming-mars-rule__rendered_p15_f0.png (score=14.000, method=dhash)
+
+Generating diagnostics for unmatched references...
+
+[BOARD] tm_ref_01.png - Top 5 candidates:
+  1. fb-terraforming-mars-rule__rendered_p4_f19.png
+     phash=12, dhash=10, orb=0.010, fallback=0.766, combined=7.604
+  2. fb-terraforming-mars-rule__rendered_p12_f6.png
+     phash=16, dhash=10, orb=0.004, fallback=0.695, combined=8.244
+  3. fb-terraforming-mars-rule__rendered_p11_f4.png
+     phash=11, dhash=14, orb=0.004, fallback=0.689, combined=8.852
+  4. fb-terraforming-mars-rule__rendered_p14_f28.png
+     phash=14, dhash=12, orb=0.008, fallback=0.692, combined=9.368
+  5. fb-terraforming-mars-rule__rendered_p9_f9.png
+     phash=15, dhash=11, orb=0.014, fallback=0.615, combined=9.513
+
+[MID] tm_ref_13.png - Top 5 candidates:
+  1. fb-terraforming-mars-rule__rendered_p14_f35.png
+     phash=12, dhash=14, orb=0.007, fallback=0.780, combined=8.579
+  2. fb-terraforming-mars-rule__rendered_p11_f4.png
+     phash=13, dhash=16, orb=0.010, fallback=0.797, combined=8.981
+  3. fb-terraforming-mars-rule__rendered_p13_f15.png
+     phash=13, dhash=15, orb=0.007, fallback=0.776, combined=9.162
+  4. fb-terraforming-mars-rule__rendered_p14_f31.png
+     phash=14, dhash=15, orb=0.007, fallback=0.791, combined=9.580
+  5. fb-terraforming-mars-rule__rendered_p4_f19.png
+     phash=14, dhash=16, orb=0.000, fallback=0.790, combined=9.594
+
+[ICON] tm_ref_24.png - Top 5 candidates:
+  1. fb-terraforming-mars-rule__rendered_p14_f31.png
+     phash=15, dhash=9, orb=0.000, fallback=0.862, combined=6.194
+  2. fb-terraforming-mars-rule__rendered_p14_f29.png
+     phash=13, dhash=10, orb=0.000, fallback=0.831, combined=7.017
+  3. fb-terraforming-mars-rule__rendered_p14_f35.png
+     phash=16, dhash=12, orb=0.000, fallback=0.841, combined=8.027
+  4. fb-terraforming-mars-rule__rendered_p14_f32.png
+     phash=11, dhash=15, orb=0.000, fallback=0.779, combined=8.038
+  5. fb-terraforming-mars-rule__rendered_p14_f28.png
+     phash=12, dhash=13, orb=0.000, fallback=0.818, combined=8.238
+
+============================================================
+EVALUATION SUMMARY
+============================================================
+Total reference images: 31
+  ICON: 26
+  MID: 4
+  BOARD: 1
+Total extracted components: 28
+
+Matches found: 28
+  ICON: 25/26
+  MID: 3/4
+  BOARD: 0/1
+
+Unmatched references: 3
+  ICON: 1
+  MID: 1
+  BOARD: 1
+
+False positives: 0
+
+Recall: 90.3% (28/31)
+
+ACCEPTANCE CRITERIA (G7.5):
+  Recall >=90%: [PASS] (90.3%)
+  False positives <=2: [PASS] (0)
+
+[OVERALL: PASS]
+
+Unmatched references by tier:
+  ICON:
+    - tm_ref_24.png
+  MID:
+    - tm_ref_13.png
+  BOARD:
+    - tm_ref_01.png
+
+Results saved to: test_output\g7_tuned_eval_1to1_tiered.json

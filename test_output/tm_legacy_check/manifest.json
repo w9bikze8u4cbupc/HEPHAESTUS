@@ -1,0 +1,894 @@
+{
+  "version": "1.0.0",
+  "source_pdf": "acceptance_test\\fb-terraforming-mars-rule.pdf",
+  "extraction_timestamp": "2026-01-17T07:45:25.220166",
+  "total_items": 30,
+  "summary": {
+    "total_items": 30,
+    "components": 30,
+    "non_components": 0,
+    "component_ratio": 1.0,
+    "metadata_coverage": {
+      "with_labels": 15,
+      "with_quantities": 15,
+      "complete": 15,
+      "label_success_rate": 0.5,
+      "quantity_success_rate": 0.5,
+      "complete_success_rate": 0.5
+    },
+    "confidence_scores": {
+      "average_classification": 0.7,
+      "average_metadata": 0.0
+    },
+    "distributions": {
+      "classifications": {
+        "board": 30
+      },
+      "pages": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2,
+        "8": 2,
+        "9": 2,
+        "10": 2,
+        "11": 2,
+        "12": 2,
+        "13": 2,
+        "14": 2,
+        "15": 1
+      },
+      "top_labels": {
+        "Oxygen": 2,
+        "Energy": 2,
+        "Generous": 1,
+        "Resource cubes": 1,
+        "New": 1,
+        "Ends": 1,
+        "Choose": 1,
+        "Card": 1,
+        "Cubes": 1,
+        "Rulebook": 1
+      }
+    },
+    "deduplication": {
+      "total_duplicates": 14,
+      "unique_groups": 14,
+      "duplicate_ratio": 0.4666666666666667
+    }
+  },
+  "items": [
+    {
+      "image_id": "p0_img0",
+      "file_name": "component_p0_img0.png",
+      "page_index": 0,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p0_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p0_img0.png",
+      "path_all": "images/all/component_p0_img0.png",
+      "path_primary": "images/canonicals/boards/component_p0_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img0",
+      "file_name": "component_p1_img0.png",
+      "page_index": 1,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p1_img0.png",
+      "path_all": "images/all/component_p1_img0.png",
+      "path_primary": "images/canonicals/boards/component_p1_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p1_img1",
+      "file_name": "component_p1_img1.png",
+      "page_index": 1,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Generous",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_008",
+      "is_duplicate": false,
+      "canonical_image_id": "p1_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p1_img1.png",
+      "path_all": "images/all/component_p1_img1.png",
+      "path_primary": "images/canonicals/boards/component_p1_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p2_img0",
+      "file_name": "component_p2_img0.png",
+      "page_index": 2,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Oxygen",
+      "quantity": 9,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_007",
+      "is_duplicate": true,
+      "canonical_image_id": "p1_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p2_img0.png",
+      "path_all": "images/all/component_p2_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p2_img0.png"
+    },
+    {
+      "image_id": "p2_img1",
+      "file_name": "component_p2_img1.png",
+      "page_index": 2,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_008",
+      "is_duplicate": true,
+      "canonical_image_id": "p1_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p2_img1.png",
+      "path_all": "images/all/component_p2_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p2_img1.png"
+    },
+    {
+      "image_id": "p3_img0",
+      "file_name": "component_p3_img0.png",
+      "page_index": 3,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_009",
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p3_img0.png",
+      "path_all": "images/all/component_p3_img0.png",
+      "path_primary": "images/canonicals/boards/component_p3_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p3_img1",
+      "file_name": "component_p3_img1.png",
+      "page_index": 3,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Oxygen",
+      "quantity": 9,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_010",
+      "is_duplicate": false,
+      "canonical_image_id": "p3_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p3_img1.png",
+      "path_all": "images/all/component_p3_img1.png",
+      "path_primary": "images/canonicals/boards/component_p3_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p4_img0",
+      "file_name": "component_p4_img0.png",
+      "page_index": 4,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Resource cubes",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_009",
+      "is_duplicate": true,
+      "canonical_image_id": "p3_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p4_img0.png",
+      "path_all": "images/all/component_p4_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p4_img0.png"
+    },
+    {
+      "image_id": "p4_img1",
+      "file_name": "component_p4_img1.png",
+      "page_index": 4,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_010",
+      "is_duplicate": true,
+      "canonical_image_id": "p3_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p4_img1.png",
+      "path_all": "images/all/component_p4_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p4_img1.png"
+    },
+    {
+      "image_id": "p5_img0",
+      "file_name": "component_p5_img0.png",
+      "page_index": 5,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_011",
+      "is_duplicate": false,
+      "canonical_image_id": "p5_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p5_img0.png",
+      "path_all": "images/all/component_p5_img0.png",
+      "path_primary": "images/canonicals/boards/component_p5_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p5_img1",
+      "file_name": "component_p5_img1.png",
+      "page_index": 5,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Energy",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_012",
+      "is_duplicate": false,
+      "canonical_image_id": "p5_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p5_img1.png",
+      "path_all": "images/all/component_p5_img1.png",
+      "path_primary": "images/canonicals/boards/component_p5_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p6_img0",
+      "file_name": "component_p6_img0.png",
+      "page_index": 6,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "New",
+      "quantity": 20,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_011",
+      "is_duplicate": true,
+      "canonical_image_id": "p5_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p6_img0.png",
+      "path_all": "images/all/component_p6_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p6_img0.png"
+    },
+    {
+      "image_id": "p6_img1",
+      "file_name": "component_p6_img1.png",
+      "page_index": 6,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_012",
+      "is_duplicate": true,
+      "canonical_image_id": "p5_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p6_img1.png",
+      "path_all": "images/all/component_p6_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p6_img1.png"
+    },
+    {
+      "image_id": "p7_img0",
+      "file_name": "component_p7_img0.png",
+      "page_index": 7,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_013",
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p7_img0.png",
+      "path_all": "images/all/component_p7_img0.png",
+      "path_primary": "images/canonicals/boards/component_p7_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p7_img1",
+      "file_name": "component_p7_img1.png",
+      "page_index": 7,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Ends",
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_014",
+      "is_duplicate": false,
+      "canonical_image_id": "p7_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p7_img1.png",
+      "path_all": "images/all/component_p7_img1.png",
+      "path_primary": "images/canonicals/boards/component_p7_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p8_img0",
+      "file_name": "component_p8_img0.png",
+      "page_index": 8,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Choose",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_013",
+      "is_duplicate": true,
+      "canonical_image_id": "p7_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p8_img0.png",
+      "path_all": "images/all/component_p8_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p8_img0.png"
+    },
+    {
+      "image_id": "p8_img1",
+      "file_name": "component_p8_img1.png",
+      "page_index": 8,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_014",
+      "is_duplicate": true,
+      "canonical_image_id": "p7_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p8_img1.png",
+      "path_all": "images/all/component_p8_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p8_img1.png"
+    },
+    {
+      "image_id": "p9_img0",
+      "file_name": "component_p9_img0.png",
+      "page_index": 9,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Card",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p9_img0.png",
+      "path_all": "images/all/component_p9_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p9_img0.png"
+    },
+    {
+      "image_id": "p9_img1",
+      "file_name": "component_p9_img1.png",
+      "page_index": 9,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_001",
+      "is_duplicate": true,
+      "canonical_image_id": "p10_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p9_img1.png",
+      "path_all": "images/all/component_p9_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p9_img1.png"
+    },
+    {
+      "image_id": "p10_img0",
+      "file_name": "component_p10_img0.png",
+      "page_index": 10,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Cubes",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_001",
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p10_img0.png",
+      "path_all": "images/all/component_p10_img0.png",
+      "path_primary": "images/canonicals/boards/component_p10_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p10_img1",
+      "file_name": "component_p10_img1.png",
+      "page_index": 10,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_002",
+      "is_duplicate": false,
+      "canonical_image_id": "p10_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p10_img1.png",
+      "path_all": "images/all/component_p10_img1.png",
+      "path_primary": "images/canonicals/boards/component_p10_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img0",
+      "file_name": "component_p11_img0.png",
+      "page_index": 11,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_003",
+      "is_duplicate": false,
+      "canonical_image_id": "p11_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p11_img0.png",
+      "path_all": "images/all/component_p11_img0.png",
+      "path_primary": "images/canonicals/boards/component_p11_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p11_img1",
+      "file_name": "component_p11_img1.png",
+      "page_index": 11,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Rulebook",
+      "quantity": 5,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_004",
+      "is_duplicate": false,
+      "canonical_image_id": "p11_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p11_img1.png",
+      "path_all": "images/all/component_p11_img1.png",
+      "path_primary": "images/canonicals/boards/component_p11_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p12_img0",
+      "file_name": "component_p12_img0.png",
+      "page_index": 12,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Rise first",
+      "quantity": 2,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_003",
+      "is_duplicate": true,
+      "canonical_image_id": "p11_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p12_img0.png",
+      "path_all": "images/all/component_p12_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p12_img0.png"
+    },
+    {
+      "image_id": "p12_img1",
+      "file_name": "component_p12_img1.png",
+      "page_index": 12,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_004",
+      "is_duplicate": true,
+      "canonical_image_id": "p11_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p12_img1.png",
+      "path_all": "images/all/component_p12_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p12_img1.png"
+    },
+    {
+      "image_id": "p13_img0",
+      "file_name": "component_p13_img0.png",
+      "page_index": 13,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": 581.0139770507812,
+        "y0": -0.02227783203125,
+        "x1": 1162.2939453125,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_005",
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p13_img0.png",
+      "path_all": "images/all/component_p13_img0.png",
+      "path_primary": "images/canonicals/boards/component_p13_img0.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p13_img1",
+      "file_name": "component_p13_img1.png",
+      "page_index": 13,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Energy",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_006",
+      "is_duplicate": false,
+      "canonical_image_id": "p13_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p13_img1.png",
+      "path_all": "images/all/component_p13_img1.png",
+      "path_primary": "images/canonicals/boards/component_p13_img1.png",
+      "path_duplicate": null
+    },
+    {
+      "image_id": "p14_img0",
+      "file_name": "component_p14_img0.png",
+      "page_index": 14,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "City tile",
+      "quantity": 3,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.08883330225944519,
+        "y0": -0.02227783203125,
+        "x1": 581.1912231445312,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_005",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p14_img0.png",
+      "path_all": "images/all/component_p14_img0.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p14_img0.png"
+    },
+    {
+      "image_id": "p14_img1",
+      "file_name": "component_p14_img1.png",
+      "page_index": 14,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": null,
+      "quantity": null,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -581.1909790039062,
+        "y0": -0.02227783203125,
+        "x1": 0.08905029296875,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": "dup_006",
+      "is_duplicate": true,
+      "canonical_image_id": "p13_img1",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p14_img1.png",
+      "path_all": "images/all/component_p14_img1.png",
+      "path_primary": null,
+      "path_duplicate": "images/duplicates/boards/component_p14_img1.png"
+    },
+    {
+      "image_id": "p15_img0",
+      "file_name": "component_p15_img0.png",
+      "page_index": 15,
+      "classification": "board",
+      "classification_confidence": 0.7,
+      "label": "Credits",
+      "quantity": 8,
+      "metadata_confidence": 0.0,
+      "dimensions": {
+        "width": 776,
+        "height": 964
+      },
+      "bbox": {
+        "x0": -0.0888672024011612,
+        "y0": -0.02227783203125,
+        "x1": 581.191162109375,
+        "y1": 722.8577270507812
+      },
+      "dedup_group_id": null,
+      "is_duplicate": false,
+      "canonical_image_id": "p15_img0",
+      "file_path": "test_output\\tm_legacy_check\\images\\all\\component_p15_img0.png",
+      "path_all": "images/all/component_p15_img0.png",
+      "path_primary": "images/canonicals/boards/component_p15_img0.png",
+      "path_duplicate": null
+    }
+  ],
+  "extraction_health": {
+    "images_attempted": 30,
+    "images_saved": 30,
+    "conversion_failures": 0,
+    "success_rate": 1.0,
+    "failure_rate": 0.0,
+    "colorspace_distribution": {
+      "ICCBased(RGB,sRGB IEC61966-2.1)": 30
+    },
+    "conversion_operations": {
+      "ICCBased_to_RGB": 30
+    },
+    "failure_reasons": {}
+  },
+  "text_artifacts": {
+    "page_text_jsonl_path": "page_text.jsonl",
+    "page_text_jsonl_sha256": "a97ca28dcba38df6647b6bf22aa0d2fb7b943d24c2d1173c39459759fec4927d"
+  }
+}

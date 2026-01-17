@@ -67,6 +67,11 @@ class MobiusManifestItem:
     uniformity_ratio: float = 0.0
     render_dpi_used: int = 0
     
+    # G7 metrics
+    size_tier: str = "MID"
+    raster_upscale_suspect: bool = False
+    render_info_gain: float = 0.0
+    
     # Content hash for deduplication
     content_hash: str
     
@@ -82,7 +87,7 @@ class MobiusManifest:
     """Complete MOBIUS manifest."""
     
     # Metadata
-    schema_version: str = "9.1-mobius-role-driven"
+    schema_version: str = "9.7-mobius-recall-recovery"
     extraction_mode: str = "mobius"
     generated_at: str = ""
     
@@ -162,7 +167,10 @@ def build_mobius_manifest(
             bbox_width_in=component.bbox_width_in,
             bbox_height_in=component.bbox_height_in,
             uniformity_ratio=component.uniformity_ratio,
-            render_dpi_used=component.render_dpi_used
+            render_dpi_used=component.render_dpi_used,
+            size_tier=component.size_tier,
+            raster_upscale_suspect=component.raster_upscale_suspect,
+            render_info_gain=component.render_info_gain
         )
         items.append(item)
     

@@ -1,0 +1,415 @@
+{
+  "total_references": 31,
+  "total_extracted": 28,
+  "matches": 28,
+  "unmatched": 3,
+  "recall": 0.9032258064516129,
+  "recall_pct": 90.32258064516128,
+  "false_positives": 0,
+  "tier_counts": {
+    "ICON": 26,
+    "MID": 4,
+    "BOARD": 1
+  },
+  "matches_by_tier": {
+    "ICON": 25,
+    "MID": 3,
+    "BOARD": 0
+  },
+  "unmatched_by_tier": {
+    "ICON": 1,
+    "MID": 1,
+    "BOARD": 1
+  },
+  "matched_details": [
+    {
+      "reference": "tm_ref_21.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f16.png",
+      "score": 4.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_10.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p5_f3.png",
+      "score": 4.0,
+      "method": "phash",
+      "tier": "MID"
+    },
+    {
+      "reference": "tm_ref_30.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f29.png",
+      "score": 6.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_03.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p4_f19.png",
+      "score": 7.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_16.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+      "score": 7.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_29.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+      "score": 7.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_02.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p12_f6.png",
+      "score": 8.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_25.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f26.png",
+      "score": 9.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_19.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f15.png",
+      "score": 9.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_22.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f15.png",
+      "score": 9.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_26.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f18.png",
+      "score": 9.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_17.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f28.png",
+      "score": 10.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_15.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f32.png",
+      "score": 10.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_23.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f17.png",
+      "score": 9.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_18.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f6.png",
+      "score": 11.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_14.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p8_f26.png",
+      "score": 10.0,
+      "method": "phash",
+      "tier": "MID"
+    },
+    {
+      "reference": "tm_ref_06.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p8_f27.png",
+      "score": 11.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_11.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f16.png",
+      "score": 10.0,
+      "method": "dhash",
+      "tier": "MID"
+    },
+    {
+      "reference": "tm_ref_08.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p9_f9.png",
+      "score": 12.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_07.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f11.png",
+      "score": 13.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_04.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f11.png",
+      "score": 12.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_31.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p9_f13.png",
+      "score": 12.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_05.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f17.png",
+      "score": 13.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_27.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f10.png",
+      "score": 13.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_20.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p11_f5.png",
+      "score": 14.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_28.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f26.png",
+      "score": 12.0,
+      "method": "phash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_12.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p11_f4.png",
+      "score": 14.0,
+      "method": "dhash",
+      "tier": "ICON"
+    },
+    {
+      "reference": "tm_ref_09.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p15_f0.png",
+      "score": 14.0,
+      "method": "dhash",
+      "tier": "ICON"
+    }
+  ],
+  "unmatched_references": [
+    "tm_ref_01.png",
+    "tm_ref_13.png",
+    "tm_ref_24.png"
+  ],
+  "unmatched_by_tier_list": {
+    "ICON": [
+      "tm_ref_24.png"
+    ],
+    "MID": [
+      "tm_ref_13.png"
+    ],
+    "BOARD": [
+      "tm_ref_01.png"
+    ]
+  },
+  "unmatched_diagnostics": [
+    {
+      "reference": "tm_ref_01.png",
+      "tier": "BOARD",
+      "top_candidates": [
+        {
+          "rank": 1,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p4_f19.png",
+          "phash_dist": 12,
+          "dhash_dist": 10,
+          "orb_sim": 0.01,
+          "fallback_sim": 0.7661917805671692,
+          "combined_score": 7.604273974895477,
+          "already_assigned": true
+        },
+        {
+          "rank": 2,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p12_f6.png",
+          "phash_dist": 16,
+          "dhash_dist": 10,
+          "orb_sim": 0.004,
+          "fallback_sim": 0.6951401829719543,
+          "combined_score": 8.243738353252411,
+          "already_assigned": true
+        },
+        {
+          "rank": 3,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p11_f4.png",
+          "phash_dist": 11,
+          "dhash_dist": 14,
+          "orb_sim": 0.004,
+          "fallback_sim": 0.6886938810348511,
+          "combined_score": 8.851755070686341,
+          "already_assigned": true
+        },
+        {
+          "rank": 4,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f28.png",
+          "phash_dist": 14,
+          "dhash_dist": 12,
+          "orb_sim": 0.008,
+          "fallback_sim": 0.6924498379230499,
+          "combined_score": 9.367951458692552,
+          "already_assigned": true
+        },
+        {
+          "rank": 5,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p9_f9.png",
+          "phash_dist": 15,
+          "dhash_dist": 11,
+          "orb_sim": 0.014,
+          "fallback_sim": 0.6152468323707581,
+          "combined_score": 9.512778508663178,
+          "already_assigned": true
+        }
+      ]
+    },
+    {
+      "reference": "tm_ref_13.png",
+      "tier": "MID",
+      "top_candidates": [
+        {
+          "rank": 1,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+          "phash_dist": 12,
+          "dhash_dist": 14,
+          "orb_sim": 0.006787330316742082,
+          "fallback_sim": 0.7800781279802322,
+          "combined_score": 8.579296848177911,
+          "already_assigned": true
+        },
+        {
+          "rank": 2,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p11_f4.png",
+          "phash_dist": 13,
+          "dhash_dist": 16,
+          "orb_sim": 0.01,
+          "fallback_sim": 0.79654660820961,
+          "combined_score": 8.98108052611351,
+          "already_assigned": true
+        },
+        {
+          "rank": 3,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p13_f15.png",
+          "phash_dist": 13,
+          "dhash_dist": 15,
+          "orb_sim": 0.006787330316742082,
+          "fallback_sim": 0.7764380425214767,
+          "combined_score": 9.16205761730671,
+          "already_assigned": true
+        },
+        {
+          "rank": 4,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+          "phash_dist": 14,
+          "dhash_dist": 15,
+          "orb_sim": 0.006787330316742082,
+          "fallback_sim": 0.7911563813686371,
+          "combined_score": 9.579592567682267,
+          "already_assigned": true
+        },
+        {
+          "rank": 5,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p4_f19.png",
+          "phash_dist": 14,
+          "dhash_dist": 16,
+          "orb_sim": 0.0,
+          "fallback_sim": 0.78955078125,
+          "combined_score": 9.594042968750001,
+          "already_assigned": true
+        }
+      ]
+    },
+    {
+      "reference": "tm_ref_24.png",
+      "tier": "ICON",
+      "top_candidates": [
+        {
+          "rank": 1,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+          "phash_dist": 15,
+          "dhash_dist": 9,
+          "orb_sim": 0.0,
+          "fallback_sim": 0.8617254495620728,
+          "combined_score": 6.194470953941345,
+          "already_assigned": true
+        },
+        {
+          "rank": 2,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f29.png",
+          "phash_dist": 13,
+          "dhash_dist": 10,
+          "orb_sim": 0.0,
+          "fallback_sim": 0.8314108550548553,
+          "combined_score": 7.017302304506302,
+          "already_assigned": true
+        },
+        {
+          "rank": 3,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+          "phash_dist": 16,
+          "dhash_dist": 12,
+          "orb_sim": 0.0,
+          "fallback_sim": 0.8414234817028046,
+          "combined_score": 8.02718866467476,
+          "already_assigned": true
+        },
+        {
+          "rank": 4,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f32.png",
+          "phash_dist": 11,
+          "dhash_dist": 15,
+          "orb_sim": 0.0,
+          "fallback_sim": 0.7791053950786591,
+          "combined_score": 8.03805144429207,
+          "already_assigned": true
+        },
+        {
+          "rank": 5,
+          "extracted_file": "fb-terraforming-mars-rule__rendered_p14_f28.png",
+          "phash_dist": 12,
+          "dhash_dist": 13,
+          "orb_sim": 0.0,
+          "fallback_sim": 0.8180376887321472,
+          "combined_score": 8.237660801410676,
+          "already_assigned": true
+        }
+      ]
+    }
+  ],
+  "false_positive_files": [],
+  "acceptance_criteria": {
+    "recall_target": 0.9,
+    "recall_achieved": true,
+    "false_positive_target": 2,
+    "false_positive_achieved": true
+  }
+}

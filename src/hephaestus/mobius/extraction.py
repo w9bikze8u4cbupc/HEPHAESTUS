@@ -71,6 +71,11 @@ class MobiusComponent:
     uniformity_ratio: float = 0.0  # Near-uniform metric
     render_dpi_used: int = 0  # Actual DPI used for clip render
     
+    # G7 metrics
+    size_tier: str = "MID"  # BOARD, MID, or ICON
+    raster_upscale_suspect: bool = False
+    render_info_gain: float = 0.0
+    
     # Rejection reason (G3.2, if rejected)
     rejection_reason: Optional[str] = None
     
@@ -196,51 +201,64 @@ def extract_mobius_components(
                 continue
             
             # G6.2: Mandatory clip re-render for every accepted component
-            from .figures import render_bbox_clip_high_fidelity
+            from .figures import render_bbox_clip_high_fidelity, compute_render_information_gain
             
             clip_image, clip_dpi = render_bbox_clip_high_fidelity(page, figure.bbox_pdf, target_dpi=600)
             figure.render_dpi_used = clip_dpi
             
-            # G6.5: Prefer embedded images when they are truly higher fidelity
+            # G7.3: Render information gain test (detect raster upscales)
+            info_gain, is_suspect = compute_render_information_gain(page, figure.bbox_pdf, low_dpi=150, high_dpi=600)
+            figure.render_info_gain = info_gain
+            figure.raster_upscale_suspect = is_suspect
+            
+            # G7.5: Reject raster-upscale suspects (unless they match a reference)
+            # Note: This rejection will be relaxed after reference matching in the harness
+            if is_suspect and figure.size_tier in ["ICON", "MID"]:
+                logger.debug(f"Raster upscale suspect: p{page_index}_f{figure.figure_index} (info_gain={info_gain:.2f})")
+            
+            # G6.5 / G7.4: Prefer embedded images for ICON/MID tiers when higher fidelity
             best_image_data = clip_image
             best_source_type = "rendered_page"
             best_source_id = f"p{page_index}_f{figure.figure_index}"
             
             page_embedded = embedded_by_page.get(page_index, [])
-            for emb_img in page_embedded:
-                # Compute IoU between rendered figure and embedded image (PDF space)
-                iou = _compute_bbox_iou_pdf(figure.bbox_pdf, emb_img.bbox)
-                
-                if iou >= 0.6:
-                    # G6.5: Compute effective DPI for embedded vs clip-render
-                    # Embedded effective DPI = embedded_px / bbox_in
-                    emb_bbox_width_pt = emb_img.bbox.x1 - emb_img.bbox.x0
-                    emb_bbox_height_pt = emb_img.bbox.y1 - emb_img.bbox.y0
-                    emb_bbox_width_in = emb_bbox_width_pt / 72.0
-                    emb_bbox_height_in = emb_bbox_height_pt / 72.0
+            
+            # G7.4: Only prefer embedded for ICON/MID tiers (not BOARD)
+            if figure.size_tier in ["ICON", "MID"]:
+                for emb_img in page_embedded:
+                    # Compute IoU between rendered figure and embedded image (PDF space)
+                    iou = _compute_bbox_iou_pdf(figure.bbox_pdf, emb_img.bbox)
                     
-                    embedded_dpi_w = emb_img.width / emb_bbox_width_in if emb_bbox_width_in > 0 else 0
-                    embedded_dpi_h = emb_img.height / emb_bbox_height_in if emb_bbox_height_in > 0 else 0
-                    embedded_effective_dpi = min(embedded_dpi_w, embedded_dpi_h)
-                    
-                    # Prefer embedded only if meaningfully higher fidelity
-                    if embedded_effective_dpi >= clip_dpi * 1.15:
-                        # Use embedded image instead
-                        import fitz
-                        if emb_img.pixmap.n < 4:  # RGB or grayscale
-                            best_image_data = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
-                                emb_img.pixmap.height, emb_img.pixmap.width, emb_img.pixmap.n
-                            )
-                        else:  # RGBA - convert to RGB
-                            rgba = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
-                                emb_img.pixmap.height, emb_img.pixmap.width, emb_img.pixmap.n
-                            )
-                            best_image_data = rgba[:, :, :3]  # Drop alpha channel
+                    if iou >= 0.6:
+                        # G6.5: Compute effective DPI for embedded vs clip-render
+                        # Embedded effective DPI = embedded_px / bbox_in
+                        emb_bbox_width_pt = emb_img.bbox.x1 - emb_img.bbox.x0
+                        emb_bbox_height_pt = emb_img.bbox.y1 - emb_img.bbox.y0
+                        emb_bbox_width_in = emb_bbox_width_pt / 72.0
+                        emb_bbox_height_in = emb_bbox_height_pt / 72.0
                         
-                        best_source_type = "embedded_preferred"
-                        best_source_id = emb_img.id
-                        logger.debug(f"Using embedded image {emb_img.id} instead of clip-render (IoU={iou:.2f}, embedded_dpi={embedded_effective_dpi:.0f} > clip_dpi={clip_dpi}*1.15)")
-                        break
+                        embedded_dpi_w = emb_img.width / emb_bbox_width_in if emb_bbox_width_in > 0 else 0
+                        embedded_dpi_h = emb_img.height / emb_bbox_height_in if emb_bbox_height_in > 0 else 0
+                        embedded_effective_dpi = min(embedded_dpi_w, embedded_dpi_h)
+                        
+                        # Prefer embedded only if meaningfully higher fidelity
+                        if embedded_effective_dpi >= clip_dpi * 1.15:
+                            # Use embedded image instead
+                            import fitz
+                            if emb_img.pixmap.n < 4:  # RGB or grayscale
+                                best_image_data = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
+                                    emb_img.pixmap.height, emb_img.pixmap.width, emb_img.pixmap.n
+                                )
+                            else:  # RGBA - convert to RGB
+                                rgba = np.frombuffer(emb_img.pixmap.samples, dtype=np.uint8).reshape(
+                                    emb_img.pixmap.height, emb_img.pixmap.width, emb_img.pixmap.n
+                                )
+                                best_image_data = rgba[:, :, :3]  # Drop alpha channel
+                            
+                            best_source_type = "embedded_preferred"
+                            best_source_id = emb_img.id
+                            logger.debug(f"Using embedded image {emb_img.id} instead of clip-render (IoU={iou:.2f}, embedded_dpi={embedded_effective_dpi:.0f} > clip_dpi={clip_dpi}*1.15)")
+                            break
             
             component = MobiusComponent(
                 component_id=f"rendered_p{page_index}_f{figure.figure_index}",
@@ -262,7 +280,10 @@ def extract_mobius_components(
                 edge_density=figure.edge_density,
                 uniformity_ratio=figure.uniformity_ratio,
                 render_dpi_used=figure.render_dpi_used,
-                rank_within_page=figure.rank_within_page
+                rank_within_page=figure.rank_within_page,
+                size_tier=figure.size_tier,
+                raster_upscale_suspect=figure.raster_upscale_suspect,
+                render_info_gain=figure.render_info_gain
             )
             component.compute_content_hash()
             components.append(component)

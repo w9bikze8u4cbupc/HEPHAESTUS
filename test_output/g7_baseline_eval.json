@@ -1,0 +1,181 @@
+{
+  "total_references": 31,
+  "total_extracted": 27,
+  "matches": 23,
+  "unmatched": 8,
+  "recall": 0.7419354838709677,
+  "recall_pct": 74.19354838709677,
+  "false_positives": 14,
+  "matched_details": [
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111534.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p12_f6.png",
+      "score": 10.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111550.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p12_f6.png",
+      "score": 8.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111602.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p4_f19.png",
+      "score": 7.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111629.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+      "score": 9.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111654.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p5_f3.png",
+      "score": 4.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111704.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f15.png",
+      "score": 10.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111746.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p8_f26.png",
+      "score": 10.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111812.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p12_f6.png",
+      "score": 9.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111818.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+      "score": 7.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111823.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f28.png",
+      "score": 10.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111831.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f16.png",
+      "score": 5.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111836.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f15.png",
+      "score": 9.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111845.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f18.png",
+      "score": 10.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111858.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f16.png",
+      "score": 4.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111903.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f16.png",
+      "score": 7.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111907.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f17.png",
+      "score": 9.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111912.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+      "score": 9.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111916.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f26.png",
+      "score": 9.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111921.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f16.png",
+      "score": 8.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111925.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f29.png",
+      "score": 7.0,
+      "method": "dhash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111930.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p13_f15.png",
+      "score": 9.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111934.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+      "score": 7.0,
+      "method": "phash"
+    },
+    {
+      "reference": "Capture d\u2019\u00e9cran 2026-01-16 111940.png",
+      "matched": "fb-terraforming-mars-rule__rendered_p14_f29.png",
+      "score": 6.0,
+      "method": "phash"
+    }
+  ],
+  "unmatched_references": [
+    "Capture d\u2019\u00e9cran 2026-01-16 111609.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111621.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111634.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111640.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111645.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111716.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111730.png",
+    "Capture d\u2019\u00e9cran 2026-01-16 111944.png"
+  ],
+  "false_positive_files": [
+    "fb-terraforming-mars-rule__rendered_p11_f4.png",
+    "fb-terraforming-mars-rule__rendered_p11_f5.png",
+    "fb-terraforming-mars-rule__rendered_p13_f10.png",
+    "fb-terraforming-mars-rule__rendered_p13_f11.png",
+    "fb-terraforming-mars-rule__rendered_p13_f16.png",
+    "fb-terraforming-mars-rule__rendered_p13_f17.png",
+    "fb-terraforming-mars-rule__rendered_p13_f26.png",
+    "fb-terraforming-mars-rule__rendered_p13_f6.png",
+    "fb-terraforming-mars-rule__rendered_p14_f11.png",
+    "fb-terraforming-mars-rule__rendered_p14_f15.png",
+    "fb-terraforming-mars-rule__rendered_p14_f32.png",
+    "fb-terraforming-mars-rule__rendered_p15_f0.png",
+    "fb-terraforming-mars-rule__rendered_p8_f27.png",
+    "fb-terraforming-mars-rule__rendered_p9_f13.png"
+  ],
+  "acceptance_criteria": {
+    "recall_target": 0.9,
+    "recall_achieved": false,
+    "false_positive_target": 2,
+    "false_positive_achieved": false
+  }
+}

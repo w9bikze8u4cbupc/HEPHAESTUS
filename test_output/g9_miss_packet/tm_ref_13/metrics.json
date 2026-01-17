@@ -1,0 +1,97 @@
+{
+  "reference": "tm_ref_13.png",
+  "tier": "MID",
+  "thresholds": {
+    "phash": 12,
+    "dhash": 12,
+    "orb": 0.12,
+    "fallback": 0.85
+  },
+  "top_candidates": [
+    {
+      "rank": 1,
+      "file": "fb-terraforming-mars-rule__rendered_p14_f35.png",
+      "phash_dist": 12,
+      "dhash_dist": 14,
+      "orb_sim": 0.006787330316742082,
+      "fallback_sim": 0.7800781279802322,
+      "combined_score": 8.579296848177911,
+      "already_assigned": true,
+      "manifest_data": {
+        "bbox_width_in": 0.35992690600563254,
+        "bbox_height_in": 0.33247931165049255,
+        "render_dpi_used": 1203,
+        "size_tier": "ICON",
+        "page_index": 14
+      }
+    },
+    {
+      "rank": 2,
+      "file": "fb-terraforming-mars-rule__rendered_p11_f4.png",
+      "phash_dist": 13,
+      "dhash_dist": 16,
+      "orb_sim": 0.01,
+      "fallback_sim": 0.79654660820961,
+      "combined_score": 8.98108052611351,
+      "already_assigned": true,
+      "manifest_data": {
+        "bbox_width_in": 2.3695187978704144,
+        "bbox_height_in": 2.9898139604059346,
+        "render_dpi_used": 600,
+        "size_tier": "MID",
+        "page_index": 11
+      }
+    },
+    {
+      "rank": 3,
+      "file": "fb-terraforming-mars-rule__rendered_p13_f15.png",
+      "phash_dist": 13,
+      "dhash_dist": 15,
+      "orb_sim": 0.006787330316742082,
+      "fallback_sim": 0.7764380425214767,
+      "combined_score": 9.16205761730671,
+      "already_assigned": true,
+      "manifest_data": {
+        "bbox_width_in": 0.4249137084788717,
+        "bbox_height_in": 0.34497853389299216,
+        "render_dpi_used": 1159,
+        "size_tier": "ICON",
+        "page_index": 13
+      }
+    },
+    {
+      "rank": 4,
+      "file": "fb-terraforming-mars-rule__rendered_p14_f31.png",
+      "phash_dist": 14,
+      "dhash_dist": 15,
+      "orb_sim": 0.006787330316742082,
+      "fallback_sim": 0.7911563813686371,
+      "combined_score": 9.579592567682267,
+      "already_assigned": true,
+      "manifest_data": {
+        "bbox_width_in": 0.34243045918591425,
+        "bbox_height_in": 0.33247931165049255,
+        "render_dpi_used": 1203,
+        "size_tier": "ICON",
+        "page_index": 14
+      }
+    },
+    {
+      "rank": 5,
+      "file": "fb-terraforming-mars-rule__rendered_p4_f19.png",
+      "phash_dist": 14,
+      "dhash_dist": 16,
+      "orb_sim": 0.0,
+      "fallback_sim": 0.78955078125,
+      "combined_score": 9.594042968750001,
+      "already_assigned": true,
+      "manifest_data": {
+        "bbox_width_in": 0.6448690399267583,
+        "bbox_height_in": 0.6849573788889853,
+        "render_dpi_used": 620,
+        "size_tier": "ICON",
+        "page_index": 4
+      }
+    }
+  ]
+}
