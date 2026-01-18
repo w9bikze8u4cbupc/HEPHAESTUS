@@ -119,7 +119,7 @@ def generate_miss_packet(
         json.dump(miss_packet, f, indent=2)
     
     print(f"\n{'='*60}")
-    print(f"✓ Miss packet generated: {output_dir}")
+    print(f"[OK] Miss packet generated: {output_dir}")
     print(f"  Total misses: {len(miss_packet['misses'])}")
     print(f"  Master JSON: {packet_json_path.name}")
     print(f"{'='*60}")
@@ -128,12 +128,22 @@ def generate_miss_packet(
 
 
 if __name__ == "__main__":
-    # Paths
-    eval_results = Path("test_output/g8_hungarian_eval.json")
-    reference_dir = Path("acceptance_test/terraforming_mars_reference")
-    extracted_dir = Path("test_output/g7_tuned/MOBIUS_READY/images")
-    manifest_path = Path("test_output/g7_tuned/MOBIUS_READY/manifest.json")
-    output_dir = Path("test_output/g9_miss_packet")
+    import sys
+    
+    if len(sys.argv) == 6:
+        # Called from evaluator with explicit args
+        eval_results = Path(sys.argv[1])
+        reference_dir = Path(sys.argv[2])
+        extracted_dir = Path(sys.argv[3])
+        manifest_path = Path(sys.argv[4])
+        output_dir = Path(sys.argv[5])
+    else:
+        # Default paths for standalone execution
+        eval_results = Path("test_output/g8_hungarian_eval.json")
+        reference_dir = Path("acceptance_test/terraforming_mars_reference")
+        extracted_dir = Path("test_output/g7_tuned/MOBIUS_READY/images")
+        manifest_path = Path("test_output/g7_tuned/MOBIUS_READY/manifest.json")
+        output_dir = Path("test_output/g9_miss_packet")
     
     # Generate packet
     generate_miss_packet(

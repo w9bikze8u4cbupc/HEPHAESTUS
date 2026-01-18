@@ -448,7 +448,7 @@ def evaluate_recall(
     # G10: Ceiling warning
     if manifest['components_extracted'] < total_references:
         max_possible_recall = manifest['components_extracted'] / total_references * 100
-        print(f"\n⚠ CANDIDATE POOL SIZE CEILING:")
+        print(f"\n[!] CANDIDATE POOL SIZE CEILING:")
         print(f"  Extracted pool: {manifest['components_extracted']} components")
         print(f"  Reference set: {total_references} images")
         print(f"  Max possible recall (1:1): {max_possible_recall:.1f}% ({manifest['components_extracted']}/{total_references})")
@@ -775,14 +775,23 @@ def main():
         print("G9: Generating miss packet...")
         print(f"{'='*60}")
         
-        from scripts.generate_miss_packet import generate_miss_packet
-        generate_miss_packet(
-            args.output if args.output else Path("temp_results.json"),
-            args.reference_dir,
-            args.extracted_dir,
-            args.manifest,
-            args.generate_miss_packet
-        )
+        import sys
+        import subprocess
+        
+        # Call generate_miss_packet.py as external script
+        result = subprocess.run([
+            sys.executable,
+            "scripts/generate_miss_packet.py",
+            str(args.output if args.output else Path("temp_results.json")),
+            str(args.reference_dir),
+            str(args.extracted_dir),
+            str(args.manifest),
+            str(args.generate_miss_packet)
+        ], capture_output=True, text=True)
+        
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error generating miss packet: {result.stderr}")
     
     # G9: Run audit if requested
     if args.audit_misses and results['unmatched'] > 0:
@@ -790,8 +799,18 @@ def main():
         print("G9: Running tier audit on misses...")
         print(f"{'='*60}")
         
-        # Note: Audit requires miss packet to exist
-        print("Note: Run with --generate-miss-packet first to create audit inputs")
+        import sys
+        import subprocess
+        
+        # Call audit_misses.py as external script
+        result = subprocess.run([
+            sys.executable,
+            "scripts/audit_misses.py"
+        ], capture_output=True, text=True)
+        
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error running audit: {result.stderr}")
 
 
 if __name__ == "__main__":

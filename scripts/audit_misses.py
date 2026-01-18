@@ -133,7 +133,7 @@ def main():
             print(f"  {tier_name:6s}{current}: {status}")
             if result['passed_criteria']:
                 for criterion in result['passed_criteria']:
-                    print(f"    ✓ {criterion}")
+                    print(f"    [OK] {criterion}")
             else:
                 # Show why it failed
                 checks = result['checks']
@@ -152,7 +152,7 @@ def main():
         }, f, indent=2)
     
     print(f"\n{'='*60}")
-    print(f"✓ Audit complete")
+    print(f"[OK] Audit complete")
     print(f"  Results saved to: {audit_output_path}")
     print(f"{'='*60}")
     
