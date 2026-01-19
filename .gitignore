@@ -82,3 +82,7 @@ test_output/
 # Bench bundle generated smoke outputs
 bench_bundle/**/evaluation_smoke.json
 
+
+# Bench bundle persistent installs
+data/bench/
+

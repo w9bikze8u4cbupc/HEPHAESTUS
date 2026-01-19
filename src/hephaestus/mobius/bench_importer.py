@@ -121,12 +121,15 @@ def load_manifest(bundle_dir: Path) -> dict:
 @app.command("import-tm")
 def import_terraforming_mars(
     zip_path: Path = typer.Option(..., "--zip", help="Path to tm_g6_g7_g10.zip"),
-    extract_dir: Optional[Path] = typer.Option(None, "--extract-to", help="Directory to extract bundle (default: temp)"),
+    install_to: Optional[Path] = typer.Option(None, "--install-to", help="Install directory (default: data/bench/terraforming_mars/tm_g6_g7_g10)"),
     verify_sha: bool = typer.Option(True, "--verify-sha/--no-verify-sha", help="Verify SHA-256 integrity"),
-    keep_extracted: bool = typer.Option(False, "--keep-extracted", help="Keep extracted files after import")
+    ephemeral: bool = typer.Option(False, "--ephemeral", help="Validation-only mode: extract, validate, cleanup (no persistent install)"),
+    keep_extracted: bool = typer.Option(False, "--keep-extracted", help="Keep extracted files after import (ephemeral mode only)")
 ):
     """
     Import Terraforming Mars bench bundle (tm_g6_g7_g10.zip).
+    
+    Default behavior: Persistent install to data/bench/terraforming_mars/tm_g6_g7_g10/
     
     Validates:
     - ZIP SHA-256 integrity (optional)
@@ -138,6 +141,9 @@ def import_terraforming_mars(
     - Recall: 90.3% (28/31)
     - False positives: 0
     """
+    from datetime import datetime, timezone
+    import uuid
+    
     typer.echo("=== MOBIUS Bench Import: Terraforming Mars ===")
     typer.echo(f"ZIP: {zip_path}")
     
@@ -146,13 +152,24 @@ def import_terraforming_mars(
         typer.echo(f"[FAIL] ZIP not found: {zip_path}", err=True)
         raise typer.Exit(1)
     
+    # Determine install directory
+    if install_to is None:
+        install_to = Path("data/bench/terraforming_mars/tm_g6_g7_g10")
+    
+    if ephemeral:
+        typer.echo("Mode: Ephemeral (validation-only)")
+    else:
+        typer.echo(f"Install: {install_to}")
+    
     # Verify SHA-256 if requested
+    actual_sha = None
     if verify_sha:
         sha_path = zip_path.with_suffix(zip_path.suffix + ".sha256")
         typer.echo(f"SHA: {sha_path}")
         
         try:
             is_valid, expected, actual = verify_sha256(zip_path, sha_path)
+            actual_sha = actual
             
             typer.echo(f"Expected: {expected}")
             typer.echo(f"Actual:   {actual}")
@@ -166,9 +183,33 @@ def import_terraforming_mars(
             typer.echo(f"[FAIL] SHA verification failed: {e}", err=True)
             raise typer.Exit(1)
     
+    # Check for idempotent install (skip if already installed with same SHA)
+    if not ephemeral and install_to.exists():
+        metadata_path = install_to / "bench_install.json"
+        if metadata_path.exists():
+            try:
+                with open(metadata_path) as f:
+                    metadata = json.load(f)
+                
+                installed_sha = metadata.get("sha256")
+                if installed_sha == actual_sha:
+                    typer.echo("[PASS] Already installed (SHA match)")
+                    typer.echo(f"  Installed: {metadata.get('installed_at_utc')}")
+                    typer.echo(f"  Location: {install_to}")
+                    typer.echo("\nMOBIUS Runtime Paths:")
+                    typer.echo(f"  Images:   {install_to}/MOBIUS_READY/images")
+                    typer.echo(f"  Manifest: {install_to}/MOBIUS_READY/manifest.json")
+                    return  # Exit 0 (idempotent)
+            except Exception:
+                pass  # Continue with install if metadata read fails
+    
     # Determine extract directory
-    if extract_dir is None:
+    if ephemeral:
         extract_dir = Path("bench_bundle") / "tmp_import_tm_g6_g7_g10"
+    else:
+        # Use staging directory for atomic install
+        staging_id = str(uuid.uuid4())[:8]
+        extract_dir = install_to.parent / f".staging_{staging_id}"
     
     typer.echo(f"Extract: {extract_dir}")
     
@@ -187,7 +228,7 @@ def import_terraforming_mars(
         for error in errors:
             typer.echo(f"  - {error}", err=True)
         
-        if not keep_extracted:
+        if ephemeral and not keep_extracted:
             shutil.rmtree(extract_dir)
         
         raise typer.Exit(1)
@@ -211,28 +252,91 @@ def import_terraforming_mars(
     except Exception as e:
         typer.echo(f"[FAIL] Manifest loading failed: {e}", err=True)
         
-        if not keep_extracted:
+        if ephemeral and not keep_extracted:
             shutil.rmtree(extract_dir)
         
         raise typer.Exit(1)
     
-    # Report ingestion paths
-    images_dir = bundle_dir / "MOBIUS_READY" / "images"
-    manifest_path = bundle_dir / "MOBIUS_READY" / "manifest.json"
+    # Ephemeral mode: report and cleanup
+    if ephemeral:
+        images_dir = bundle_dir / "MOBIUS_READY" / "images"
+        manifest_path = bundle_dir / "MOBIUS_READY" / "manifest.json"
+        
+        typer.echo("\n=== Validation Complete (Ephemeral Mode) ===")
+        typer.echo(f"Validated: {len(list(images_dir.glob('*.png')))} PNG files")
+        
+        # Cleanup if requested
+        if not keep_extracted:
+            typer.echo("[INFO] Cleaning up extracted files...")
+            shutil.rmtree(extract_dir)
+        else:
+            typer.echo(f"[INFO] Extracted bundle kept at: {extract_dir}")
+        
+        typer.echo("\nExpected baseline:")
+        typer.echo("  Recall: 90.3% (28/31)")
+        typer.echo("  False positives: 0")
+        return  # Exit 0
     
-    typer.echo("\n=== MOBIUS Ingestion Paths ===")
-    typer.echo(f"Images:   {images_dir}")
-    typer.echo(f"Manifest: {manifest_path}")
-    typer.echo(f"Count:    {len(list(images_dir.glob('*.png')))} PNG files")
+    # Persistent install: atomic move
+    typer.echo("\n[STEP] Installing to persistent location...")
     
-    # Cleanup if requested
-    if not keep_extracted:
-        typer.echo("\n[INFO] Cleaning up extracted files...")
-        shutil.rmtree(extract_dir)
-    else:
-        typer.echo(f"\n[INFO] Extracted bundle kept at: {extract_dir}")
+    try:
+        # Create parent directory
+        install_to.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Write install metadata
+        metadata = {
+            "bundle_id": "tm_g6_g7_g10",
+            "bundle_zip": zip_path.name,
+            "sha256": actual_sha,
+            "installed_at_utc": datetime.now(timezone.utc).isoformat(),
+            "components_extracted": components_extracted
+        }
+        
+        metadata_path = extract_dir / "bench_install.json"
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f, indent=2)
+        
+        # Atomic install: backup existing, move staging to live
+        backup_dir = None
+        if install_to.exists():
+            backup_id = str(uuid.uuid4())[:8]
+            backup_dir = install_to.parent / f".backup_{backup_id}"
+            shutil.move(str(install_to), str(backup_dir))
+        
+        # Move staging to live location
+        shutil.move(str(extract_dir), str(install_to))
+        
+        # Delete backup on success
+        if backup_dir and backup_dir.exists():
+            shutil.rmtree(backup_dir)
+        
+        typer.echo("[PASS] Install complete")
+        
+    except Exception as e:
+        typer.echo(f"[FAIL] Install failed: {e}", err=True)
+        
+        # Restore backup if it exists
+        if backup_dir and backup_dir.exists():
+            if install_to.exists():
+                shutil.rmtree(install_to)
+            shutil.move(str(backup_dir), str(install_to))
+            typer.echo("[INFO] Restored from backup")
+        
+        # Cleanup staging
+        if extract_dir.exists():
+            shutil.rmtree(extract_dir)
+        
+        raise typer.Exit(1)
     
-    typer.echo("\n[PASS] Import complete")
+    # Report installation paths
+    typer.echo("\n=== Installation Complete ===")
+    typer.echo(f"Location: {install_to}")
+    typer.echo("\nMOBIUS Runtime Paths:")
+    typer.echo(f"  Images:   {install_to}/MOBIUS_READY/images")
+    typer.echo(f"  Manifest: {install_to}/MOBIUS_READY/manifest.json")
+    typer.echo(f"  Metadata: {install_to}/bench_install.json")
+    typer.echo(f"\nComponents: {components_extracted} PNG files")
     typer.echo("\nExpected baseline:")
     typer.echo("  Recall: 90.3% (28/31)")
     typer.echo("  False positives: 0")
