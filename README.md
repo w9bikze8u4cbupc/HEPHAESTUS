@@ -2,6 +2,36 @@
 
 HEPHAESTUS is a modular system that extracts board-game components from rulebook PDFs. It processes PDF documents to identify, extract, and organize component images with structured metadata output.
 
+## Consumer Contract (MOBIUS Integration)
+
+**Distributable Artifact**: `bench_bundle/tm_g6_g7_g10.zip`
+
+### One-Command Verification
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\bench_bundle\RUN_VERIFY.ps1
+```
+
+This validates:
+- ZIP SHA-256 integrity
+- Bundle extraction
+- Benchmark invariants (recall ≥90%, FP ≤2)
+
+### Files for MOBIUS Ingestion
+
+After extracting `tm_g6_g7_g10.zip`, consume:
+
+1. **Component Images**: `MOBIUS_READY/images/*.png` (28 PNG files)
+2. **Extraction Metadata**: `MOBIUS_READY/manifest.json`
+
+### Expected Baseline
+
+- **Recall**: 90.3% (28/31 matches)
+- **False Positives**: 0
+- **Theoretical Ceiling**: 28 components vs 31 references under 1:1 constraint
+
+See `bench_bundle/tm_g6_g7_g10/README.md` for detailed documentation.
+
 ## Features
 
 ### Phase 1 (Complete)
