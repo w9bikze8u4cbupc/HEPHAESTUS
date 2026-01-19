@@ -1,6 +1,8 @@
 param(
   [string]$ZipPath = (Join-Path $PSScriptRoot "..\tm_g6_g7_g10.zip"),
-  [string]$ShaPath = (Join-Path $PSScriptRoot "..\tm_g6_g7_g10.zip.sha256")
+  [string]$ShaPath = (Join-Path $PSScriptRoot "..\tm_g6_g7_g10.zip.sha256"),
+  [switch]$KeepExtracted,
+  [switch]$NoExtractCleanup
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,19 +32,45 @@ Write-Host "[PASS] ZIP SHA256 integrity verified."
 
 # Extract to deterministic temp folder
 $tmpRoot = Join-Path (Split-Path $ZipPath -Parent) "tmp_verify_tm_g6_g7_g10"
-if (Test-Path $tmpRoot) { Remove-Item -Recurse -Force $tmpRoot }
-New-Item -ItemType Directory -Force -Path $tmpRoot | Out-Null
 
-Write-Host "Extracting ZIP to: $tmpRoot"
-Expand-Archive -Path $ZipPath -DestinationPath $tmpRoot -Force
+try {
+  if (Test-Path $tmpRoot) { Remove-Item -Recurse -Force $tmpRoot }
+  New-Item -ItemType Directory -Force -Path $tmpRoot | Out-Null
 
-# Run smoke test against extracted bundle
-$bundleDir = $tmpRoot
-$smokeScript = Join-Path $bundleDir "smoke_eval.ps1"
-if (-not (Test-Path $smokeScript)) { throw "Missing smoke script inside extracted bundle: $smokeScript" }
+  Write-Host "Extracting ZIP to: $tmpRoot"
+  Expand-Archive -Path $ZipPath -DestinationPath $tmpRoot -Force
 
-Write-Host "Running extracted smoke test..."
-powershell -ExecutionPolicy Bypass -File $smokeScript
+  # Run smoke test against extracted bundle
+  $bundleDir = $tmpRoot
+  $smokeScript = Join-Path $bundleDir "smoke_eval.ps1"
+  if (-not (Test-Path $smokeScript)) { throw "Missing smoke script inside extracted bundle: $smokeScript" }
 
-Write-Host "[PASS] Bundle verify complete."
-exit 0
+  Write-Host "Running extracted smoke test..."
+  powershell -ExecutionPolicy Bypass -File $smokeScript
+
+  Write-Host "[PASS] Bundle verify complete."
+  
+  # Cleanup on success (unless -KeepExtracted)
+  if (-not $KeepExtracted) {
+    Remove-Item -Recurse -Force $tmpRoot
+  } else {
+    Write-Host "Extracted bundle kept at: $tmpRoot"
+  }
+  
+  exit 0
+}
+catch {
+  Write-Host "[FAIL] Bundle verify failed: $_" -ForegroundColor Red
+  
+  # Cleanup on failure (unless -NoExtractCleanup)
+  if (-not $NoExtractCleanup -and (Test-Path $tmpRoot)) {
+    Remove-Item -Recurse -Force $tmpRoot
+  } else {
+    Write-Host "Extracted bundle kept for debugging at: $tmpRoot" -ForegroundColor Yellow
+  }
+  
+  exit 1
+}
+finally {
+  # Ensure deterministic cleanup behavior
+}

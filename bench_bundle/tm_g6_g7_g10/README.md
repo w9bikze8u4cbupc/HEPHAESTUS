@@ -169,11 +169,25 @@ For questions about this bundle or the evaluation methodology, refer to:
 - `scripts/evaluate_mobius_recall.py` - Evaluation harness source
 
 ## Integrity Verification
+
 This bundle ships with a SHA-256 contract for the distributable ZIP.
 
-1) Verify ZIP integrity + run smoke validation (from extracted copy):
+### Build Workflow (Required After Any Bundle Changes)
+
+**IMPORTANT**: If any file is added/removed in the bundle folder, you must rebuild the ZIP and SHA.
+
+1) Build distributable ZIP + SHA-256:
+
+    powershell -ExecutionPolicy Bypass -File .\build_bundle.ps1
+
+2) Verify ZIP integrity + run smoke validation (from extracted copy):
 
     powershell -ExecutionPolicy Bypass -File .\verify_bundle.ps1
 
-The expected hash is stored in: ..\tm_g6_g7_g10.zip.sha256
+The expected hash is stored in: `..\tm_g6_g7_g10.zip.sha256`
+
+### Verifier Options
+
+- `-KeepExtracted`: Do not delete temp folder on success (default: delete)
+- `-NoExtractCleanup`: Do not delete temp folder on failure (default: keep for debugging)
 
