@@ -78,3 +78,7 @@ debug_*.py
 # Generated evaluation/output artifacts
 test_output/
 
+
+# Bench bundle generated smoke outputs
+bench_bundle/**/evaluation_smoke.json
+
