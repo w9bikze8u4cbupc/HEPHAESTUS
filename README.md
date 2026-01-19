@@ -21,6 +21,13 @@ This single command:
 **Options**:
 - `-Verbose`: Show detailed output from all steps
 - `-KeepExtracted`: Keep extracted files after import
+- `-NoImport`: Run verification only, skip import
+- `-SelfTestShaFailure`: Test failure path (SHA mismatch simulation)
+
+**Self-Test** (verify failure detection):
+```powershell
+.\scripts\validate_and_import_tm.ps1 -SelfTestShaFailure
+```
 
 ### Manual Verification (Optional)
 
