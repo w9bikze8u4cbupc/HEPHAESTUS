@@ -35,6 +35,10 @@ app = typer.Typer(help="HEPHAESTUS – board-game component extractor", no_args_
 from .analytics.corpus import app as analytics_app
 app.add_typer(analytics_app, name="analytics", help="Corpus-level analytics commands")
 
+# G18: Add bench import subcommand
+from .mobius.bench_importer import app as bench_app
+app.add_typer(bench_app, name="bench", help="Bench bundle import commands")
+
 # Phase 7: Add analytics subcommand
 analytics_app = typer.Typer(help="Corpus-level analytics commands")
 app.add_typer(analytics_app, name="analytics")
