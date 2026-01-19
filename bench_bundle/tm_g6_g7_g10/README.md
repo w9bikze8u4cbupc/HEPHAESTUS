@@ -167,3 +167,13 @@ For questions about this bundle or the evaluation methodology, refer to:
 - `docs/phase_9_order_G7_evidence.md` - G7 acceptance evidence
 - `docs/phase_10_order_G9_evidence.md` - G9 audit analysis
 - `scripts/evaluate_mobius_recall.py` - Evaluation harness source
+
+## Integrity Verification
+This bundle ships with a SHA-256 contract for the distributable ZIP.
+
+1) Verify ZIP integrity + run smoke validation (from extracted copy):
+
+    powershell -ExecutionPolicy Bypass -File .\verify_bundle.ps1
+
+The expected hash is stored in: ..\tm_g6_g7_g10.zip.sha256
+
