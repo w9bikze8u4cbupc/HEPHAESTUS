@@ -6,7 +6,23 @@ HEPHAESTUS is a modular system that extracts board-game components from rulebook
 
 **Distributable Artifact**: `bench_bundle/tm_g6_g7_g10.zip`
 
-### One-Command Verification
+### One-Command Validate + Import
+
+```powershell
+.\scripts\validate_and_import_tm.ps1
+```
+
+This single command:
+1. Verifies ZIP SHA-256 integrity
+2. Extracts and validates bundle structure
+3. Runs smoke benchmark (recall ≥90%, FP ≤2)
+4. Imports into MOBIUS with structure validation
+
+**Options**:
+- `-Verbose`: Show detailed output from all steps
+- `-KeepExtracted`: Keep extracted files after import
+
+### Manual Verification (Optional)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\bench_bundle\RUN_VERIFY.ps1
