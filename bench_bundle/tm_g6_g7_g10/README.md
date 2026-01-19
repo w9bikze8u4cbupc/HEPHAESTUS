@@ -81,9 +81,29 @@ This means:
 
 **Root Cause**: Pure assignment competition under 1:1 constraint. The extracted pool (28) is smaller than the reference set (31), creating a hard ceiling at 90.3%.
 
-## Usage
+## Bundle Contract
 
-### Run Evaluation
+### What is Canonical
+- **This bundle folder** (`bench_bundle/tm_g6_g7_g10/`) and **ZIP artifact** (`bench_bundle/tm_g6_g7_g10.zip`) are canonical
+- `test_output/` is NOT canonical (local development artifacts only, not tracked in git)
+
+### MOBIUS Consumption
+MOBIUS consumes exactly two artifacts from this bundle:
+
+1. **Component Images**: `MOBIUS_READY/images/*.png` (28 PNG files)
+2. **Extraction Metadata**: `MOBIUS_READY/manifest.json`
+
+The manifest provides:
+- `file_name`: Component filename
+- `bbox_width_in`, `bbox_height_in`: Physical dimensions in inches
+- `render_dpi_used`: DPI used for rendering
+- `size_tier`: Classification (ICON/MID/BOARD)
+- `page_index`: Source page number
+- Additional metadata: embedded status, dedup info, extraction confidence
+
+### Re-run Evaluation Against Bundle
+
+**Basic evaluation**:
 ```bash
 python scripts/evaluate_mobius_recall.py \
   --reference-dir acceptance_test/terraforming_mars_reference \
@@ -92,7 +112,7 @@ python scripts/evaluate_mobius_recall.py \
   --output results.json
 ```
 
-### Generate Miss Packet
+**With miss packet generation**:
 ```bash
 python scripts/evaluate_mobius_recall.py \
   --reference-dir acceptance_test/terraforming_mars_reference \
@@ -102,7 +122,7 @@ python scripts/evaluate_mobius_recall.py \
   --generate-miss-packet miss_packet_output/
 ```
 
-### Run Tier Audit
+**With tier audit**:
 ```bash
 python scripts/evaluate_mobius_recall.py \
   --reference-dir acceptance_test/terraforming_mars_reference \
@@ -110,6 +130,11 @@ python scripts/evaluate_mobius_recall.py \
   --manifest bench_bundle/tm_g6_g7_g10/MOBIUS_READY/manifest.json \
   --output results.json \
   --audit-misses
+```
+
+**Smoke test** (validates bundle integrity):
+```powershell
+.\bench_bundle\tm_g6_g7_g10\smoke_eval.ps1
 ```
 
 ## System Requirements
